@@ -123,188 +123,75 @@
         <div class="bg-zinc-900 w-full max-w-md p-8 rounded-2xl border border-zinc-800 shadow-2xl">
             <h3 class="luxury-font text-xl gold-text mb-6 text-center tracking-widest">SHIPPING INFO</h3>
             <form id="orderForm" class="space-y-4">
-                <input id="custName" placeholder="Full Name"> required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
-                <input id="custPhone" placeholder="WhatsApp Number"> required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
-                <textarea id="custAddress" placeholder="Full Address with Pincode"></textarea> required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
-                <div class="flex gap-4">
-                    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer hover:border-amber-500 transition">
-                        <input type="radio" name="pay" value="UPI"> UPI checked class="hidden"> <span class="text-[10px] tracking-widest uppercase">GPay/UPI</span>
-                    </label>
-                    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer hover:border-amber-500 transition">
-                       <input type="radio" name="pay" value="COD"> COD class="hidden"> <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
-                    </label>
-                   "use client";
+  <input id="custName" required placeholder="Full Name"
+    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
 
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+                <input id="custPhone" required placeholder="WhatsApp Number"
+    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
 
-export default function Checkout() {
+               <textarea id="custAddress" required placeholder="Full Address with Pincode"
+    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
 
-  async function submitOrder() {
-    try {
-      await addDoc(collection(db, "orders"), {
-        product: "Bracelet",
-        price: 999,
-        createdAt: Timestamp.now(),
-        status: "pending",
-      });
+               <div class="flex gap-4">
+    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
+      <input type="radio" name="pay" value="UPI" checked class="hidden">
+      <span class="text-[10px] tracking-widest uppercase">GPay / UPI</span>
+    </label>
+<label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
+      <input type="radio" name="pay" value="COD" class="hidden">
+      <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
+    </label>
+  </div>
+    <button id="finalBtn" onclick="submitOrder()"
+    class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">
+    Place Order
+  </button>
 
-      alert("Order placed successfully!");
-    } catch (error) {
-      console.error("Error placing order:", error);
-      alert("Order failed");
-    }
-  }
-
-  function closeCheckout() {
-    alert("Checkout closed");
-  }
-
-  return (
-    <div>
-     <button
-  id="finalBtn"
-  onclick="submitOrder()"
-  class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs mt-4">
+<button type="button" onclick="closeCheckout()"
+    class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
+    CANCEL
+    <button id="finalBtn" onclick="submitOrder()"
+  class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">
   Place Order
 </button>
 
-<button
-  onclick="closeCheckout()"
-  class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
-  CANCEL
-</button>
-    </div>
+  </button>
+</form>
   );
 }
 
 
-    <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7KmjRtqdwQZ0GmaKev4BVy_6xQI0TP4aPbA3Xfjfo5lra252D4LZOqprwwKnHfOSggQ/exec';
-        const MY_UPI_ID = '8850484512@fam';
-        const WHATSAPP_NUM = '+91 8850484512';
 
-        const products = [
-            { id: 1, name: 'Black Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600' },
-            { id: 2, name: 'Lava Stone', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600' },
-            { id: 3, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600' },
-            { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600' }
-        ];
-
-        let cart = [];
-        let currentProdID = null;
-
-        // Render Home Grid
-        const grid = document.getElementById('productGrid');
-        products.forEach(p => {
-            grid.innerHTML += `
-                <div class="product-card p-4 rounded-xl flex flex-col cursor-pointer" onclick="openProductPage(${p.id})">
-                    <img src="${p.img}" class="w-full aspect-square object-cover rounded-lg mb-4">
-                    <h3 class="font-semibold tracking-wide uppercase text-sm">${p.name}</h3>
-                    <p class="gold-text font-bold mb-4">₹${p.price}</p>
-                    <button class="mt-auto w-full py-3 border border-zinc-800 text-[10px] tracking-widest hover:bg-white hover:text-black transition">VIEW PRODUCT</button>
-                </div>`;
-        });
-
-        // Slider Logic
-        let cSlide = 0;
-        function updateSlider() {
-            document.getElementById('slider').style.transform = `translateX(-${cSlide * 100}%)`;
-            document.querySelectorAll('.slider-dot').forEach((d, i) => {
-                d.style.backgroundColor = i === cSlide ? '#D4AF37' : 'rgba(255,255,255,0.3)';
-                d.style.width = i === cSlide ? '24px' : '12px';
-            });
-        }
-        function goToSlide(i) { cSlide = i; updateSlider(); }
-        setInterval(() => { cSlide = (cSlide + 1) % 2; updateSlider(); }, 5000);
-        updateSlider();
-
-        // Page/Cart Logic
-        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('cart-open'); }
-        function openProductPage(id) {
-            const p = products.find(x => x.id === id);
-            currentProdID = id;
-            document.getElementById('pName').innerText = p.name;
-            document.getElementById('pPrice').innerText = '₹' + p.price;
-            document.getElementById('stickyName').innerText = p.name;
-            document.getElementById('stickyPrice').innerText = '₹' + p.price;
-            document.getElementById('mainImg').src = p.img;
-            document.getElementById('productPage').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeProductPage() { document.getElementById('productPage').classList.add('hidden'); document.body.style.overflow = 'auto'; }
-        
-        function addCurrentToCart() { addToCart(currentProdID); closeProductPage(); }
-        function addToCart(id) {
-            cart.push(products.find(x => x.id === id));
-            updateCartUI();
-            toggleCart();
-        }
-        function updateCartUI() {
-            document.getElementById('cartCount').innerText = cart.length;
-            document.getElementById('cartTotal').innerText = `₹${cart.reduce((s, i) => s + i.price, 0)}`;
-            document.getElementById('cartItems').innerHTML = cart.map((i, idx) => `
-                <div class="flex items-center gap-4 bg-zinc-900/50 p-4 rounded-lg border border-zinc-900">
-                    <img src="${i.img}" class="w-12 h-12 rounded object-cover">
-                    <div class="flex-1"><p class="text-[10px] font-bold uppercase">${i.name}</p><p class="text-xs gold-text">₹${i.price}</p></div>
-                    <button onclick="cart.splice(${idx},1); updateCartUI()" class="text-zinc-700 hover:text-white">&times;</button>
-                </div>`).join('');
-        }
-        function openCheckout() { if(!cart.length) return alert("Cart Empty"); document.getElementById('checkoutModal').classList.remove('hidden'); }
-        function closeCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); }
-
-        async function submitOrder() {
-            const n = document.getElementById('custName').value, ph = document.getElementById('custPhone').value, ad = document.getElementById('custAddress').value;
-            const m = document.querySelector('input[name="pay"]:checked').value, t = cart.reduce((s, i) => s + i.price, 0), it = cart.map(i => i.name).join(', ');
-            if(!n || !ph || !ad) return alert("Fill all fields");
-            
-            const btn = document.getElementById('finalBtn'); btn.innerText = "Processing..."; btn.disabled = true;
-            const fd = new FormData(); fd.append('name', n); fd.append('phone', ph); fd.append('address', ad); fd.append('product', it); fd.append('paymentMethod', m);
-
-            try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: fd });
-                if(m === 'UPI') window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${t}&cu=INR`;
-                else {
-                    const wa = `https://wa.me/${WHATSAPP_NUM}?text=New Order for ${it}. Total: ₹${t}. Ship to: ${ad}`;
-                    alert("Order Placed! Redirecting to WhatsApp for confirmation.");
-                    window.location.href = wa;
-                }
-            } catch (e) { alert("Order Sent! We will contact you."); location.reload(); }
-        }
-                    <script type="module">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp } 
+  import { getFirestore, collection, addDoc, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // ✅ YOUR FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
     authDomain: "climax-store.firebaseapp.com",
     projectId: "climax-store",
     storageBucket: "climax-store.firebasestorage.app",
     messagingSenderId: "1080709377710",
-    appId: "1:1080709377710:web:9e48d62019ec99026e873f",
-    measurementId: "G-M3VJ8759VF"
+    appId: "1:1080709377710:web:9e48d62019ec99026e873f"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // 🔥 PLACE ORDER FUNCTION
   window.submitOrder = async function () {
-    const name = document.getElementById("custName").value;
-    const phone = document.getElementById("custPhone").value;
-    const address = document.getElementById("custAddress").value;
-    const payment = document.querySelector("input[name='pay']:checked")?.value;
+    const name = custName.value;
+    const phone = custPhone.value;
+    const address = custAddress.value;
+    const payment = document.querySelector("input[name='pay']:checked").value;
 
-    if (!name || !phone || !address || !payment) {
-      alert("Please fill all details");
+    if (!name || !phone || !address) {
+      alert("Fill all details");
       return;
     }
 
-    const btn = document.getElementById("finalBtn");
-    btn.innerText = "Processing...";
-    btn.disabled = true;
+    finalBtn.innerText = "Processing...";
+    finalBtn.disabled = true;
 
     try {
       await addDoc(collection(db, "orders"), {
@@ -312,26 +199,25 @@ export default function Checkout() {
         phone,
         address,
         payment,
+        items: cart.map(i => i.name),
+        total: cart.reduce((s, i) => s + i.price, 0),
         status: "pending",
         createdAt: serverTimestamp()
       });
 
       alert("Order placed successfully!");
+      location.reload();
 
-      btn.innerText = "Place Order";
-      btn.disabled = false;
-
-    } catch (err) {
-      console.error(err);
+    } catch (e) {
+      console.error(e);
       alert("Order failed");
-      btn.innerText = "Place Order";
-      btn.disabled = false;
+      finalBtn.disabled = false;
+      finalBtn.innerText = "Place Order";
     }
   };
 
-  // OPTIONAL
   window.closeCheckout = function () {
-    alert("Checkout closed");
+    document.getElementById("checkoutModal").classList.add("hidden");
   };
 </script>
 
