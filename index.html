@@ -1,345 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLIMAX | Elite Men's Bracelets</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --gold: #D4AF37; --black: #080808; }
-        body { background-color: var(--black); color: white; font-family: 'Montserrat', sans-serif; scroll-behavior: smooth; }
-        .luxury-font { font-family: 'Cinzel', serif; }
-        .gold-text { color: var(--gold); }
-        .gold-bg { background-color: var(--gold); }
-        .product-card { background: #111; border: 1px solid #1a1a1a; transition: 0.3s ease; }
-        .product-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        #cartSidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .cart-open { transform: translateX(0) !important; }
-        .slider-dot { transition: all 0.3s ease; }
-        .hidden { display: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLIMAX | Elite Men's Bracelets</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+    :root { --gold: #D4AF37; --black: #080808; }
+    body { background-color: var(--black); color: white; font-family: 'Montserrat', sans-serif; scroll-behavior: smooth; }
+    .luxury-font { font-family: 'Cinzel', serif; }
+    .gold-text { color: var(--gold); }
+    .gold-bg { background-color: var(--gold); }
+    .product-card { background: #111; border: 1px solid #1a1a1a; transition: 0.3s ease; }
+    .product-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+    #cartSidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .cart-open { transform: translateX(0) !important; }
+    .slider-dot { transition: all 0.3s ease; }
+    .hidden { display: none; }
+</style>
 </head>
 <body class="overflow-x-hidden">
 
-    <nav class="p-5 flex justify-between items-center border-b border-zinc-900 sticky top-0 bg-black/90 backdrop-blur-md z-50 px-6 md:px-12">
-        <h1 class="luxury-font text-2xl font-bold tracking-[0.3em] gold-text cursor-pointer" onclick="location.reload()">CLIMAX</h1>
-        <button onclick="toggleCart()" class="relative p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="gold-text"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            <span id="cartCount" class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1.5 rounded-full">0</span>
-        </button>
-    </nav>
+<!-- NAVBAR -->
+<nav class="p-5 flex justify-between items-center border-b border-zinc-900 sticky top-0 bg-black/90 backdrop-blur-md z-50 px-6 md:px-12">
+    <h1 class="luxury-font text-2xl font-bold tracking-[0.3em] gold-text cursor-pointer" onclick="location.reload()">CLIMAX</h1>
+    <button onclick="toggleCart()" class="relative p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="gold-text">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span id="cartCount" class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1.5 rounded-full">0</span>
+    </button>
+</nav>
 
-    <header class="relative h-[70vh] w-full overflow-hidden">
-        <div id="slider" class="h-full w-full flex transition-transform duration-700 ease-in-out">
-            <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1515562141207-7a18b5ce3377?w=1500')] bg-cover bg-center">
-                <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
-                    <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter">THE ELITE WRIST</h2>
-                    <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic">HANDCRAFTED LUXURY</p>
-                    <a href="#collection" class="gold-bg text-black px-12 py-4 font-bold uppercase tracking-widest text-xs">Shop Collection</a>
-                </div>
-            </div>
-            <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1500')] bg-cover bg-center">
-                <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center px-6">
-                    <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter">NATURAL FORCE</h2>
-                    <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic">GENUINE ONYX SERIES</p>
-                    <a href="#collection" class="border border-white text-white px-12 py-4 font-bold uppercase tracking-widest text-xs">Explore Now</a>
-                </div>
+<!-- HEADER / SLIDER -->
+<header class="relative h-[70vh] w-full overflow-hidden">
+    <div id="slider" class="h-full w-full flex transition-transform duration-700 ease-in-out">
+        <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1515562141207-7a18b5ce3377?w=1500')] bg-cover bg-center">
+            <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
+                <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter">THE ELITE WRIST</h2>
+                <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic">HANDCRAFTED LUXURY</p>
+                <a href="#collection" class="gold-bg text-black px-12 py-4 font-bold uppercase tracking-widest text-xs">Shop Collection</a>
             </div>
         </div>
-        <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
-            <button onclick="goToSlide(0)" class="slider-dot w-3 h-3 rounded-full bg-white/30"></button>
-            <button onclick="goToSlide(1)" class="slider-dot w-3 h-3 rounded-full bg-white/30"></button>
-        </div>
-    </header>
-
-    <section id="collection" class="py-20 px-6 max-w-7xl mx-auto">
-        <h3 class="luxury-font text-2xl text-center mb-16 tracking-[0.5em] gold-text uppercase">The Signature Series</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="productGrid"></div>
-    </section>
-
-    <footer class="bg-zinc-950 border-t border-zinc-900 pt-20 pb-10 px-8">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
-            <div>
-                <h4 class="luxury-font gold-text text-xl mb-6">CLIMAX</h4>
-                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural stones and timeless craftsmanship. Every piece tells a story.</p>
-                <a href="https://www.instagram.com/theclimex_wears/?__pwa=1" target="_blank" rel="noopener noreferrer" class="text-xs gold-text hover:underline">
-            INSTAGRAM
-        </a>
+        <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1500')] bg-cover bg-center">
+            <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center px-6">
+                <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter">NATURAL FORCE</h2>
+                <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic">GENUINE ONYX SERIES</p>
+                <a href="#collection" class="border border-white text-white px-12 py-4 font-bold uppercase tracking-widest text-xs">Explore Now</a>
             </div>
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Customer Care</h4>
-                <ul class="text-zinc-500 text-sm space-y-4 cursor-pointer">
-                    <li class="hover:text-white transition">Track Order</li>
-                    <li class="hover:text-white transition">Shipping Policy</li>
-                    <li class="hover:text-white transition">Return Policy</li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Secure Checkout</h4>
-                <p class="text-zinc-500 text-sm mb-6">Safe and secure direct payments via UPI and Cash on Delivery across India.</p>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" class="h-5 opacity-40">
-            </div>
-        </div>
-        <p class="text-center text-zinc-800 text-[10px] tracking-widest border-t border-zinc-900 pt-10">© 2026 CLIMAX LUXURY ELITE. MADE FOR THE BOLD.</p>
-    </footer>
-
-    <div id="productPage" class="fixed inset-0 bg-black z-[60] hidden overflow-y-auto">
-        <div class="max-w-6xl mx-auto p-6 lg:py-20">
-            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 flex items-center gap-2 hover:text-white transition uppercase text-[10px] tracking-widest">← Back to Collection</button>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 pb-32">
-                <img id="mainImg" src="" class="w-full aspect-square object-cover rounded-lg border border-zinc-900">
-                <div class="flex flex-col">
-                    <h2 id="pName" class="luxury-font text-4xl mb-2 tracking-wide"></h2>
-                    <p id="pPrice" class="gold-text text-2xl font-bold mb-8"></p>
-                    <p class="text-zinc-400 text-sm leading-relaxed mb-8">Hand-selected natural stones paired with surgical grade steel. Designed for daily wear and maximum impact.</p>
-                    <ul class="text-xs space-y-3 text-zinc-500 uppercase tracking-widest border-t border-zinc-900 pt-8">
-                        <li>• Premium AAA Grade Stones</li>
-                        <li>• Anti-Snap Reinforced Cord</li>
-                        <li>• Signature Velvet Packaging</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="fixed bottom-0 left-0 right-0 p-4 bg-black/90 backdrop-blur-md border-t border-zinc-800 z-[70] flex items-center justify-between md:px-32">
-            <div><p id="stickyName" class="text-[10px] text-zinc-500 uppercase tracking-widest"></p><p id="stickyPrice" class="font-bold gold-text"></p></div>
-            <button onclick="addCurrentToCart()" class="gold-bg text-black px-10 py-3 rounded font-bold text-xs tracking-widest uppercase shadow-lg">Add to Cart</button>
         </div>
     </div>
+    <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
+        <button onclick="goToSlide(0)" class="slider-dot w-3 h-3 rounded-full bg-white/30"></button>
+        <button onclick="goToSlide(1)" class="slider-dot w-3 h-3 rounded-full bg-white/30"></button>
+    </div>
+</header>
 
-    <div id="cartSidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-zinc-950 z-[100] translate-x-full shadow-2xl p-6 flex flex-col">
-        <div class="flex justify-between items-center border-b border-zinc-900 pb-4 mb-6">
-            <h3 class="luxury-font text-xl gold-text">YOUR CART</h3>
-            <button onclick="toggleCart()" class="text-zinc-500 text-2xl">&times;</button>
+<!-- COLLECTION -->
+<section id="collection" class="py-20 px-6 max-w-7xl mx-auto">
+    <h3 class="luxury-font text-2xl text-center mb-16 tracking-[0.5em] gold-text uppercase">The Signature Series</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="productGrid"></div>
+</section>
+
+<!-- ADMIN ORDERS SECTION -->
+<section id="adminOrders" class="py-20 px-6 max-w-7xl mx-auto">
+    <h2 class="luxury-font text-2xl gold-text mb-6 text-center tracking-widest">All Orders</h2>
+    <div id="ordersList" class="space-y-4"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-zinc-950 border-t border-zinc-900 pt-20 pb-10 px-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
+        <div>
+            <h4 class="luxury-font gold-text text-xl mb-6">CLIMAX</h4>
+            <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural stones and timeless craftsmanship. Every piece tells a story.</p>
+            <a href="https://www.instagram.com/theclimex_wears/?__pwa=1" target="_blank" rel="noopener noreferrer" class="text-xs gold-text hover:underline">
+                INSTAGRAM
+            </a>
         </div>
-        <div id="cartItems" class="flex-1 overflow-y-auto space-y-4"></div>
-        <div class="border-t border-zinc-900 pt-6 mt-4">
-            <div class="flex justify-between mb-6"><span class="text-zinc-500 uppercase text-xs tracking-widest">Subtotal</span><span id="cartTotal" class="gold-text font-bold text-xl">₹0</span></div>
-            <button onclick="openCheckout()" class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">Proceed to Shipping</button>
+        <div>
+            <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Customer Care</h4>
+            <ul class="text-zinc-500 text-sm space-y-4 cursor-pointer">
+                <li class="hover:text-white transition">Track Order</li>
+                <li class="hover:text-white transition">Shipping Policy</li>
+                <li class="hover:text-white transition">Return Policy</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Secure Checkout</h4>
+            <p class="text-zinc-500 text-sm mb-6">Safe and secure direct payments via UPI and Cash on Delivery across India.</p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" class="h-5 opacity-40">
         </div>
     </div>
+    <p class="text-center text-zinc-800 text-[10px] tracking-widest border-t border-zinc-900 pt-10">© 2026 CLIMAX LUXURY ELITE. MADE FOR THE BOLD.</p>
+</footer>
 
-    <div id="checkoutModal" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-4">
-        <div class="bg-zinc-900 w-full max-w-md p-8 rounded-2xl border border-zinc-800 shadow-2xl">
-            <h3 class="luxury-font text-xl gold-text mb-6 text-center tracking-widest">SHIPPING INFO</h3>
-            <form id="orderForm" class="space-y-4" onsubmit="return false;">
-                <input id="custName" required placeholder="Full Name"
-                    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+<!-- SCRIPT -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-                <input id="custPhone" required placeholder="WhatsApp Number"
-                    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+// Firebase config
+const firebaseConfig = {
+    apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
+    authDomain: "climax-store.firebaseapp.com",
+    projectId: "climax-store",
+    storageBucket: "climax-store.firebasestorage.app",
+    messagingSenderId: "1080709377710",
+    appId: "1:1080709377710:web:9e48d62019ec99026e873f"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-                <textarea id="custAddress" required placeholder="Full Address with Pincode"
-                    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
+// Products
+const products = [
+    { id: 1, name: 'Black Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600' },
+    { id: 2, name: 'Lava Stone', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600' },
+    { id: 3, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600' },
+    { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600' }
+];
 
-                <div class="flex gap-4">
-                    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
-                        <input type="radio" name="pay" value="UPI" checked class="hidden">
-                        <span class="text-[10px] tracking-widest uppercase">GPay / UPI</span>
-                    </label>
+// State
+let cart = [];
+let currentProduct = null;
+let slideIndex = 0;
 
-                    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
-                        <input type="radio" name="pay" value="COD" class="hidden">
-                        <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
-                    </label>
-                </div>
+// Elements
+const grid = document.getElementById('productGrid');
+const cartCountEl = document.getElementById('cartCount');
+const cartItemsEl = document.getElementById('cartItems');
+const cartTotalEl = document.getElementById('cartTotal');
+const sliderEl = document.getElementById('slider');
+const ordersList = document.getElementById("ordersList");
 
-                <button id="finalBtn" type="button" onclick="submitOrder()"
-                    class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">
-                    Place Order
-                </button>
+// Render products
+function renderProducts() {
+    grid.innerHTML = '';
+    products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card p-4 rounded-xl flex flex-col cursor-pointer';
+        card.onclick = () => openProductPage(p.id);
 
-                <button type="button" onclick="closeCheckout()"
-                    class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
-                    CANCEL
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- SINGLE MODULE SCRIPT -->
-    <script type="module">
-    // Imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    // Firebase config
-    const firebaseConfig = {
-        apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
-        authDomain: "climax-store.firebaseapp.com",
-        projectId: "climax-store",
-        storageBucket: "climax-store.firebasestorage.app",
-        messagingSenderId: "1080709377710",
-        appId: "1:1080709377710:web:9e48d62019ec99026e873f"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Product data
-    const products = [
-        { id: 1, name: 'Black Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600' },
-        { id: 2, name: 'Lava Stone', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600' },
-        { id: 3, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600' },
-        { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600' }
-    ];
-
-    // State
-    let cart = [];
-    let currentProduct = null;
-    let slideIndex = 0;
-
-    // Elements
-    const grid = document.getElementById('productGrid');
-    const cartCountEl = document.getElementById('cartCount');
-    const cartItemsEl = document.getElementById('cartItems');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const sliderEl = document.getElementById('slider');
-
-    // DOM ready
-    document.addEventListener("DOMContentLoaded", () => {
-        renderProducts();
-        goToSlide(0); // initial slide
+        card.innerHTML = `
+            <img src="${p.img}" class="w-full aspect-square object-cover rounded-lg mb-4">
+            <h3 class="font-semibold tracking-wide uppercase text-sm">${p.name}</h3>
+            <p class="gold-text font-bold mb-4">₹${p.price}</p>
+            <button class="mt-auto w-full py-3 border border-zinc-800 text-[10px] tracking-widest hover:bg-white hover:text-black transition">
+              VIEW PRODUCT
+            </button>
+        `;
+        grid.appendChild(card);
     });
+}
 
-    // Render product cards
-    function renderProducts() {
-        grid.innerHTML = '';
-        products.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'product-card p-4 rounded-xl flex flex-col cursor-pointer';
-            card.onclick = () => openProductPage(p.id);
+// Fetch all orders
+async function fetchOrders() {
+    const querySnapshot = await getDocs(collection(db, "orders"));
+    ordersList.innerHTML = '';
+    querySnapshot.forEach(doc => {
+        const data = doc.data();
+        ordersList.innerHTML += `
+            <div class="p-4 bg-zinc-900 rounded border border-zinc-800">
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Phone:</strong> ${data.phone}</p>
+                <p><strong>Address:</strong> ${data.address}</p>
+                <p><strong>Payment:</strong> ${data.payment}</p>
+                <p><strong>Items:</strong> ${data.items.join(", ")}</p>
+                <p><strong>Total:</strong> ₹${data.total}</p>
+                <p><strong>Status:</strong> ${data.status}</p>
+            </div>
+        `;
+    });
+}
 
-            card.innerHTML = `
-                <img src="${p.img}" class="w-full aspect-square object-cover rounded-lg mb-4">
-                <h3 class="font-semibold tracking-wide uppercase text-sm">${p.name}</h3>
-                <p class="gold-text font-bold mb-4">₹${p.price}</p>
-                <button class="mt-auto w-full py-3 border border-zinc-800 text-[10px] tracking-widest hover:bg-white hover:text-black transition">
-                  VIEW PRODUCT
-                </button>
-            `;
-            grid.appendChild(card);
+// Cart functions
+window.toggleCart = () => document.getElementById('cartSidebar').classList.toggle('cart-open');
+window.openProductPage = (id) => {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+    currentProduct = product;
+    document.getElementById('mainImg').src = product.img;
+    document.getElementById('pName').innerText = product.name;
+    document.getElementById('pPrice').innerText = `₹${product.price}`;
+    document.getElementById('stickyName').innerText = product.name;
+    document.getElementById('stickyPrice').innerText = `₹${product.price}`;
+    document.getElementById('productPage').classList.remove('hidden');
+};
+window.closeProductPage = () => document.getElementById('productPage').classList.add('hidden');
+window.addCurrentToCart = () => {
+    if (!currentProduct) return;
+    cart.push(currentProduct);
+    updateCartDisplay();
+    alert(`${currentProduct.name} added to cart`);
+};
+function updateCartDisplay() {
+    cartCountEl.innerText = cart.length;
+    cartItemsEl.innerHTML = '';
+    cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'flex justify-between text-sm';
+        div.innerHTML = `<span>${item.name}</span><span>₹${item.price}</span>`;
+        cartItemsEl.appendChild(div);
+    });
+    cartTotalEl.innerText = `₹${cart.reduce((s,i)=>s+i.price,0)}`;
+}
+window.goToSlide = (index) => {
+    if(index<0) index=0;
+    if(index>1) index=1;
+    slideIndex=index;
+    sliderEl.style.transform=`translateX(-${index*100}%)`;
+};
+window.openCheckout = () => {
+    if(cart.length===0){ alert('Cart is empty'); return; }
+    document.getElementById('checkoutModal').classList.remove('hidden');
+};
+window.closeCheckout = () => document.getElementById('checkoutModal').classList.add('hidden');
+window.submitOrder = async () => {
+    const name = document.getElementById('custName').value;
+    const phone = document.getElementById('custPhone').value;
+    const address = document.getElementById('custAddress').value;
+    const payment = document.querySelector("input[name='pay']:checked")?.value;
+    if(!name||!phone||!address||!payment){ alert("Fill all details"); return; }
+    const finalBtn = document.getElementById('finalBtn');
+    finalBtn.innerText = "Processing...";
+    finalBtn.disabled = true;
+    try{
+        await addDoc(collection(db,"orders"),{
+            name, phone, address, payment,
+            items: cart.map(i=>i.name),
+            total: cart.reduce((s,i)=>s+i.price,0),
+            status: "pending",
+            createdAt: serverTimestamp()
         });
+        alert("Order placed successfully!");
+        location.reload();
+    }catch(e){
+        console.error(e);
+        alert("Order failed");
+        finalBtn.disabled=false;
+        finalBtn.innerText="Place Order";
     }
+};
 
-    // Cart sidebar toggle
-    window.toggleCart = function() {
-        const sidebar = document.getElementById('cartSidebar');
-        sidebar.classList.toggle('cart-open');
-    }
-
-    // Open product page
-    window.openProductPage = function(id) {
-        const product = products.find(p => p.id === id);
-        if (!product) return;
-        currentProduct = product;
-
-        document.getElementById('mainImg').src = product.img;
-        document.getElementById('pName').innerText = product.name;
-        document.getElementById('pPrice').innerText = `₹${product.price}`;
-        document.getElementById('stickyName').innerText = product.name;
-        document.getElementById('stickyPrice').innerText = `₹${product.price}`;
-
-        document.getElementById('productPage').classList.remove('hidden');
-    }
-
-    // Close product page
-    window.closeProductPage = function() {
-        document.getElementById('productPage').classList.add('hidden');
-    }
-
-    // Add current product to cart
-    window.addCurrentToCart = function() {
-        if (!currentProduct) return;
-        cart.push(currentProduct);
-        updateCartDisplay();
-        alert(`${currentProduct.name} added to cart`);
-    }
-
-    // Update cart UI
-    function updateCartDisplay() {
-        // update count
-        cartCountEl.innerText = cart.length;
-
-        // list items
-        cartItemsEl.innerHTML = '';
-        cart.forEach((item, idx) => {
-            const div = document.createElement('div');
-            div.className = 'flex justify-between text-sm';
-            div.innerHTML = `
-                <span>${item.name}</span>
-                <span>₹${item.price}</span>
-            `;
-            cartItemsEl.appendChild(div);
-        });
-
-        // total
-        const total = cart.reduce((s, i) => s + i.price, 0);
-        cartTotalEl.innerText = `₹${total}`;
-    }
-
-    // Slide navigation
-    window.goToSlide = function(index) {
-        // assume 2 slides
-        if (index < 0) index = 0;
-        if (index > 1) index = 1;
-        slideIndex = index;
-        sliderEl.style.transform = `translateX(-${index * 100}%)`;
-
-        // optional: highlight dots; you can add logic to change dot styles if desired
-    }
-
-    // Checkout modal
-    window.openCheckout = function() {
-        if (cart.length === 0) {
-            alert('Cart is empty');
-            return;
-        }
-        document.getElementById('checkoutModal').classList.remove('hidden');
-    }
-
-    window.closeCheckout = function() {
-        document.getElementById('checkoutModal').classList.add('hidden');
-    }
-
-    // Submit order to Firestore
-    window.submitOrder = async function () {
-        const name = document.getElementById('custName').value;
-        const phone = document.getElementById('custPhone').value;
-        const address = document.getElementById('custAddress').value;
-        const payment = document.querySelector("input[name='pay']:checked")?.value;
-
-        if (!name || !phone || !address || !payment) {
-            alert("Fill all details");
-            return;
-        }
-
-        const finalBtn = document.getElementById('finalBtn');
-        finalBtn.innerText = "Processing...";
-        finalBtn.disabled = true;
-
-        try {
-            await addDoc(collection(db, "orders"), {
-                name,
-                phone,
-                address,
-                payment,
-                items: cart.map(i => i.name),
-                total: cart.reduce((s, i) => s + i.price, 0),
-                status: "pending",
-                createdAt: serverTimestamp()
-            });
-
-            alert("Order placed successfully!");
-            location.reload();
-        } catch (e) {
-            console.error(e);
-            alert("Order failed");
-            finalBtn.disabled = false;
-            finalBtn.innerText = "Place Order";
-        }
-    };
-    </script>
-    <!-- end module script -->
+// Init
+document.addEventListener("DOMContentLoaded", ()=>{
+    renderProducts();
+    goToSlide(0);
+    fetchOrders();
+});
+</script>
 
 </body>
 </html>
