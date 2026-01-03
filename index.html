@@ -123,15 +123,15 @@
         <div class="bg-zinc-900 w-full max-w-md p-8 rounded-2xl border border-zinc-800 shadow-2xl">
             <h3 class="luxury-font text-xl gold-text mb-6 text-center tracking-widest">SHIPPING INFO</h3>
             <form id="orderForm" class="space-y-4">
-                <input type="text" id="custName" placeholder="Full Name" required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
-                <input type="tel" id="custPhone" placeholder="WhatsApp Number" required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
-                <textarea id="custAddress" placeholder="Full Address with Pincode" required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
+                <input id="custName" placeholder="Full Name"> required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+                <input id="custPhone" placeholder="WhatsApp Number"> required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+                <textarea id="custAddress" placeholder="Full Address with Pincode"></textarea> required class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
                 <div class="flex gap-4">
                     <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer hover:border-amber-500 transition">
-                        <input type="radio" name="pay" value="UPI" checked class="hidden"> <span class="text-[10px] tracking-widest uppercase">GPay/UPI</span>
+                        <input type="radio" name="pay" value="UPI"> UPI checked class="hidden"> <span class="text-[10px] tracking-widest uppercase">GPay/UPI</span>
                     </label>
                     <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer hover:border-amber-500 transition">
-                        <input type="radio" name="pay" value="COD" class="hidden"> <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
+                       <input type="radio" name="pay" value="COD"> COD class="hidden"> <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
                     </label>
                    "use client";
 
@@ -162,22 +162,18 @@ export default function Checkout() {
 
   return (
     <div>
-      <button
-        type="button"
-        onClick={submitOrder}
-        id="finalBtn"
-        className="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs mt-4"
-      >
-        Place Order
-      </button>
+     <button
+  id="finalBtn"
+  onclick="submitOrder()"
+  class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs mt-4">
+  Place Order
+</button>
 
-      <button
-        type="button"
-        onClick={closeCheckout}
-        className="w-full text-zinc-600 text-[10px] mt-4 tracking-widest"
-      >
-        CANCEL
-      </button>
+<button
+  onclick="closeCheckout()"
+  class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
+  CANCEL
+</button>
     </div>
   );
 }
@@ -275,6 +271,69 @@ export default function Checkout() {
                 }
             } catch (e) { alert("Order Sent! We will contact you."); location.reload(); }
         }
-    </script>
+                    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } 
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // ✅ YOUR FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
+    authDomain: "climax-store.firebaseapp.com",
+    projectId: "climax-store",
+    storageBucket: "climax-store.firebasestorage.app",
+    messagingSenderId: "1080709377710",
+    appId: "1:1080709377710:web:9e48d62019ec99026e873f",
+    measurementId: "G-M3VJ8759VF"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 🔥 PLACE ORDER FUNCTION
+  window.submitOrder = async function () {
+    const name = document.getElementById("custName").value;
+    const phone = document.getElementById("custPhone").value;
+    const address = document.getElementById("custAddress").value;
+    const payment = document.querySelector("input[name='pay']:checked")?.value;
+
+    if (!name || !phone || !address || !payment) {
+      alert("Please fill all details");
+      return;
+    }
+
+    const btn = document.getElementById("finalBtn");
+    btn.innerText = "Processing...";
+    btn.disabled = true;
+
+    try {
+      await addDoc(collection(db, "orders"), {
+        name,
+        phone,
+        address,
+        payment,
+        status: "pending",
+        createdAt: serverTimestamp()
+      });
+
+      alert("Order placed successfully!");
+
+      btn.innerText = "Place Order";
+      btn.disabled = false;
+
+    } catch (err) {
+      console.error(err);
+      alert("Order failed");
+      btn.innerText = "Place Order";
+      btn.disabled = false;
+    }
+  };
+
+  // OPTIONAL
+  window.closeCheckout = function () {
+    alert("Checkout closed");
+  };
+</script>
+
 </body>
 </html>
