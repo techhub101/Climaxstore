@@ -133,12 +133,55 @@
                     <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer hover:border-amber-500 transition">
                         <input type="radio" name="pay" value="COD" class="hidden"> <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
                     </label>
-                </div>
-                <button type="button" onclick="submitOrder()" id="finalBtn" class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs mt-4">Place Order</button>
-                <button type="button" onclick="closeCheckout()" class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">CANCEL</button>
-            </form>
-        </div>
+                   "use client";
+
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+export default function Checkout() {
+
+  async function submitOrder() {
+    try {
+      await addDoc(collection(db, "orders"), {
+        product: "Bracelet",
+        price: 999,
+        createdAt: Timestamp.now(),
+        status: "pending",
+      });
+
+      alert("Order placed successfully!");
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Order failed");
+    }
+  }
+
+  function closeCheckout() {
+    alert("Checkout closed");
+  }
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={submitOrder}
+        id="finalBtn"
+        className="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs mt-4"
+      >
+        Place Order
+      </button>
+
+      <button
+        type="button"
+        onClick={closeCheckout}
+        className="w-full text-zinc-600 text-[10px] mt-4 tracking-widest"
+      >
+        CANCEL
+      </button>
     </div>
+  );
+}
+
 
     <script>
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7KmjRtqdwQZ0GmaKev4BVy_6xQI0TP4aPbA3Xfjfo5lra252D4LZOqprwwKnHfOSggQ/exec';
