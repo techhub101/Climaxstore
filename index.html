@@ -122,122 +122,224 @@
     <div id="checkoutModal" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-4">
         <div class="bg-zinc-900 w-full max-w-md p-8 rounded-2xl border border-zinc-800 shadow-2xl">
             <h3 class="luxury-font text-xl gold-text mb-6 text-center tracking-widest">SHIPPING INFO</h3>
-<form id="orderForm" class="space-y-4" onsubmit="return false;">
-  <input id="custName" required placeholder="Full Name"
-    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+            <form id="orderForm" class="space-y-4" onsubmit="return false;">
+                <input id="custName" required placeholder="Full Name"
+                    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
 
-  <input id="custPhone" required placeholder="WhatsApp Number"
-    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+                <input id="custPhone" required placeholder="WhatsApp Number"
+                    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
 
-  <textarea id="custAddress" required placeholder="Full Address with Pincode"
-    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
+                <textarea id="custAddress" required placeholder="Full Address with Pincode"
+                    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
 
-  <div class="flex gap-4">
-    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
-      <input type="radio" name="pay" value="UPI" checked class="hidden">
-      <span class="text-[10px] tracking-widest uppercase">GPay / UPI</span>
-    </label>
+                <div class="flex gap-4">
+                    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
+                        <input type="radio" name="pay" value="UPI" checked class="hidden">
+                        <span class="text-[10px] tracking-widest uppercase">GPay / UPI</span>
+                    </label>
 
-    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
-      <input type="radio" name="pay" value="COD" class="hidden">
-      <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
-    </label>
-  </div>
+                    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
+                        <input type="radio" name="pay" value="COD" class="hidden">
+                        <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
+                    </label>
+                </div>
 
-  <button id="finalBtn" type="button" onclick="submitOrder()"
-    class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">
-    Place Order
-  </button>
+                <button id="finalBtn" type="button" onclick="submitOrder()"
+                    class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">
+                    Place Order
+                </button>
 
-  <button type="button" onclick="closeCheckout()"
-    class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
-    CANCEL
-  </button>
-</form>
+                <button type="button" onclick="closeCheckout()"
+                    class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
+                    CANCEL
+                </button>
+            </form>
+        </div>
+    </div>
 
-<script type="module">
-document.addEventListener("DOMContentLoaded", () => {
+    <!-- SINGLE MODULE SCRIPT -->
+    <script type="module">
+    // Imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  const products = [
-    { id: 1, name: 'Black Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600' },
-    { id: 2, name: 'Lava Stone', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600' },
-    { id: 3, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600' },
-    { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600' }
-  ];
+    // Firebase config
+    const firebaseConfig = {
+        apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
+        authDomain: "climax-store.firebaseapp.com",
+        projectId: "climax-store",
+        storageBucket: "climax-store.firebasestorage.app",
+        messagingSenderId: "1080709377710",
+        appId: "1:1080709377710:web:9e48d62019ec99026e873f"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  const grid = document.getElementById('productGrid');
+    // Product data
+    const products = [
+        { id: 1, name: 'Black Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600' },
+        { id: 2, name: 'Lava Stone', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600' },
+        { id: 3, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600' },
+        { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600' }
+    ];
 
-  products.forEach(p => {
-    grid.innerHTML += `
-      <div class="product-card p-4 rounded-xl flex flex-col cursor-pointer" onclick="openProductPage(${p.id})">
-        <img src="${p.img}" class="w-full aspect-square object-cover rounded-lg mb-4">
-        <h3 class="font-semibold tracking-wide uppercase text-sm">${p.name}</h3>
-        <p class="gold-text font-bold mb-4">₹${p.price}</p>
-        <button class="mt-auto w-full py-3 border border-zinc-800 text-[10px] tracking-widest hover:bg-white hover:text-black transition">
-          VIEW PRODUCT
-        </button>
-      </div>
-    `;
-  });
+    // State
+    let cart = [];
+    let currentProduct = null;
+    let slideIndex = 0;
 
-});
-</script>
- 
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp }
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    // Elements
+    const grid = document.getElementById('productGrid');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const sliderEl = document.getElementById('slider');
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
-    authDomain: "climax-store.firebaseapp.com",
-    projectId: "climax-store",
-    storageBucket: "climax-store.firebasestorage.app",
-    messagingSenderId: "1080709377710",
-    appId: "1:1080709377710:web:9e48d62019ec99026e873f"
-  };
+    // DOM ready
+    document.addEventListener("DOMContentLoaded", () => {
+        renderProducts();
+        goToSlide(0); // initial slide
+    });
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    // Render product cards
+    function renderProducts() {
+        grid.innerHTML = '';
+        products.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'product-card p-4 rounded-xl flex flex-col cursor-pointer';
+            card.onclick = () => openProductPage(p.id);
 
-  window.submitOrder = async function () {
-    const name = custName.value;
-    const phone = custPhone.value;
-    const address = custAddress.value;
-    const payment = document.querySelector("input[name='pay']:checked")?.value;
-
-    if (!name || !phone || !address || !payment) {
-      alert("Fill all details");
-      return;
+            card.innerHTML = `
+                <img src="${p.img}" class="w-full aspect-square object-cover rounded-lg mb-4">
+                <h3 class="font-semibold tracking-wide uppercase text-sm">${p.name}</h3>
+                <p class="gold-text font-bold mb-4">₹${p.price}</p>
+                <button class="mt-auto w-full py-3 border border-zinc-800 text-[10px] tracking-widest hover:bg-white hover:text-black transition">
+                  VIEW PRODUCT
+                </button>
+            `;
+            grid.appendChild(card);
+        });
     }
 
-    finalBtn.innerText = "Processing...";
-    finalBtn.disabled = true;
-
-    try {
-      await addDoc(collection(db, "orders"), {
-        name,
-        phone,
-        address,
-        payment,
-        items: cart.map(i => i.name),
-        total: cart.reduce((s, i) => s + i.price, 0),
-        status: "pending",
-        createdAt: serverTimestamp()
-      });
-
-      alert("Order placed successfully!");
-      location.reload();
-    } catch (e) {
-      console.error(e);
-      alert("Order failed");
-      finalBtn.disabled = false;
-      finalBtn.innerText = "Place Order";
+    // Cart sidebar toggle
+    window.toggleCart = function() {
+        const sidebar = document.getElementById('cartSidebar');
+        sidebar.classList.toggle('cart-open');
     }
-  };
 
-  window.closeCheckout = function () {
-    document.getElementById("checkoutModal").classList.add("hidden");
-  };
-</script>
+    // Open product page
+    window.openProductPage = function(id) {
+        const product = products.find(p => p.id === id);
+        if (!product) return;
+        currentProduct = product;
+
+        document.getElementById('mainImg').src = product.img;
+        document.getElementById('pName').innerText = product.name;
+        document.getElementById('pPrice').innerText = `₹${product.price}`;
+        document.getElementById('stickyName').innerText = product.name;
+        document.getElementById('stickyPrice').innerText = `₹${product.price}`;
+
+        document.getElementById('productPage').classList.remove('hidden');
+    }
+
+    // Close product page
+    window.closeProductPage = function() {
+        document.getElementById('productPage').classList.add('hidden');
+    }
+
+    // Add current product to cart
+    window.addCurrentToCart = function() {
+        if (!currentProduct) return;
+        cart.push(currentProduct);
+        updateCartDisplay();
+        alert(`${currentProduct.name} added to cart`);
+    }
+
+    // Update cart UI
+    function updateCartDisplay() {
+        // update count
+        cartCountEl.innerText = cart.length;
+
+        // list items
+        cartItemsEl.innerHTML = '';
+        cart.forEach((item, idx) => {
+            const div = document.createElement('div');
+            div.className = 'flex justify-between text-sm';
+            div.innerHTML = `
+                <span>${item.name}</span>
+                <span>₹${item.price}</span>
+            `;
+            cartItemsEl.appendChild(div);
+        });
+
+        // total
+        const total = cart.reduce((s, i) => s + i.price, 0);
+        cartTotalEl.innerText = `₹${total}`;
+    }
+
+    // Slide navigation
+    window.goToSlide = function(index) {
+        // assume 2 slides
+        if (index < 0) index = 0;
+        if (index > 1) index = 1;
+        slideIndex = index;
+        sliderEl.style.transform = `translateX(-${index * 100}%)`;
+
+        // optional: highlight dots; you can add logic to change dot styles if desired
+    }
+
+    // Checkout modal
+    window.openCheckout = function() {
+        if (cart.length === 0) {
+            alert('Cart is empty');
+            return;
+        }
+        document.getElementById('checkoutModal').classList.remove('hidden');
+    }
+
+    window.closeCheckout = function() {
+        document.getElementById('checkoutModal').classList.add('hidden');
+    }
+
+    // Submit order to Firestore
+    window.submitOrder = async function () {
+        const name = document.getElementById('custName').value;
+        const phone = document.getElementById('custPhone').value;
+        const address = document.getElementById('custAddress').value;
+        const payment = document.querySelector("input[name='pay']:checked")?.value;
+
+        if (!name || !phone || !address || !payment) {
+            alert("Fill all details");
+            return;
+        }
+
+        const finalBtn = document.getElementById('finalBtn');
+        finalBtn.innerText = "Processing...";
+        finalBtn.disabled = true;
+
+        try {
+            await addDoc(collection(db, "orders"), {
+                name,
+                phone,
+                address,
+                payment,
+                items: cart.map(i => i.name),
+                total: cart.reduce((s, i) => s + i.price, 0),
+                status: "pending",
+                createdAt: serverTimestamp()
+            });
+
+            alert("Order placed successfully!");
+            location.reload();
+        } catch (e) {
+            console.error(e);
+            alert("Order failed");
+            finalBtn.disabled = false;
+            finalBtn.innerText = "Place Order";
+        }
+    };
+    </script>
+    <!-- end module script -->
+
 </body>
 </html>
