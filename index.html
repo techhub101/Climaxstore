@@ -6,18 +6,23 @@
     <title>CLIMAX | Elite Men's Bracelets</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+
     <style>
         :root { --gold: #D4AF37; --black: #080808; }
         body { background-color: var(--black); color: white; font-family: 'Montserrat', sans-serif; scroll-behavior: smooth; }
         .luxury-font { font-family: 'Cinzel', serif; }
         .gold-text { color: var(--gold); }
         .gold-bg { background-color: var(--gold); }
-        .product-card { background: #111; border: 1px solid #1a1a1a; transition: 0.3s ease; }
+        .product-card { background: #111; border: 1px solid #1a1a1a; transition: 0.3s ease; cursor: pointer; }
         .product-card:hover { border-color: var(--gold); transform: translateY(-5px); }
         #cartSidebar { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .cart-open { transform: translateX(0) !important; }
-        .slider-dot { transition: all 0.3s ease; }
         .hidden { display: none; }
+        input, textarea, select { border-radius: 4px !important; background-color: #000 !important; border: 1px solid #27272a !important; color: #fff !important; }
+        input:focus, textarea:focus { border-color: var(--gold) !important; outline: none; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -30,26 +35,15 @@
         </button>
     </nav>
 
-    <header class="relative h-[70vh] w-full overflow-hidden">
+    <header class="relative h-[60vh] w-full overflow-hidden">
         <div id="slider" class="h-full w-full flex transition-transform duration-700 ease-in-out">
             <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1515562141207-7a18b5ce3377?w=1500')] bg-cover bg-center">
                 <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
-                    <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter">THE ELITE WRIST</h2>
-                    <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic">HANDCRAFTED LUXURY</p>
+                    <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter uppercase">The Elite Wrist</h2>
+                    <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic uppercase">Handcrafted Luxury</p>
                     <a href="#collection" class="gold-bg text-black px-12 py-4 font-bold uppercase tracking-widest text-xs">Shop Collection</a>
                 </div>
             </div>
-            <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1500')] bg-cover bg-center">
-                <div class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-center px-6">
-                    <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter">NATURAL FORCE</h2>
-                    <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic">GENUINE ONYX SERIES</p>
-                    <a href="#collection" class="border border-white text-white px-12 py-4 font-bold uppercase tracking-widest text-xs">Explore Now</a>
-                </div>
-            </div>
-        </div>
-        <div class="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-20">
-            <button onclick="goToSlide(0)" class="slider-dot w-3 h-3 rounded-full bg-white/30"></button>
-            <button onclick="goToSlide(1)" class="slider-dot w-3 h-3 rounded-full bg-white/30"></button>
         </div>
     </header>
 
@@ -61,49 +55,44 @@
     <footer class="bg-zinc-950 border-t border-zinc-900 pt-20 pb-10 px-8">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
             <div>
-                <h4 class="luxury-font gold-text text-xl mb-6">CLIMAX</h4>
-                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural stones and timeless craftsmanship. Every piece tells a story.</p>
-                <a href="https://www.instagram.com/theclimex_wears/?__pwa=1" target="_blank" rel="noopener noreferrer" class="text-xs gold-text hover:underline">
-            INSTAGRAM
-        </a>
+                <h4 class="luxury-font gold-text text-xl mb-6 uppercase">Climax</h4>
+                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural stones and timeless craftsmanship.</p>
+                <a href="https://instagram.com/YOUR_USERNAME" target="_blank" class="text-xs gold-text tracking-widest hover:underline uppercase">Follow us on Instagram</a>
             </div>
             <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Customer Care</h4>
-                <ul class="text-zinc-500 text-sm space-y-4 cursor-pointer">
-                    <li class="hover:text-white transition">Track Order</li>
-                    <li class="hover:text-white transition">Shipping Policy</li>
-                    <li class="hover:text-white transition">Return Policy</li>
-                </ul>
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
+                <p class="text-zinc-500 text-sm">Free Express Shipping across India. 24/7 Premium Customer Support.</p>
             </div>
             <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Secure Checkout</h4>
-                <p class="text-zinc-500 text-sm mb-6">Safe and secure direct payments via UPI and Cash on Delivery across India.</p>
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Payments</h4>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" class="h-5 opacity-40">
             </div>
         </div>
-        <p class="text-center text-zinc-800 text-[10px] tracking-widest border-t border-zinc-900 pt-10">© 2026 CLIMAX LUXURY ELITE. MADE FOR THE BOLD.</p>
     </footer>
 
     <div id="productPage" class="fixed inset-0 bg-black z-[60] hidden overflow-y-auto">
         <div class="max-w-6xl mx-auto p-6 lg:py-20">
-            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 flex items-center gap-2 hover:text-white transition uppercase text-[10px] tracking-widest">← Back to Collection</button>
+            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 flex items-center gap-2 hover:text-white transition uppercase text-[10px] tracking-widest">← Back</button>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 pb-32">
                 <img id="mainImg" src="" class="w-full aspect-square object-cover rounded-lg border border-zinc-900">
                 <div class="flex flex-col">
-                    <h2 id="pName" class="luxury-font text-4xl mb-2 tracking-wide"></h2>
-                    <p id="pPrice" class="gold-text text-2xl font-bold mb-8"></p>
-                    <p class="text-zinc-400 text-sm leading-relaxed mb-8">Hand-selected natural stones paired with surgical grade steel. Designed for daily wear and maximum impact.</p>
-                    <ul class="text-xs space-y-3 text-zinc-500 uppercase tracking-widest border-t border-zinc-900 pt-8">
-                        <li>• Premium AAA Grade Stones</li>
-                        <li>• Anti-Snap Reinforced Cord</li>
-                        <li>• Signature Velvet Packaging</li>
-                    </ul>
+                    <h2 id="pName" class="luxury-font text-4xl mb-2 tracking-wide uppercase"></h2>
+                    <p id="pPrice" class="gold-text text-2xl font-bold mb-6"></p>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-zinc-800 pb-2">Product Details</h4>
+                        <p id="pDesc" class="text-zinc-400 text-sm leading-relaxed"></p>
+                        <ul class="mt-6 space-y-2 text-[11px] text-zinc-500 uppercase tracking-widest">
+                            <li>• AAA Grade Natural Stones</li>
+                            <li>• High-Tensile Reinforced Cord</li>
+                            <li>• Sweat & Water Resistant</li>
+                            <li>• Signature Velvet Pouch Included</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="addCurrentToCart()" class="gold-bg text-black px-12 py-4 font-bold text-xs tracking-widest uppercase hover:brightness-110">Add to Cart</button>
                 </div>
             </div>
-        </div>
-        <div class="fixed bottom-0 left-0 right-0 p-4 bg-black/90 backdrop-blur-md border-t border-zinc-800 z-[70] flex items-center justify-between md:px-32">
-            <div><p id="stickyName" class="text-[10px] text-zinc-500 uppercase tracking-widest"></p><p id="stickyPrice" class="font-bold gold-text"></p></div>
-            <button onclick="addCurrentToCart()" class="gold-bg text-black px-10 py-3 rounded font-bold text-xs tracking-widest uppercase shadow-lg">Add to Cart</button>
         </div>
     </div>
 
@@ -114,129 +103,189 @@
         </div>
         <div id="cartItems" class="flex-1 overflow-y-auto space-y-4"></div>
         <div class="border-t border-zinc-900 pt-6 mt-4">
-            <div class="flex justify-between mb-6"><span class="text-zinc-500 uppercase text-xs tracking-widest">Subtotal</span><span id="cartTotal" class="gold-text font-bold text-xl">₹0</span></div>
-            <button onclick="openCheckout()" class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">Proceed to Shipping</button>
+            <div class="flex justify-between mb-6 text-xl"><span>Total</span><span id="cartTotal" class="gold-text font-bold">₹0</span></div>
+            <button onclick="openCheckout()" class="w-full gold-bg text-black font-bold py-5 uppercase tracking-widest text-xs">Checkout Now</button>
         </div>
     </div>
 
-    <div id="checkoutModal" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-4">
-        <div class="bg-zinc-900 w-full max-w-md p-8 rounded-2xl border border-zinc-800 shadow-2xl">
-            <h3 class="luxury-font text-xl gold-text mb-6 text-center tracking-widest">SHIPPING INFO</h3>
-<form id="orderForm" class="space-y-4" onsubmit="return false;">
-  <input id="custName" required placeholder="Full Name"
-    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+    <div id="checkoutModal" class="fixed inset-0 bg-black/98 z-[200] hidden flex items-center justify-center p-4">
+        <div class="bg-zinc-900 w-full max-w-2xl p-6 md:p-8 rounded border border-zinc-800 shadow-2xl overflow-y-auto max-h-[95vh]">
+            <div class="flex justify-between mb-10 text-[10px] font-bold tracking-[0.2em]">
+                <div id="step1-dot" class="gold-text border-b border-gold pb-1">01 ORDER</div>
+                <div id="step2-dot" class="text-zinc-700 border-b border-zinc-800 pb-1">02 SHIPPING</div>
+                <div id="step3-dot" class="text-zinc-700 border-b border-zinc-800 pb-1">03 PAYMENT</div>
+            </div>
 
-  <input id="custPhone" required placeholder="WhatsApp Number"
-    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm outline-none focus:border-amber-500">
+            <form id="orderForm">
+                <div id="step1Content" class="space-y-6">
+                    <div id="checkoutItemsList" class="border-b border-zinc-800 pb-4"></div>
+                    <div class="flex justify-between font-bold text-xl uppercase"><span>Grand Total</span><span id="checkoutTotalValue" class="gold-text"></span></div>
+                    <button type="button" onclick="nextStep(2)" class="w-full gold-bg text-black font-bold py-5 uppercase text-xs">Continue to Shipping</button>
+                </div>
 
-  <textarea id="custAddress" required placeholder="Full Address with Pincode"
-    class="w-full bg-black border border-zinc-800 p-4 rounded text-sm h-28 outline-none focus:border-amber-500"></textarea>
+                <div id="step2Content" class="hidden space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="custName" placeholder="Name" required class="w-full p-3 text-sm">
+                        <input type="tel" id="custPhone" placeholder="10-digit mobile number" required class="w-full p-3 text-sm">
+                        <input type="text" id="custPincode" placeholder="Pincode" required class="w-full p-3 text-sm">
+                        <input type="text" id="custLocality" placeholder="Locality" required class="w-full p-3 text-sm">
+                        <textarea id="custAddress" placeholder="Address (Area and Street)" required class="w-full p-3 text-sm h-24 md:col-span-2"></textarea>
+                        <input type="text" id="custCity" placeholder="City/District/Town" required class="w-full p-3 text-sm">
+                        <select id="custState" required class="w-full p-3 text-sm">
+                            <option value="">--Select State--</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Gujarat">Gujarat</option>
+                        </select>
+                        <input type="text" id="custLandmark" placeholder="Landmark (Optional)" class="w-full p-3 text-sm">
+                        <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)" class="w-full p-3 text-sm">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6">
+                        <button type="button" onclick="nextStep(1)" class="py-4 border border-zinc-800 text-zinc-500 text-xs uppercase">Back</button>
+                        <button type="button" onclick="nextStep(3)" class="gold-bg text-black font-bold py-4 text-xs uppercase">Next</button>
+                    </div>
+                </div>
 
-  <div class="flex gap-4">
-    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
-      <input type="radio" name="pay" value="UPI" checked class="hidden">
-      <span class="text-[10px] tracking-widest uppercase">GPay / UPI</span>
-    </label>
+                <div id="step3Content" class="hidden space-y-6">
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 p-4 border border-zinc-800 cursor-pointer hover:border-gold">
+                            <input type="radio" name="pay" value="UPI" checked class="accent-amber-500"><span class="text-xs uppercase">UPI / GPay / PhonePe</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 border border-zinc-800 cursor-pointer hover:border-gold">
+                            <input type="radio" name="pay" value="COD" class="accent-amber-500"><span class="text-xs uppercase">Cash on Delivery</span>
+                        </label>
+                    </div>
+                    <button type="button" onclick="submitOrder()" id="finalBtn" class="w-full gold-bg text-black font-bold py-5 uppercase text-xs">Place Order</button>
+                </div>
+            </form>
+            <button type="button" onclick="closeCheckout()" class="w-full text-zinc-700 text-[10px] mt-8 tracking-widest uppercase">Discard</button>
+        </div>
+    </div>
 
-    <label class="flex-1 text-center border border-zinc-800 p-4 rounded cursor-pointer">
-      <input type="radio" name="pay" value="COD" class="hidden">
-      <span class="text-[10px] tracking-widest uppercase">Cash (COD)</span>
-    </label>
-  </div>
+    <script>
+        // CONFIG
+        const MY_UPI_ID = 'your-upi@id';
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4B88SlR4aXarruyfenpQG2_ttw1ZjuHQ",
+            authDomain: "climax-fbf10.firebaseapp.com",
+            projectId: "climax-fbf10",
+            storageBucket: "climax-fbf10.firebasestorage.app",
+            messagingSenderId: "273590231780",
+            appId: "1:273590231780:web:87ddd68084e4db648c42f1",
+            databaseURL: "https://climax-fbf10-default-rtdb.firebaseio.com"
+        };
 
-  <button id="finalBtn" type="button" onclick="submitOrder()"
-    class="w-full gold-bg text-black font-bold py-5 rounded uppercase tracking-widest text-xs">
-    Place Order
-  </button>
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-  <button type="button" onclick="closeCheckout()"
-    class="w-full text-zinc-600 text-[10px] mt-4 tracking-widest">
-    CANCEL
-  </button>
-</form>
+        const products = [
+            { id: 1, name: 'Midnight Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600', desc: 'Crafted from matte-finish natural Onyx stones, this piece embodies strength and silence. Perfect for the modern professional.' },
+            { id: 2, name: 'Volcanic Raw', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600', desc: 'Sourced from real volcanic basalt, the porous texture adds a rugged, earthy character to your wrist. Essential for casual styling.' },
+            { id: 3, name: 'Imperial Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600', desc: 'Known as the stone of courage, our Tiger Eye features a deep golden chatoyancy that shifts beautifully under light.' },
+            { id: 4, name: 'Classic Leather', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600', desc: 'Triple-braided Italian leather with a 316L surgical steel magnetic clasp. A timeless accessory for any suit or shirt.' }
+        ];
 
-<script type="module">
-document.addEventListener("DOMContentLoaded", () => {
+        let cart = [];
+        let curID = null;
 
-  const products = [
-    { id: 1, name: 'Black Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600' },
-    { id: 2, name: 'Lava Stone', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600' },
-    { id: 3, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600' },
-    { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600' }
-  ];
+        // Render Homepage
+        const grid = document.getElementById('productGrid');
+        products.forEach(p => {
+            grid.innerHTML += `
+                <div class="product-card p-4 flex flex-col" onclick="openProductPage(${p.id})">
+                    <img src="${p.img}" class="w-full aspect-square object-cover mb-4 rounded shadow-lg">
+                    <h3 class="font-semibold tracking-widest uppercase text-xs">${p.name}</h3>
+                    <p class="gold-text font-bold mb-4">₹${p.price}</p>
+                    <button class="mt-auto w-full py-3 border border-zinc-800 text-[9px] tracking-widest hover:bg-white hover:text-black transition uppercase">View Product</button>
+                </div>`;
+        });
 
-  const grid = document.getElementById('productGrid');
+        function toggleCart() { document.getElementById('cartSidebar').classList.toggle('cart-open'); }
+        
+        function openProductPage(id) {
+            const p = products.find(x => x.id === id); curID = id;
+            document.getElementById('pName').innerText = p.name;
+            document.getElementById('pPrice').innerText = '₹' + p.price;
+            document.getElementById('pDesc').innerText = p.desc;
+            document.getElementById('mainImg').src = p.img;
+            document.getElementById('productPage').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
 
-  products.forEach(p => {
-    grid.innerHTML += `
-      <div class="product-card p-4 rounded-xl flex flex-col cursor-pointer" onclick="openProductPage(${p.id})">
-        <img src="${p.img}" class="w-full aspect-square object-cover rounded-lg mb-4">
-        <h3 class="font-semibold tracking-wide uppercase text-sm">${p.name}</h3>
-        <p class="gold-text font-bold mb-4">₹${p.price}</p>
-        <button class="mt-auto w-full py-3 border border-zinc-800 text-[10px] tracking-widest hover:bg-white hover:text-black transition">
-          VIEW PRODUCT
-        </button>
-      </div>
-    `;
-  });
+        function closeProductPage() { document.getElementById('productPage').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+        function addCurrentToCart() { addToCart(curID); closeProductPage(); }
+        
+        function addToCart(id) {
+            cart.push(products.find(x => x.id === id));
+            updateCartUI(); toggleCart();
+        }
 
-});
- 
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp }
-    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        function updateCartUI() {
+            document.getElementById('cartCount').innerText = cart.length;
+            const t = cart.reduce((s, i) => s + i.price, 0);
+            document.getElementById('cartTotal').innerText = `₹${t}`;
+            document.getElementById('cartItems').innerHTML = cart.map((i, idx) => `
+                <div class="flex items-center gap-4 bg-zinc-900/40 p-3 border border-zinc-900 rounded">
+                    <img src="${i.img}" class="w-12 h-12 object-cover rounded">
+                    <div class="flex-1 text-[10px] uppercase font-bold tracking-widest">${i.name}<br><span class="gold-text italic">₹${i.price}</span></div>
+                    <button onclick="cart.splice(${idx},1); updateCartUI()" class="text-zinc-700 hover:text-white">&times;</button>
+                </div>`).join('');
+        }
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBDymk-YW_eTeecd4Q-XgCRz3Lbaj-4hJY",
-    authDomain: "climax-store.firebaseapp.com",
-    projectId: "climax-store",
-    storageBucket: "climax-store.firebasestorage.app",
-    messagingSenderId: "1080709377710",
-    appId: "1:1080709377710:web:9e48d62019ec99026e873f"
-  };
+        function nextStep(s) {
+            ['1','2','3'].forEach(n => {
+                document.getElementById('step'+n+'Content').classList.add('hidden');
+                document.getElementById('step'+n+'-dot').className = 'text-zinc-700 border-b border-zinc-800 pb-1';
+            });
+            document.getElementById('step'+s+'Content').classList.remove('hidden');
+            document.getElementById('step'+s+'-dot').className = 'gold-text border-b border-gold pb-1';
+        }
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+        function openCheckout() {
+            if(!cart.length) return alert("Your cart is empty");
+            document.getElementById('checkoutItemsList').innerHTML = cart.map(i => `<div class="flex justify-between py-2 text-[10px] tracking-widest uppercase border-b border-zinc-800"><span>${i.name}</span><span>₹${i.price}</span></div>`).join('');
+            document.getElementById('checkoutTotalValue').innerText = '₹' + cart.reduce((s, i) => s + i.price, 0);
+            nextStep(1);
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
 
-  window.submitOrder = async function () {
-    const name = custName.value;
-    const phone = custPhone.value;
-    const address = custAddress.value;
-    const payment = document.querySelector("input[name='pay']:checked")?.value;
+        function closeCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); }
 
-    if (!name || !phone || !address || !payment) {
-      alert("Fill all details");
-      return;
-    }
+        async function submitOrder() {
+            const btn = document.getElementById('finalBtn');
+            btn.innerText = "Processing..."; btn.disabled = true;
 
-    finalBtn.innerText = "Processing...";
-    finalBtn.disabled = true;
+            const orderData = {
+                customer: {
+                    name: document.getElementById('custName').value,
+                    phone: document.getElementById('custPhone').value,
+                    pincode: document.getElementById('custPincode').value,
+                    locality: document.getElementById('custLocality').value,
+                    address: document.getElementById('custAddress').value,
+                    city: document.getElementById('custCity').value,
+                    state: document.getElementById('custState').value,
+                    landmark: document.getElementById('custLandmark').value,
+                    altPhone: document.getElementById('custAltPhone').value
+                },
+                order: {
+                    items: cart.map(i => i.name).join(', '),
+                    total: cart.reduce((s, i) => s + i.price, 0),
+                    method: document.querySelector('input[name="pay"]:checked').value,
+                    date: new Date().toLocaleString()
+                }
+            };
 
-    try {
-      await addDoc(collection(db, "orders"), {
-        name,
-        phone,
-        address,
-        payment,
-        items: cart.map(i => i.name),
-        total: cart.reduce((s, i) => s + i.price, 0),
-        status: "pending",
-        createdAt: serverTimestamp()
-      });
-
-      alert("Order placed successfully!");
-      location.reload();
-    } catch (e) {
-      console.error(e);
-      alert("Order failed");
-      finalBtn.disabled = false;
-      finalBtn.innerText = "Place Order";
-    }
-  };
-
-  window.closeCheckout = function () {
-    document.getElementById("checkoutModal").classList.add("hidden");
-  };
-</script>
+            try {
+                await database.ref('orders').push().set(orderData);
+                if(orderData.order.method === 'UPI') {
+                    window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${orderData.order.total}&cu=INR`;
+                } else {
+                    alert("Order Placed Successfully!");
+                    location.reload();
+                }
+            } catch (e) { alert("Error saving order."); btn.disabled = false; btn.innerText = "Place Order"; }
+        }
+    </script>
 </body>
 </html>
