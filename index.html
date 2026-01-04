@@ -56,12 +56,12 @@
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
             <div>
                 <h4 class="luxury-font gold-text text-xl mb-6 uppercase">Climax</h4>
-                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural stones and timeless craftsmanship.</p>
+                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural leather and timeless craftsmanship.</p>
   <a href="https://www.instagram.com/theclimax_wears/?__pwa=1" target="_blank" rel="noopener noreferrer" class="text-xs gold-text hover:underline">Follow us on Instagram</a>
             </div>
             <div>
                 <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
-                <p class="text-zinc-500 text-sm">Free Express Shipping across India. 24/7 Premium Customer Support.</p>
+                <p class="text-zinc-500 text-sm">Free Express Shipping across thane to Dombivli. 24/7 Premium Customer Support. for more detailed follow on Instagram</p>
             </div>
             <div>
                 <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Payments</h4>
@@ -72,7 +72,7 @@
 
     <div id="productPage" class="fixed inset-0 bg-black z-[60] hidden overflow-y-auto">
         <div class="max-w-6xl mx-auto p-6 lg:py-20">
-            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 flex items-center gap-2 hover:text-white transition uppercase text-[10px] tracking-widest">← Back</button>
+            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 flex items-center gap-2 hover:text-white transition uppercase text-[10px] tracking-widest">← Back to the collection</button>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 pb-32">
                 <img id="mainImg" src="" class="w-full aspect-square object-cover rounded-lg border border-zinc-900">
                 <div class="flex flex-col">
@@ -83,10 +83,11 @@
                         <h4 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-zinc-800 pb-2">Product Details</h4>
                         <p id="pDesc" class="text-zinc-400 text-sm leading-relaxed"></p>
                         <ul class="mt-6 space-y-2 text-[11px] text-zinc-500 uppercase tracking-widest">
-                            <li>• AAA Grade Natural Stones</li>
+                            <li>• AAA Grade Natural leather look</li>
                             <li>• High-Tensile Reinforced Cord</li>
                             <li>• Sweat & Water Resistant</li>
-                            <li>• Signature Velvet Pouch Included</li>
+                            <li>• Signature premium boxx Included</li>
+                            <li>• metallic lock system</li>
                         </ul>
                     </div>
                     
@@ -178,10 +179,10 @@
         const database = firebase.database();
 
         const products = [
-            { id: 1, name: 'Midnight Onyx', price: 399, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Crafted from matte-finish natural Onyx stones, this piece embodies strength and silence. Perfect for the modern professional.' },
-            { id: 2, name: 'Volcanic Raw', price: 349, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Sourced from real volcanic basalt, the porous texture adds a rugged, earthy character to your wrist. Essential for casual styling.' },
-            { id: 3, name: 'Imperial Tiger Eye', price: 449, img: 'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg', desc: 'Known as the stone of courage, our Tiger Eye features a deep golden chatoyancy that shifts beautifully under light.' },
-            { id: 4, name: 'Classic Leather', price: 499, img: 'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg', desc: 'Triple-braided Italian leather with a 316L surgical steel magnetic clasp. A timeless accessory for any suit or shirt.' }
+            { id: 1, name: 'Midnight Onyx leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Crafted from matte-finish natural Onyx Leather, this piece embodies strength and silence. Perfect for the modern professional.' },
+            { id: 2, name: 'Volcanic Raw Leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Sourced from real volcanic Leather, the porous texture adds a rugged, earthy character to your wrist. Essential for casual styling.' },
+            { id: 3, name: 'Imperial Leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg', desc: 'Known as the Leather of courage, our features a deep golden chatoyancy that shifts beautifully under light.' },
+            { id: 4, name: 'Classic Leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg', desc: 'Triple-braided Italian leather with a 316L surgical steel lock system. A premium accessory for any oversize t-shirt or shirt.' }
         ];
 
         let cart = [];
