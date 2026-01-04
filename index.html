@@ -22,7 +22,6 @@
         .cart-open { transform: translateX(0) !important; }
         .hidden { display: none; }
         input, textarea, select { border-radius: 4px !important; background-color: #000 !important; border: 1px solid #27272a !important; color: #fff !important; }
-        input:focus, textarea:focus { border-color: var(--gold) !important; outline: none; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -35,18 +34,6 @@
         </button>
     </nav>
 
-    <header class="relative h-[60vh] w-full overflow-hidden">
-        <div id="slider" class="h-full w-full flex transition-transform duration-700 ease-in-out">
-            <div class="min-w-full h-full relative bg-[url('https://images.unsplash.com/photo-1515562141207-7a18b5ce3377?w=1500')] bg-cover bg-center">
-                <div class="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-center px-6">
-                    <h2 class="luxury-font text-5xl md:text-7xl mb-4 tracking-tighter uppercase">The Elite Wrist</h2>
-                    <p class="text-zinc-300 tracking-[0.2em] mb-8 text-xs italic uppercase">Handcrafted Luxury</p>
-                    <a href="#collection" class="gold-bg text-black px-12 py-4 font-bold uppercase tracking-widest text-xs">Shop Collection</a>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <section id="collection" class="py-20 px-6 max-w-7xl mx-auto">
         <h3 class="luxury-font text-2xl text-center mb-16 tracking-[0.5em] gold-text uppercase">The Signature Series</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="productGrid"></div>
@@ -56,116 +43,79 @@
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
             <div>
                 <h4 class="luxury-font gold-text text-xl mb-6 uppercase">Climax</h4>
-                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Redefining masculine elegance through premium natural stones and timeless craftsmanship.</p>
-                <a href="https://instagram.com/YOUR_USERNAME" target="_blank" class="text-xs gold-text tracking-widest hover:underline uppercase">Follow us on Instagram</a>
+                <p class="text-zinc-500 text-sm leading-relaxed mb-6">Premium natural stones and timeless craftsmanship.</p>
+                <a href="https://instagram.com/YOUR_INSTAGRAM_HANDLE" target="_blank" class="text-xs gold-text tracking-widest hover:underline uppercase flex items-center gap-2">
+                    Follow us on Instagram
+                </a>
             </div>
             <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
-                <p class="text-zinc-500 text-sm">Free Express Shipping across India. 24/7 Premium Customer Support.</p>
-            </div>
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Payments</h4>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" class="h-5 opacity-40">
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Contact</h4>
+                <p class="text-zinc-500 text-sm">Free Express Shipping across India.</p>
             </div>
         </div>
     </footer>
 
     <div id="productPage" class="fixed inset-0 bg-black z-[60] hidden overflow-y-auto">
         <div class="max-w-6xl mx-auto p-6 lg:py-20">
-            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 flex items-center gap-2 hover:text-white transition uppercase text-[10px] tracking-widest">← Back</button>
+            <button onclick="closeProductPage()" class="mb-10 text-zinc-500 uppercase text-[10px] tracking-widest">← Back</button>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 pb-32">
-                <img id="mainImg" src="" class="w-full aspect-square object-cover rounded-lg border border-zinc-900">
-                <div class="flex flex-col">
-                    <h2 id="pName" class="luxury-font text-4xl mb-2 tracking-wide uppercase"></h2>
-                    <p id="pPrice" class="gold-text text-2xl font-bold mb-6"></p>
-                    
-                    <div class="mb-8">
-                        <h4 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-zinc-800 pb-2">Product Details</h4>
-                        <p id="pDesc" class="text-zinc-400 text-sm leading-relaxed"></p>
-                        <ul class="mt-6 space-y-2 text-[11px] text-zinc-500 uppercase tracking-widest">
-                            <li>• AAA Grade Natural Stones</li>
-                            <li>• High-Tensile Reinforced Cord</li>
-                            <li>• Sweat & Water Resistant</li>
-                            <li>• Signature Velvet Pouch Included</li>
-                        </ul>
+                <img id="mainImg" src="" class="w-full aspect-square object-cover rounded border border-zinc-900 shadow-2xl">
+                <div>
+                    <h2 id="pName" class="luxury-font text-4xl mb-2 gold-text"></h2>
+                    <p id="pPrice" class="text-2xl font-bold mb-6"></p>
+                    <div class="border-t border-zinc-800 pt-6">
+                        <h4 class="text-xs font-bold uppercase gold-text mb-4">Product Story</h4>
+                        <p id="pDesc" class="text-zinc-400 text-sm leading-relaxed mb-8"></p>
+                        <button onclick="addCurrentToCart()" class="w-full gold-bg text-black font-bold py-4 uppercase text-xs tracking-widest">Add to Cart</button>
                     </div>
-                    
-                    <button onclick="addCurrentToCart()" class="gold-bg text-black px-12 py-4 font-bold text-xs tracking-widest uppercase hover:brightness-110">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="cartSidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-zinc-950 z-[100] translate-x-full shadow-2xl p-6 flex flex-col">
+    <div id="cartSidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-zinc-950 z-[100] translate-x-full p-6 flex flex-col">
         <div class="flex justify-between items-center border-b border-zinc-900 pb-4 mb-6">
-            <h3 class="luxury-font text-xl gold-text">YOUR CART</h3>
+            <h3 class="luxury-font text-xl gold-text uppercase">Cart</h3>
             <button onclick="toggleCart()" class="text-zinc-500 text-2xl">&times;</button>
         </div>
         <div id="cartItems" class="flex-1 overflow-y-auto space-y-4"></div>
-        <div class="border-t border-zinc-900 pt-6 mt-4">
-            <div class="flex justify-between mb-6 text-xl"><span>Total</span><span id="cartTotal" class="gold-text font-bold">₹0</span></div>
-            <button onclick="openCheckout()" class="w-full gold-bg text-black font-bold py-5 uppercase tracking-widest text-xs">Checkout Now</button>
+        <div class="pt-6 border-t border-zinc-900">
+            <div class="flex justify-between mb-6 text-xl uppercase font-bold"><span>Total</span><span id="cartTotal" class="gold-text">₹0</span></div>
+            <button onclick="openCheckout()" class="w-full gold-bg text-black font-bold py-5 uppercase text-xs">Proceed to Shipping</button>
         </div>
     </div>
 
-    <div id="checkoutModal" class="fixed inset-0 bg-black/98 z-[200] hidden flex items-center justify-center p-4">
-        <div class="bg-zinc-900 w-full max-w-2xl p-6 md:p-8 rounded border border-zinc-800 shadow-2xl overflow-y-auto max-h-[95vh]">
-            <div class="flex justify-between mb-10 text-[10px] font-bold tracking-[0.2em]">
-                <div id="step1-dot" class="gold-text border-b border-gold pb-1">01 ORDER</div>
-                <div id="step2-dot" class="text-zinc-700 border-b border-zinc-800 pb-1">02 SHIPPING</div>
-                <div id="step3-dot" class="text-zinc-700 border-b border-zinc-800 pb-1">03 PAYMENT</div>
+    <div id="checkoutModal" class="fixed inset-0 bg-black/95 z-[200] hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-zinc-900 w-full max-w-2xl p-6 rounded border border-zinc-800 shadow-2xl">
+            <div id="step1Content">
+                <div id="checkoutItemsList" class="mb-6"></div>
+                <button type="button" onclick="nextStep(2)" class="w-full gold-bg text-black font-bold py-4 uppercase text-xs">Proceed to Address</button>
             </div>
 
-            <form id="orderForm">
-                <div id="step1Content" class="space-y-6">
-                    <div id="checkoutItemsList" class="border-b border-zinc-800 pb-4"></div>
-                    <div class="flex justify-between font-bold text-xl uppercase"><span>Grand Total</span><span id="checkoutTotalValue" class="gold-text"></span></div>
-                    <button type="button" onclick="nextStep(2)" class="w-full gold-bg text-black font-bold py-5 uppercase text-xs">Continue to Shipping</button>
+            <div id="step2Content" class="hidden space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input type="text" id="custName" placeholder="Name" class="p-3">
+                    <input type="tel" id="custPhone" placeholder="10-digit mobile number" class="p-3">
+                    <input type="text" id="custPincode" placeholder="Pincode" class="p-3">
+                    <input type="text" id="custLocality" placeholder="Locality" class="p-3">
+                    <textarea id="custAddress" placeholder="Address (Area and Street)" class="p-3 h-24 md:col-span-2"></textarea>
+                    <input type="text" id="custCity" placeholder="City/District/Town" class="p-3">
+                    <select id="custState" class="p-3 text-zinc-400">
+                        <option value="">--Select State--</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Karnataka">Karnataka</option>
+                    </select>
+                    <input type="text" id="custLandmark" placeholder="Landmark (Optional)" class="p-3">
+                    <input type="tel" id="custAltPhone" placeholder="Alternate Phone (Optional)" class="p-3">
                 </div>
-
-                <div id="step2Content" class="hidden space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input type="text" id="custName" placeholder="Name" required class="w-full p-3 text-sm">
-                        <input type="tel" id="custPhone" placeholder="10-digit mobile number" required class="w-full p-3 text-sm">
-                        <input type="text" id="custPincode" placeholder="Pincode" required class="w-full p-3 text-sm">
-                        <input type="text" id="custLocality" placeholder="Locality" required class="w-full p-3 text-sm">
-                        <textarea id="custAddress" placeholder="Address (Area and Street)" required class="w-full p-3 text-sm h-24 md:col-span-2"></textarea>
-                        <input type="text" id="custCity" placeholder="City/District/Town" required class="w-full p-3 text-sm">
-                        <select id="custState" required class="w-full p-3 text-sm">
-                            <option value="">--Select State--</option>
-                            <option value="Maharashtra">Maharashtra</option>
-                            <option value="Delhi">Delhi</option>
-                            <option value="Karnataka">Karnataka</option>
-                            <option value="Gujarat">Gujarat</option>
-                        </select>
-                        <input type="text" id="custLandmark" placeholder="Landmark (Optional)" class="w-full p-3 text-sm">
-                        <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)" class="w-full p-3 text-sm">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 mt-6">
-                        <button type="button" onclick="nextStep(1)" class="py-4 border border-zinc-800 text-zinc-500 text-xs uppercase">Back</button>
-                        <button type="button" onclick="nextStep(3)" class="gold-bg text-black font-bold py-4 text-xs uppercase">Next</button>
-                    </div>
-                </div>
-
-                <div id="step3Content" class="hidden space-y-6">
-                    <div class="space-y-3">
-                        <label class="flex items-center gap-3 p-4 border border-zinc-800 cursor-pointer hover:border-gold">
-                            <input type="radio" name="pay" value="UPI" checked class="accent-amber-500"><span class="text-xs uppercase">UPI / GPay / PhonePe</span>
-                        </label>
-                        <label class="flex items-center gap-3 p-4 border border-zinc-800 cursor-pointer hover:border-gold">
-                            <input type="radio" name="pay" value="COD" class="accent-amber-500"><span class="text-xs uppercase">Cash on Delivery</span>
-                        </label>
-                    </div>
-                    <button type="button" onclick="submitOrder()" id="finalBtn" class="w-full gold-bg text-black font-bold py-5 uppercase text-xs">Place Order</button>
-                </div>
-            </form>
-            <button type="button" onclick="closeCheckout()" class="w-full text-zinc-700 text-[10px] mt-8 tracking-widest uppercase">Discard</button>
+                <button type="button" onclick="submitOrder()" id="finalBtn" class="w-full gold-bg text-black font-bold py-4 uppercase text-xs">Confirm Order</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // CONFIG
-        const MY_UPI_ID = 'your-upi@id';
+        // CONFIG FROM YOUR SCREENSHOT
         const firebaseConfig = {
             apiKey: "AIzaSyD4B88SlR4aXarruyfenpQG2_ttw1ZjuHQ",
             authDomain: "climax-fbf10.firebaseapp.com",
@@ -180,29 +130,27 @@
         const database = firebase.database();
 
         const products = [
-            { id: 1, name: 'Midnight Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600', desc: 'Crafted from matte-finish natural Onyx stones, this piece embodies strength and silence. Perfect for the modern professional.' },
-            { id: 2, name: 'Volcanic Raw', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600', desc: 'Sourced from real volcanic basalt, the porous texture adds a rugged, earthy character to your wrist. Essential for casual styling.' },
-            { id: 3, name: 'Imperial Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600', desc: 'Known as the stone of courage, our Tiger Eye features a deep golden chatoyancy that shifts beautifully under light.' },
-            { id: 4, name: 'Classic Leather', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600', desc: 'Triple-braided Italian leather with a 316L surgical steel magnetic clasp. A timeless accessory for any suit or shirt.' }
+            { id: 1, name: 'Midnight Onyx', price: 399, img: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600', desc: 'Matte black natural stones for a bold, masculine look.' },
+            { id: 2, name: 'Tiger Eye', price: 449, img: 'https://images.unsplash.com/photo-1611085583191-a3b1a60d3011?w=600', desc: 'Golden shimmer stones for success and courage.' },
+            { id: 3, name: 'Lava Rock', price: 349, img: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=600', desc: 'Raw volcanic rock for a rugged, textured style.' },
+            { id: 4, name: 'Leather Elite', price: 499, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?w=600', desc: 'Braided leather with a high-grade magnetic clasp.' }
         ];
 
         let cart = [];
         let curID = null;
 
-        // Render Homepage
+        // Render Grid
         const grid = document.getElementById('productGrid');
         products.forEach(p => {
             grid.innerHTML += `
                 <div class="product-card p-4 flex flex-col" onclick="openProductPage(${p.id})">
-                    <img src="${p.img}" class="w-full aspect-square object-cover mb-4 rounded shadow-lg">
-                    <h3 class="font-semibold tracking-widest uppercase text-xs">${p.name}</h3>
-                    <p class="gold-text font-bold mb-4">₹${p.price}</p>
-                    <button class="mt-auto w-full py-3 border border-zinc-800 text-[9px] tracking-widest hover:bg-white hover:text-black transition uppercase">View Product</button>
+                    <img src="${p.img}" class="w-full aspect-square object-cover mb-4 rounded">
+                    <h3 class="font-semibold uppercase text-xs tracking-widest">${p.name}</h3>
+                    <p class="gold-text font-bold">₹${p.price}</p>
                 </div>`;
         });
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('cart-open'); }
-        
         function openProductPage(id) {
             const p = products.find(x => x.id === id); curID = id;
             document.getElementById('pName').innerText = p.name;
@@ -210,81 +158,46 @@
             document.getElementById('pDesc').innerText = p.desc;
             document.getElementById('mainImg').src = p.img;
             document.getElementById('productPage').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
-
-        function closeProductPage() { document.getElementById('productPage').classList.add('hidden'); document.body.style.overflow = 'auto'; }
-        function addCurrentToCart() { addToCart(curID); closeProductPage(); }
-        
-        function addToCart(id) {
-            cart.push(products.find(x => x.id === id));
-            updateCartUI(); toggleCart();
-        }
+        function closeProductPage() { document.getElementById('productPage').classList.add('hidden'); }
+        function addCurrentToCart() { cart.push(products.find(x => x.id === curID)); updateCartUI(); closeProductPage(); toggleCart(); }
 
         function updateCartUI() {
             document.getElementById('cartCount').innerText = cart.length;
             const t = cart.reduce((s, i) => s + i.price, 0);
-            document.getElementById('cartTotal').innerText = `₹${t}`;
+            document.getElementById('cartTotal').innerText = '₹' + t;
             document.getElementById('cartItems').innerHTML = cart.map((i, idx) => `
-                <div class="flex items-center gap-4 bg-zinc-900/40 p-3 border border-zinc-900 rounded">
-                    <img src="${i.img}" class="w-12 h-12 object-cover rounded">
-                    <div class="flex-1 text-[10px] uppercase font-bold tracking-widest">${i.name}<br><span class="gold-text italic">₹${i.price}</span></div>
-                    <button onclick="cart.splice(${idx},1); updateCartUI()" class="text-zinc-700 hover:text-white">&times;</button>
+                <div class="flex justify-between items-center bg-zinc-900 p-3 rounded">
+                    <span class="text-xs uppercase">${i.name}</span>
+                    <button onclick="cart.splice(${idx},1); updateCartUI()" class="text-red-500">&times;</button>
                 </div>`).join('');
         }
 
-        function nextStep(s) {
-            ['1','2','3'].forEach(n => {
-                document.getElementById('step'+n+'Content').classList.add('hidden');
-                document.getElementById('step'+n+'-dot').className = 'text-zinc-700 border-b border-zinc-800 pb-1';
-            });
-            document.getElementById('step'+s+'Content').classList.remove('hidden');
-            document.getElementById('step'+s+'-dot').className = 'gold-text border-b border-gold pb-1';
-        }
-
-        function openCheckout() {
-            if(!cart.length) return alert("Your cart is empty");
-            document.getElementById('checkoutItemsList').innerHTML = cart.map(i => `<div class="flex justify-between py-2 text-[10px] tracking-widest uppercase border-b border-zinc-800"><span>${i.name}</span><span>₹${i.price}</span></div>`).join('');
-            document.getElementById('checkoutTotalValue').innerText = '₹' + cart.reduce((s, i) => s + i.price, 0);
-            nextStep(1);
-            document.getElementById('checkoutModal').classList.remove('hidden');
-        }
-
-        function closeCheckout() { document.getElementById('checkoutModal').classList.add('hidden'); }
+        function openCheckout() { document.getElementById('checkoutModal').classList.remove('hidden'); }
+        function nextStep(n) { document.getElementById('step1Content').classList.add('hidden'); document.getElementById('step2Content').classList.remove('hidden'); }
 
         async function submitOrder() {
             const btn = document.getElementById('finalBtn');
             btn.innerText = "Processing..."; btn.disabled = true;
 
-            const orderData = {
-                customer: {
-                    name: document.getElementById('custName').value,
-                    phone: document.getElementById('custPhone').value,
-                    pincode: document.getElementById('custPincode').value,
-                    locality: document.getElementById('custLocality').value,
-                    address: document.getElementById('custAddress').value,
-                    city: document.getElementById('custCity').value,
-                    state: document.getElementById('custState').value,
-                    landmark: document.getElementById('custLandmark').value,
-                    altPhone: document.getElementById('custAltPhone').value
-                },
-                order: {
-                    items: cart.map(i => i.name).join(', '),
-                    total: cart.reduce((s, i) => s + i.price, 0),
-                    method: document.querySelector('input[name="pay"]:checked').value,
-                    date: new Date().toLocaleString()
-                }
+            const order = {
+                name: document.getElementById('custName').value,
+                phone: document.getElementById('custPhone').value,
+                address: document.getElementById('custAddress').value,
+                items: cart.map(i => i.name).join(','),
+                total: cart.reduce((s, i) => s + i.price, 0),
+                timestamp: new Date().toISOString()
             };
 
             try {
-                await database.ref('orders').push().set(orderData);
-                if(orderData.order.method === 'UPI') {
-                    window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${orderData.order.total}&cu=INR`;
-                } else {
-                    alert("Order Placed Successfully!");
-                    location.reload();
-                }
-            } catch (e) { alert("Error saving order."); btn.disabled = false; btn.innerText = "Place Order"; }
+                // This sends it to the /orders node in your screenshot
+                await database.ref('orders').push().set(order);
+                alert("Order Placed Successfully!");
+                location.reload();
+            } catch (e) {
+                alert("Error: " + e.message);
+                btn.disabled = false;
+            }
         }
     </script>
 </body>
