@@ -23,6 +23,86 @@
         .hidden { display: none; }
         input, textarea, select { border-radius: 4px !important; background-color: #000 !important; border: 1px solid #27272a !important; color: #fff !important; }
         input:focus, textarea:focus { border-color: var(--gold) !important; outline: none; }
+        .review-slider{
+overflow:hidden;
+width:100%;
+position:relative;
+}
+
+.review-track{
+display:flex;
+width:max-content;
+gap:30px;
+animation: premiumSlide 40s linear infinite;
+}
+
+.review{
+min-width:340px;
+background:linear-gradient(180deg,#0d0d0d,#050505);
+border:1px solid #2a2a2a;
+padding:30px;
+color:#ddd;
+position:relative;
+box-shadow:0 0 40px rgba(212,175,55,0.05);
+}
+
+.review:before{
+content:"★★★★★";
+position:absolute;
+top:12px;
+right:20px;
+color:#D4AF37;
+font-size:11px;
+letter-spacing:2px;
+opacity:0.8;
+}
+
+.review p{
+font-size:14px;
+line-height:1.6;
+margin:20px 0;
+color:#bbb;
+}
+
+.review span{
+font-size:11px;
+letter-spacing:3px;
+text-transform:uppercase;
+color:#777;
+}
+
+@keyframes premiumSlide{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
+.top-banner{
+width:100%;
+background:#050505;
+border-bottom:1px solid #222;
+overflow:hidden;
+}
+
+.banner-track{
+display:flex;
+width:max-content;
+animation: bannerSlide 20s linear infinite;
+}
+
+.banner{
+padding:10px 40px;
+white-space:nowrap;
+font-size:11px;
+letter-spacing:3px;
+text-transform:uppercase;
+color:#D4AF37;
+}
+
+@keyframes bannerSlide{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
+
+
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -32,8 +112,25 @@
         <button onclick="toggleCart()" class="relative p-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="gold-text"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
             <span id="cartCount" class="absolute -top-1 -right-1 bg-white text-black text-[10px] font-bold px-1.5 rounded-full">0</span>
+            
         </button>
     </nav>
+<div class="top-banner">
+<div class="banner-track">
+
+<div class="banner">Free Shipping Across Mumbai & Thane</div>
+<div class="banner">Cash On Delivery Available</div>
+<div class="banner">Premium Quality Guaranteed</div>
+<div class="banner">Limited Stock – Order Now</div>
+
+<!-- duplicate for smooth loop -->
+<div class="banner">Free Shipping Across Thane & Dombivli</div>
+<div class="banner">Cash On Delivery Available</div>
+<div class="banner">Premium Quality Guaranteed</div>
+<div class="banner">Limited Stock – Order Now</div>
+
+</div>
+</div>
 
     <header class="relative h-[60vh] w-full overflow-hidden">
         <div id="slider" class="h-full w-full flex transition-transform duration-700 ease-in-out">
@@ -51,6 +148,53 @@
         <h3 class="luxury-font text-2xl text-center mb-16 tracking-[0.5em] gold-text uppercase">The Signature Series</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="productGrid"></div>
     </section>
+    <section class="py-24 bg-black border-t border-zinc-900 px-6">
+<h2 class="luxury-font gold-text text-3xl text-center mb-16 tracking-[0.4em]">
+Trusted By Mumbai Gentlemen
+</h2>
+
+<div class="review-slider">
+<div class="review-track">
+
+<div class="review">
+<p>Didn’t expect this quality at this price. The bracelet feels heavy, premium and classy.</p>
+<span>Rohit Mehta — Andheri</span>
+</div>
+
+<div class="review">
+<p>The magnetic lock is extremely strong and the finish looks imported.</p>
+<span>Aman Verma — Borivali</span>
+</div>
+
+<div class="review">
+<p>Looks like a ₹2,000 bracelet. Everyone keeps asking me about it.</p>
+<span>Kunal Shah — Ghatkopar</span>
+</div>
+
+<div class="review">
+<p>Way better than what I bought from Others. CLIMAX feels like a luxury brand.</p>
+<span>Rahul Singh — Malad</span>
+</div>
+
+<div class="review">
+<p>Packaging, fit and design are perfect. Looks expensive on the wrist.</p>
+<span>Yash Patil — Thane</span>
+</div>
+
+<!-- duplicate for seamless animation -->
+<div class="review">
+<p>Didn’t expect this quality at this price. The bracelet feels heavy, premium and classy.</p>
+<span>Rohit Mehta — Andheri</span>
+</div>
+
+<div class="review">
+<p>The magnetic lock is extremely strong and the finish looks imported.</p>
+<span>Aman Verma — Borivali</span>
+</div>
+
+</div>
+</div>
+</section>
 
     <footer class="bg-zinc-950 border-t border-zinc-900 pt-20 pb-10 px-8">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
@@ -61,7 +205,16 @@
             </div>
             <div>
                 <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Support</h4>
-                <p class="text-zinc-500 text-sm">Free Express Shipping across thane to Dombivli. 24/7 Premium Customer Support. for more detailed follow on Instagram</p>
+                <p class="text-zinc-500 text-sm">Free Express Shipping across Mumbai & Thane. 24/7 Premium Customer Support. for more detailed follow on Instagram</p>
+            </div>
+             <div>
+                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Locations</h4>
+                <p class="text-zinc-500 text-sm">➤
+MUMBAI</p>
+ <p class="text-zinc-500 text-sm">➤
+THANE</p>
+ <p class="text-zinc-500 text-sm">➤
+COMING SOON</p>
             </div>
             <div>
                 <h4 class="text-xs font-bold uppercase tracking-widest mb-6">Payments</h4>
@@ -135,7 +288,6 @@
                         <select id="custState" required class="w-full p-3 text-sm">
                             <option value="">--Select State--</option>
                             <option value="Maharashtra">Maharashtra</option>
-                            <option value="Coming soon">Coming soon</option>
                         </select>
                         <input type="text" id="custLandmark" placeholder="Landmark (Optional)" class="w-full p-3 text-sm">
                         <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)" class="w-full p-3 text-sm">
