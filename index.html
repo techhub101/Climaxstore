@@ -23,7 +23,7 @@
         .hidden { display: none; }
         input, textarea, select { border-radius: 4px !important; background-color: #000 !important; border: 1px solid #27272a !important; color: #fff !important; }
         input:focus, textarea:focus { border-color: var(--gold) !important; outline: none; }
-        .review-slider{
+       .review-slider{
 overflow:hidden;
 width:100%;
 position:relative;
@@ -31,45 +31,50 @@ position:relative;
 
 .review-track{
 display:flex;
+gap:20px;
 width:max-content;
-gap:30px;
-animation: premiumSlide 40s linear infinite;
+animation: premiumSlide 45s linear infinite;
+padding:0 10px;
 }
 
 .review{
-min-width:340px;
-background:linear-gradient(180deg,#0d0d0d,#050505);
+min-width:280px;
+max-width:280px;
+background:linear-gradient(180deg,#0e0e0e,#050505);
 border:1px solid #2a2a2a;
-padding:30px;
+padding:22px;
 color:#ddd;
-position:relative;
-box-shadow:0 0 40px rgba(212,175,55,0.05);
+box-shadow:0 0 25px rgba(212,175,55,0.08);
 }
 
 .review:before{
 content:"★★★★★";
-position:absolute;
-top:12px;
-right:20px;
+display:block;
 color:#D4AF37;
-font-size:11px;
 letter-spacing:2px;
-opacity:0.8;
+margin-bottom:10px;
+font-size:11px;
 }
 
 .review p{
-font-size:14px;
-line-height:1.6;
-margin:20px 0;
+font-size:13px;
+line-height:1.5;
 color:#bbb;
+margin-bottom:12px;
 }
 
 .review span{
-font-size:11px;
-letter-spacing:3px;
+font-size:10px;
+letter-spacing:2px;
 text-transform:uppercase;
 color:#777;
 }
+
+@keyframes premiumSlide{
+0%{ transform:translateX(0); }
+100%{ transform:translateX(-50%); }
+}
+
 
 @keyframes premiumSlide{
 0%{ transform:translateX(0); }
@@ -148,53 +153,69 @@ color:#D4AF37;
         <h3 class="luxury-font text-2xl text-center mb-16 tracking-[0.5em] gold-text uppercase">The Signature Series</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="productGrid"></div>
     </section>
-    <section class="py-24 bg-black border-t border-zinc-900 px-6">
-<h2 class="luxury-font gold-text text-3xl text-center mb-16 tracking-[0.4em]">
-Trusted By Mumbai Gentlemen
+   <section class="py-24 bg-black border-t border-zinc-900 px-4">
+<h2 class="luxury-font gold-text text-2xl md:text-3xl text-center mb-14 tracking-[0.3em]">
+Mumbai Customer Reviews
 </h2>
 
 <div class="review-slider">
 <div class="review-track">
 
 <div class="review">
-<p>Didn’t expect this quality at this price. The bracelet feels heavy, premium and classy.</p>
+<p>Didn’t expect this quality at this price. Looks imported.</p>
 <span>Rohit Mehta — Andheri</span>
 </div>
 
 <div class="review">
-<p>The magnetic lock is extremely strong and the finish looks imported.</p>
+<p>The magnetic lock is very strong and finish is premium.</p>
 <span>Aman Verma — Borivali</span>
 </div>
 
 <div class="review">
-<p>Looks like a ₹2,000 bracelet. Everyone keeps asking me about it.</p>
+<p>Feels like a ₹2,000 bracelet. Amazing quality.</p>
 <span>Kunal Shah — Ghatkopar</span>
 </div>
 
 <div class="review">
-<p>Way better than what I bought from Others. CLIMAX feels like a luxury brand.</p>
+<p>Got compliments from everyone in my office.</p>
 <span>Rahul Singh — Malad</span>
 </div>
 
 <div class="review">
-<p>Packaging, fit and design are perfect. Looks expensive on the wrist.</p>
+<p>Better than other bracelets. Very stylish.</p>
 <span>Yash Patil — Thane</span>
 </div>
 
-<!-- duplicate for seamless animation -->
 <div class="review">
-<p>Didn’t expect this quality at this price. The bracelet feels heavy, premium and classy.</p>
+<p>Packaging and fitting are perfect.</p>
+<span>Akash Kulkarni — Dombivli</span>
+</div>
+
+<div class="review">
+<p>Looks premium on wrist. Worth every rupee.</p>
+<span>Vikas Jadhav — Kalyan</span>
+</div>
+
+<div class="review">
+<p>Quality is really good for this price.</p>
+<span>Mohit Patel — Kandivali</span>
+</div>
+
+<!-- duplicate for smooth looping -->
+<div class="review">
+<p>Didn’t expect this quality at this price. Looks imported.</p>
 <span>Rohit Mehta — Andheri</span>
 </div>
 
 <div class="review">
-<p>The magnetic lock is extremely strong and the finish looks imported.</p>
+<p>The magnetic lock is very strong and finish is premium.</p>
 <span>Aman Verma — Borivali</span>
 </div>
 
 </div>
 </div>
 </section>
+
 
     <footer class="bg-zinc-950 border-t border-zinc-900 pt-20 pb-10 px-8">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
