@@ -484,19 +484,22 @@ function validateShipping() {
 }
 
 async function submitOrder() {
-
-    if (!validateShipping()) return;
-
     const btn = document.getElementById("finalBtn");
     btn.innerText = "Processing...";
     btn.disabled = true;
 
-    let method = document.querySelector('input[name="pay"]:checked').value;
+    // Validate shipping info
+    if (!validateShipping()) {
+        btn.innerText = "Place Order";
+        btn.disabled = false;
+        return;
+    }
 
-    // Calculate total
-    let finalTotal = cart.reduce((s, i) => s + i.price, 0);
-    if(method === "COD") finalTotal += COD_FEE;
+    const method = document.querySelector('input[name="pay"]:checked')?.value || "UPI";
+    let finalTotal = cart.reduce((sum, p) => sum + p.price, 0);
+    if (method === "COD") finalTotal += COD_FEE;
 
+    // Build order data
     const orderData = {
         customer: {
             name: custName.value,
@@ -504,26 +507,34 @@ async function submitOrder() {
             email: custEmail.value,
             city: custCity.value,
             pincode: custPincode.value,
-            address: custAddress.value + ", " + custLocality.value
+            address: `${custAddress.value}, ${custLocality.value}`
         },
         order: {
-            items: cart.map(p => p.name),
+            items: cart.map(p => ({ name: p.name, price: p.price, qty: p.qty || 1 })),
             total: finalTotal,
             method: method
         },
-        time: new Date().toLocaleString()
+        time: Date.now()
     };
 
-    try {
-        // Save order to Firebase and get unique order ID
-        const newRef = database.ref("orders").push();
-        await newRef.set(orderData);
-        const orderID = newRef.key;
+    let itemList = cart.map(p => `${p.name} x${p.qty || 1}`).join("\n");
 
-        // Send order email to customer
+    // 1️⃣ Save to Firebase
+    try {
+        await database.ref("orders").push(orderData);
+        console.log("✅ Order saved to Firebase");
+    } catch(err) {
+        console.error("❌ Firebase Error:", err);
+        alert("Failed to save order. Please try again.");
+        btn.innerText = "Place Order";
+        btn.disabled = false;
+        return;
+    }
+
+    // 2️⃣ Send Email via EmailJS
+    try {
         await emailjs.send("service_0xjun2v", "climax_order", {
             to_email: custEmail.value,
-            order_id: orderID,
             name: orderData.customer.name,
             phone: orderData.customer.phone,
             city: orderData.customer.city,
@@ -531,27 +542,21 @@ async function submitOrder() {
             address: orderData.customer.address,
             method: orderData.order.method,
             total: orderData.order.total,
-            items: orderData.order.items.join(", "),
-            time: orderData.time
+            items: itemList,
+            time: new Date().toLocaleString()
         });
-
-        // Reset cart
-        cart = [];
-        updateCartUI();
-
-        // Redirect for UPI or alert for COD
-        if(method === "UPI") {
-            window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR&tn=OrderID:${orderID}`;
-        } else {
-            alert("Order placed successfully! Check your email for details.");
-            location.reload();
-        }
-
+        console.log("✅ Email sent successfully");
     } catch(err) {
-        console.error(err);
-        alert("Order Failed. Please try again.");
-        btn.innerText = "Place Order";
-        btn.disabled = false;
+        console.error("❌ EmailJS Error:", err);
+        alert("Order saved, but email could not be sent.");
+    }
+
+    // 3️⃣ Redirect to UPI or show success for COD
+    if (method === "UPI") {
+        window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR`;
+    } else {
+        alert("Order placed successfully!");
+        location.reload();
     }
 }
 
