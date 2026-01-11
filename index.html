@@ -485,23 +485,19 @@ function validateShipping() {
 
 async function submitOrder() {
     const btn = document.getElementById("finalBtn");
+    btn.innerText = "Processing...";
+    btn.disabled = true;
 
-    // 1️⃣ Validate shipping info
     if (!validateShipping()) {
         btn.disabled = false;
         btn.innerText = "Place Order";
         return;
     }
 
-    btn.innerText = "Processing...";
-    btn.disabled = true;
-
-    // 2️⃣ Get payment method and total
     const method = document.querySelector('input[name="pay"]:checked').value;
     let baseTotal = cart.reduce((s, i) => s + i.price, 0);
     const finalTotal = method === "COD" ? baseTotal + COD_FEE : baseTotal;
 
-    // 3️⃣ Prepare order data for Firebase
     const orderData = {
         customer: {
             name: custName.value,
@@ -516,17 +512,17 @@ async function submitOrder() {
             total: finalTotal,
             method: method
         },
-        time: Date.now()
+        time: new Date().toISOString() // safer timestamp
     };
 
     const itemList = cart.map(p => `${p.name} x1`).join("\n");
 
     try {
-        // 4️⃣ Save order to Firebase
+        // Save order to Firebase
         await database.ref("orders").push(orderData);
         console.log("✅ Order saved to Firebase");
 
-        // 5️⃣ Send email via EmailJS (errors won't break flow)
+        // Send email
         emailjs.send("service_0xjun2v", "Contact Us", {
             name: orderData.customer.name,
             phone: orderData.customer.phone,
@@ -541,10 +537,10 @@ async function submitOrder() {
         }).then(res => {
             console.log("✅ Email sent!", res.status, res.text);
         }).catch(err => {
-            console.error("⚠️ Email failed:", err);
+            console.error("⚠️ EmailJS error:", err);
         });
 
-        // 6️⃣ Handle payment redirect or COD
+        // Payment redirect
         if (method === "UPI") {
             window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR`;
         } else {
@@ -553,7 +549,7 @@ async function submitOrder() {
         }
 
     } catch (err) {
-        console.error("❌ Order failed:", err);
+        console.error("❌ Firebase error:", err);
         alert("Something went wrong. Please try again.");
         btn.disabled = false;
         btn.innerText = "Place Order";
