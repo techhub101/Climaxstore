@@ -9,6 +9,10 @@
     
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  emailjs.init("5Qm8eO7jK7cmnIckq");   // paste your EmailJS public key
+</script>
 
     <style>
         :root { --gold: #D4AF37; --black: #080808; }
@@ -302,6 +306,7 @@ COMING SOON</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <input type="text" id="custName" placeholder="Name" required class="w-full p-3 text-sm">
                         <input type="tel" id="custPhone" placeholder="10-digit mobile number" required class="w-full p-3 text-sm">
+                        <input type="email" id="custEmail" placeholder="Email Address" required class="w-full p-3 text-sm">
                         <input type="text" id="custPincode" placeholder="Pincode" required class="w-full p-3 text-sm">
                         <input type="text" id="custLocality" placeholder="Locality" required class="w-full p-3 text-sm">
                         <textarea id="custAddress" placeholder="Address (Area and Street)" required class="w-full p-3 text-sm h-24 md:col-span-2"></textarea>
@@ -477,73 +482,77 @@ function validateShipping() {
 
     return true;
 }
-async function submitOrder() {
+ async function submitOrder() {
 
-    const btn = document.getElementById('finalBtn');
-
-    // 🔒 Validate required fields
     if (!validateShipping()) {
-        btn.disabled = false;
-        btn.innerText = "Place Order";
+        finalBtn.disabled = false;
+        finalBtn.innerText = "Place Order";
         return;
     }
 
+    const btn = document.getElementById("finalBtn");
     btn.innerText = "Processing...";
     btn.disabled = true;
 
-    const method = document.querySelector('input[name="pay"]:checked').value;
+    let method = document.querySelector('input[name="pay"]:checked').value;
 
-    const subtotal = cart.reduce((s, i) => s + i.price, 0);
-    const codFee = method === "COD" ? 50 : 0;
-    const finalTotal = subtotal + codFee;
+    let finalTotal = cartTotal;
+    if(method === "COD") finalTotal += 50;   // COD charge
 
     const orderData = {
         customer: {
-            name: custName.value,
-            phone: custPhone.value,
-            pincode: custPincode.value,
-            locality: custLocality.value,
-            address: custAddress.value,
-            city: custCity.value,
-            state: custState.value,
-            landmark: custLandmark.value,
-            altPhone: custAltPhone.value
-        },
+    name: custName.value,
+    phone: custPhone.value,
+    email: custEmail.value,
+    city: custCity.value,
+    pincode: custPincode.value,
+    address: custAddress.value + ", " + custLocality.value
+}
+,
         order: {
-            items: cart.map(i => i.name).join(", "),
-            subtotal: subtotal,
-            codFee: codFee,
+            items: cart,
             total: finalTotal,
-            method: method,
-            status: "NEW",
-            date: new Date().toLocaleString()
-        }
+            method: method
+        },
+        time: Date.now()
     };
 
+    let itemList = cart.map(p => `${p.name} x${p.qty}`).join("\n");
+
     try {
-        const savePromise = database.ref("orders").push(orderData);
-if (method === "UPI") {
-    await savePromise;
-    window.location.href =
-      `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR`;
-} else {
-    alert("Order Confirmed! Your COD order has been placed.");
-    savePromise.then(() => {
-        location.reload();
-    });
-}
+        // Save order to Firebase
+        await database.ref("orders").push(orderData);
 
 
-    } catch (err) {
-        alert("Network error. Please try again.");
-        btn.disabled = false;
+        // Send Email
+emailjs.send("service_0xjun2v", "climax_order", {
+    to_email: custEmail.value,
+            name: orderData.customer.name,
+            phone: orderData.customer.phone,
+            city: orderData.customer.city,
+            pincode: orderData.customer.pincode,
+            address: orderData.customer.address,
+            method: orderData.order.method,
+            total: orderData.order.total,
+            items: itemList,
+            time: new Date().toLocaleString()
+        });
+
+        if(method === "UPI") {
+            window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR`;
+        } else {
+            alert("Order placed successfully!");
+            location.reload();
+        }
+
+    } catch(err) {
+        alert("Order Failed. Please try again.");
         btn.innerText = "Place Order";
+        btn.disabled = false;
     }
 }
 
-      
 
-    </script>
+         </script>
 </body>
 </html>
-
