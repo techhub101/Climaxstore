@@ -512,7 +512,7 @@ async function submitOrder() {
             total: finalTotal,
             method: method
         },
-        time: new Date().toISOString() // safer timestamp
+        time: new Date().tolocaleString() // safer timestamp
     };
 
     const itemList = cart.map(p => `${p.name} x1`).join("\n");
