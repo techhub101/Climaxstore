@@ -390,9 +390,11 @@ Next
     name: 'Midnight Onyx Leather',
     price: 249,
     imgs: [
-      'https://u.cubeupload.com/qazwsxedcrf/Hanumanji.jpg',
-      'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg',
-      'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg'
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134706185.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134634536.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134737277.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134804224.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134807416.jpg'
     ],
     desc: 'Matte-finish premium leather bracelet with magnetic lock.'
   },
@@ -402,8 +404,12 @@ Next
     name: 'Volcanic Raw Leather',
     price: 249,
     imgs: [
-      'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg',
-      'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg'
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135004004.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134917191.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134919266.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134925525.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135006541.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135015648.jpg'
     ],
     desc: 'Rugged volcanic texture leather for bold everyday style.'
   },
@@ -413,8 +419,15 @@ Next
     name: 'Imperial Leather',
     price: 249,
     imgs: [
-      'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg',
-      'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg'
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135220924.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135149951.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135151106.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135155697.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135156915.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135218432.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135224562.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135232779.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135417455.jpg'
     ],
     desc: 'Elegant braided leather with premium metallic clasp.'
   },
@@ -424,8 +437,12 @@ Next
     name: 'Classic Leather',
     price: 249,
     imgs: [
-      'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg',
-      'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg'
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135604392.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135640773.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135642576.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135644864.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135736279.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116135741622.jpg'
     ],
     desc: 'Timeless leather bracelet for formal & casual outfits.'
   },
@@ -435,9 +452,11 @@ Next
     name: 'Royal Black Leather',
     price: 299,
     imgs: [
-      'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg',
-      'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg',
-      'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg'
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116141239493.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116141238205.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116140744806.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116140815579.jpg',
+      'https://u.cubeupload.com/qazwsxedcrf/IMG20260116140745782.jpg'
     ],
     desc: 'Premium royal black leather with luxury box packaging.'
   }
@@ -450,15 +469,16 @@ Next
 
         // Render Homepage
         const grid = document.getElementById('productGrid');
-        products.forEach(p => {
-            grid.innerHTML += `
-                <div class="product-card p-4 flex flex-col" onclick="openProductPage(${p.id})">
-                    <img src="${p.img}" class="w-full aspect-square object-cover mb-4 rounded shadow-lg">
-                    <h3 class="font-semibold tracking-widest uppercase text-xs">${p.name}</h3>
-                    <p class="gold-text font-bold mb-4">₹${p.price}</p>
-                    <button class="mt-auto w-full py-3 border border-zinc-800 text-[9px] tracking-widest hover:bg-white hover:text-black transition uppercase">View Product</button>
-                </div>`;
-        });
+products.forEach(p => {
+    grid.innerHTML += `
+        <div class="product-card p-4 flex flex-col" onclick="openProductPage(${p.id})">
+            <img src="${p.imgs[0]}" class="w-full aspect-square object-cover mb-4 rounded shadow-lg">
+            <h3 class="font-semibold tracking-widest uppercase text-xs">${p.name}</h3>
+            <p class="gold-text font-bold mb-4">₹${p.price}</p>
+            <button class="mt-auto w-full py-3 border border-zinc-800 text-[9px] tracking-widest hover:bg-white hover:text-black transition uppercase">View Product</button>
+        </div>`;
+});
+
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('cart-open'); }
         
