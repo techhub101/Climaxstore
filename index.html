@@ -9,10 +9,6 @@
     
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  emailjs.init("5Qm8eO7jK7cmnIckq");   // paste your EmailJS public key
-</script>
 
     <style>
         :root { --gold: #D4AF37; --black: #080808; }
@@ -306,7 +302,6 @@ COMING SOON</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <input type="text" id="custName" placeholder="Name" required class="w-full p-3 text-sm">
                         <input type="tel" id="custPhone" placeholder="10-digit mobile number" required class="w-full p-3 text-sm">
-                        <input type="email" id="custEmail" placeholder="Email Address" required class="w-full p-3 text-sm">
                         <input type="text" id="custPincode" placeholder="Pincode" required class="w-full p-3 text-sm">
                         <input type="text" id="custLocality" placeholder="Locality" required class="w-full p-3 text-sm">
                         <textarea id="custAddress" placeholder="Address (Area and Street)" required class="w-full p-3 text-sm h-24 md:col-span-2"></textarea>
@@ -327,8 +322,7 @@ Next
                     </div>
                 </div>
 
-                <div id="step3Content" class="hidden space-y-6">
-
+                <div id="step3Content" class="hidden space-y-6">                    
                     <div class="space-y-3">
                        <label class="flex items-center gap-3 p-4 border border-zinc-800 cursor-pointer hover:border-gold">
     <input type="radio" name="pay" value="UPI" checked onchange="updateCheckoutTotal()" class="accent-amber-500">
@@ -367,7 +361,7 @@ Next
         const database = firebase.database();
 
         const products = [
-            { id: 1, name: 'Midnight Onyx leather', price: 549, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Crafted from matte-finish natural Onyx Leather, this piece embodies strength and silence. Perfect for the modern professional.' },
+            { id: 1, name: 'Midnight Onyx leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Crafted from matte-finish natural Onyx Leather, this piece embodies strength and silence. Perfect for the modern professional.' },
             { id: 2, name: 'Volcanic Raw Leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/388WhatsAppImage2025123.jpeg', desc: 'Sourced from real volcanic Leather, the porous texture adds a rugged, earthy character to your wrist. Essential for casual styling.' },
             { id: 3, name: 'Imperial Leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/f26WhatsAppImage2025123.jpeg', desc: 'Known as the Leather of courage, our features a deep golden chatoyancy that shifts beautifully under light.' },
             { id: 4, name: 'Classic Leather', price: 249, img: 'https://u.cubeupload.com/qazwsxedcrf/8b1WhatsAppImage2025123.jpeg', desc: 'Triple-braided Italian leather with a 316L surgical steel lock system. A premium accessory for any oversize t-shirt or shirt.' }
@@ -421,13 +415,19 @@ Next
         }
 
         function nextStep(s) {
-            ['1','2','3'].forEach(n => {
-                document.getElementById('step'+n+'Content').classList.add('hidden');
-                document.getElementById('step'+n+'-dot').className = 'text-zinc-700 border-b border-zinc-800 pb-1';
-            });
-            document.getElementById('step'+s+'Content').classList.remove('hidden');
-            document.getElementById('step'+s+'-dot').className = 'gold-text border-b border-gold pb-1';
-        }
+    ['1','2','3'].forEach(n => {
+        document.getElementById('step'+n+'Content').classList.add('hidden');
+        document.getElementById('step'+n+'-dot').className =
+            'text-zinc-700 border-b border-zinc-800 pb-1';
+    });
+
+    document.getElementById('step'+s+'Content').classList.remove('hidden');
+    document.getElementById('step'+s+'-dot').className =
+        'gold-text border-b border-gold pb-1';
+
+if (s === 3) updateCheckoutTotal();
+}
+
 
        function openCheckout() {
     if(!cart.length) return alert("Your cart is empty");
@@ -442,7 +442,6 @@ Next
     nextStep(1);
     document.getElementById('checkoutModal').classList.remove('hidden');
 }
-
 function updateCheckoutTotal(){
     const baseTotal = cart.reduce((s, i) => s + i.price, 0);
     const method = document.querySelector('input[name="pay"]:checked')?.value || "UPI";
@@ -483,80 +482,62 @@ function validateShipping() {
     return true;
 }
 
-async function submitOrder() {
-    const btn = document.getElementById("finalBtn");
-    btn.innerText = "Processing...";
-    btn.disabled = true;
+       async function submitOrder() {
 
+    const btn = document.getElementById('finalBtn');
+
+    // Validate all shipping fields
     if (!validateShipping()) {
         btn.disabled = false;
         btn.innerText = "Place Order";
         return;
     }
 
-    const method = document.querySelector('input[name="pay"]:checked').value;
-    let baseTotal = cart.reduce((s, i) => s + i.price, 0);
-    const finalTotal = method === "COD" ? baseTotal + COD_FEE : baseTotal;
+    btn.innerText = "Processing...";
+    btn.disabled = true;
 
-    const orderData = {
-        customer: {
-            name: custName.value,
-            phone: custPhone.value,
-            email: custEmail.value,
-            city: custCity.value,
-            pincode: custPincode.value,
-            address: custAddress.value + ", " + custLocality.value
-        },
-        order: {
-            items: cart,
-            total: finalTotal,
-            method: method
-        },
-        time: new Date().tolocaleString() // safer timestamp
-    };
+   const base = cart.reduce((s, i) => s + i.price, 0);
+const method = document.querySelector('input[name="pay"]:checked').value;
+const finalTotal = method === "COD" ? base + COD_FEE : base;
 
-    const itemList = cart.map(p => `${p.name} x1`).join("\n");
+const orderData = {
+    customer: {
+        name: document.getElementById('custName').value,
+        phone: document.getElementById('custPhone').value,
+        pincode: document.getElementById('custPincode').value,
+        locality: document.getElementById('custLocality').value,
+        address: document.getElementById('custAddress').value,
+        city: document.getElementById('custCity').value,
+        state: document.getElementById('custState').value,
+        landmark: document.getElementById('custLandmark').value,
+        altPhone: document.getElementById('custAltPhone').value
+    },
+    order: {
+        items: cart.map(i => i.name).join(', '),
+        total: finalTotal,
+        method: method,
+        date: new Date().toLocaleString()
+    }
+};
+
 
     try {
-        // Save order to Firebase
-        await database.ref("orders").push(orderData);
-        console.log("✅ Order saved to Firebase");
+        await database.ref('orders').push().set(orderData);
 
-        // Send email
-        emailjs.send("service_0xjun2v", "Contact Us", {
-            name: orderData.customer.name,
-            phone: orderData.customer.phone,
-            city: orderData.customer.city,
-            pincode: orderData.customer.pincode,
-            address: orderData.customer.address,
-            method: orderData.order.method,
-            total: orderData.order.total,
-            items: itemList,
-            email: orderData.customer.email,
-            time: new Date().toLocaleString()
-        }).then(res => {
-            console.log("✅ Email sent!", res.status, res.text);
-        }).catch(err => {
-            console.error("⚠️ EmailJS error:", err);
-        });
-
-        // Payment redirect
-        if (method === "UPI") {
-            window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR`;
+        if(orderData.order.method === 'UPI') {
+            window.location.href = `upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${orderData.order.total}&cu=INR`;
         } else {
-            alert("Order placed successfully!");
+            alert("Order Placed Successfully!");
             location.reload();
         }
 
-    } catch (err) {
-        console.error("❌ Firebase error:", err);
-        alert("Something went wrong. Please try again.");
+    } catch (e) {
+        alert("Error saving order. Try again.");
         btn.disabled = false;
         btn.innerText = "Place Order";
     }
 }
 
-
     </script>
 </body>
-</html>
+</html> 
