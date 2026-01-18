@@ -75,11 +75,6 @@ color:#777;
 100%{ transform:translateX(-50%); }
 }
 
-
-@keyframes premiumSlide{
-0%{ transform:translateX(0); }
-100%{ transform:translateX(-50%); }
-}
 .top-banner{
 width:100%;
 background:#050505;
@@ -287,14 +282,6 @@ COMING SOON</p>
     </div>
   </div>
 </div>
-
-                    
-                    <button onclick="addCurrentToCart()" class="gold-bg text-black px-12 py-4 font-bold text-xs tracking-widest uppercase hover:brightness-110">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="cartSidebar" class="fixed top-0 right-0 w-full md:w-[400px] h-full bg-zinc-950 z-[100] translate-x-full shadow-2xl p-6 flex flex-col">
         <div class="flex justify-between items-center border-b border-zinc-900 pb-4 mb-6">
             <h3 class="luxury-font text-xl gold-text">YOUR CART</h3>
@@ -397,7 +384,7 @@ Next
       'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134804224.jpg',
       'https://u.cubeupload.com/qazwsxedcrf/IMG20260116134807416.jpg'
     ],
-    desc: 'Matte-finish premium leather look bracelet with magnetic lock.'
+    desc: 'A bold matte-finish leather bracelet designed for men who like power on their wrist. The premium magnetic lock ensures a secure fit while the rugged leather texture adds a strong masculine edge. Perfect for daily wear and night outings.Best for: Everyday style, office wear, confident looks.'
   },
 
   {
@@ -502,10 +489,12 @@ function openProductPage(id) {
     document.getElementById('pPrice').innerText = '₹' + p.price;
     document.getElementById('pDesc').innerText = p.desc;
 
-    renderImage();
-    renderThumbs();
-    renderDots();
-    startAutoSlide();
+  renderImage();
+renderThumbs();
+renderDots();
+enableImageControls();
+startAutoSlide();
+
 
     document.getElementById('productPage').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -533,6 +522,34 @@ function renderDots() {
         `).join('');
 }
 
+function enableImageControls() {
+    const newimg = document.getElementById('mainImg');
+    let startX = 0;
+
+    // CLICK → next image (desktop + mobile tap)
+   img.addEventListener('click', e => {
+    if ('ontouchstart' in window) return; // prevent double fire on mobile
+    nextImage();
+    resetAutoSlide();
+});
+
+
+    // SWIPE SUPPORT (mobile)
+    img.ontouchstart = e => {
+        startX = e.touches[0].clientX;
+    };
+
+    img.ontouchend = e => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > 50) {
+            diff > 0 ? nextImage() : prevImage();
+            resetAutoSlide();
+        }
+    };
+}
+
 function setImage(i) {
     currentIndex = i;
     renderImage();
@@ -540,19 +557,7 @@ function setImage(i) {
     renderDots();
     resetAutoSlide();
 }
-let startX = 0;
-const img = document.getElementById('mainImg');
 
-img.addEventListener('touchstart', e => {
-    startX = e.touches[0].clientX;
-});
-
-img.addEventListener('touchend', e => {
-    const diff = startX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-        diff > 0 ? nextImage() : prevImage();
-    }
-});
 
 function nextImage() {
     currentIndex = (currentIndex + 1) % currentImages.length;
@@ -564,8 +569,10 @@ function prevImage() {
     setImage(currentIndex);
 }
 function startAutoSlide() {
+    clearInterval(autoSlideInterval);
     autoSlideInterval = setInterval(nextImage, 3500);
 }
+
 
 function resetAutoSlide() {
     clearInterval(autoSlideInterval);
@@ -573,13 +580,24 @@ function resetAutoSlide() {
 }
 
 
-        function closeProductPage() { document.getElementById('productPage').classList.add('hidden'); document.body.style.overflow = 'auto'; }
-        function addCurrentToCart() { addToCart(curID); closeProductPage(); }
+function closeProductPage() { 
+    clearInterval(autoSlideInterval); // STOP slider
+    document.getElementById('productPage').classList.add('hidden'); 
+    document.body.style.overflow = 'auto'; 
+}
         
         function addToCart(id) {
             cart.push(products.find(x => x.id === id));
             updateCartUI(); toggleCart();
         }
+        
+function addCurrentToCart() {
+    const product = products.find(p => p.id === curID);
+    if (!product) return;
+    cart.push(product);
+    updateCartUI();
+    toggleCart();
+}
 
         function updateCartUI() {
             document.getElementById('cartCount').innerText = cart.length;
@@ -587,7 +605,7 @@ function resetAutoSlide() {
             document.getElementById('cartTotal').innerText = `₹${t}`;
             document.getElementById('cartItems').innerHTML = cart.map((i, idx) => `
                 <div class="flex items-center gap-4 bg-zinc-900/40 p-3 border border-zinc-900 rounded">
-                    <img src="${i.img}" class="w-12 h-12 object-cover rounded">
+                   <img src="${i.imgs[0]}" class="w-12 h-12 object-cover rounded">
                     <div class="flex-1 text-[10px] uppercase font-bold tracking-widest">${i.name}<br><span class="gold-text italic">₹${i.price}</span></div>
                     <button onclick="cart.splice(${idx},1); updateCartUI()" class="text-zinc-700 hover:text-white">&times;</button>
                 </div>`).join('');
