@@ -547,21 +547,6 @@ function enableImageControls() {
         }
     };
 }
-   // SWIPE SUPPORT (mobile)
-    img.ontouchstart = e => {
-        startX = e.touches[0].clientX;
-    };
-
-    img.ontouchend = e => {
-        const endX = e.changedTouches[0].clientX;
-        const diff = startX - endX;
-
-        if (Math.abs(diff) > 50) {
-            diff > 0 ? nextImage() : prevImage();
-            resetAutoSlide();
-        }
-    };
-}
 
 function setImage(i) {
     currentIndex = i;
@@ -751,4 +736,3 @@ const orderData = {
     </script>
 </body>
 </html> 
-
