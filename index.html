@@ -521,20 +521,33 @@ function renderDots() {
                  ${i === currentIndex ? 'bg-amber-500' : 'bg-zinc-500'}"></div>
         `).join('');
 }
-
 function enableImageControls() {
-    const newimg = document.getElementById('mainImg');
+    const img = document.getElementById('mainImg');
     let startX = 0;
 
-    // CLICK → next image (desktop + mobile tap)
-   img.addEventListener('click', e => {
-    if ('ontouchstart' in window) return; // prevent double fire on mobile
-    nextImage();
-    resetAutoSlide();
-});
+    // Desktop click
+    img.onclick = e => {
+        if ('ontouchstart' in window) return;
+        nextImage();
+        resetAutoSlide();
+    };
 
+    // Mobile swipe
+    img.ontouchstart = e => {
+        startX = e.touches[0].clientX;
+    };
 
-    // SWIPE SUPPORT (mobile)
+    img.ontouchend = e => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > 50) {
+            diff > 0 ? nextImage() : prevImage();
+            resetAutoSlide();
+        }
+    };
+}
+   // SWIPE SUPPORT (mobile)
     img.ontouchstart = e => {
         startX = e.touches[0].clientX;
     };
