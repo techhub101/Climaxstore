@@ -390,6 +390,7 @@ Next
     const products = [
   {
     id: 1,
+    slug: "Scorp Elite leather",
     name: 'Scorp Elite leather',
     price: 349,
     imgs: [
@@ -405,6 +406,7 @@ Next
 
   {
     id: 2,
+    slug: "Nikeon Elite leather",
     name: 'Nikeon Elite Leather',
     price: 349,
     imgs: [
@@ -421,6 +423,7 @@ Next
 
   {
     id: 3,
+    slug: "Scar Elite leather",
     name: 'Scar Elite Leather',
     price: 349,
     imgs: [
@@ -440,6 +443,7 @@ Next
 
   {
     id: 4,
+    slug: "Blaze Elite leather",
     name: 'Blaze Elite Leather',
     price: 349,
     imgs: [
@@ -456,6 +460,7 @@ Next
 
   {
     id: 5,
+    slug: "Lumi Elite leather",
     name: 'Lumi Elite Leather',
     price: 399,
     imgs: [
@@ -500,30 +505,31 @@ function buyNowFromProduct() {
         const grid = document.getElementById('productGrid');
 products.forEach(p => {
     grid.innerHTML += `
-    <div class="product-card p-4 flex flex-col">
-        <img src="${p.imgs[0]}" 
-             onclick="openProductPage(${p.id})"
+    <div id="${p.slug}" class="product-card p-4 flex flex-col">
+        <img src="${p.imgs[0]}"
+             onclick="openProductPage(${p.id}, '${p.slug}')"
              class="w-full aspect-square object-cover mb-4 rounded shadow-lg cursor-pointer">
 
         <h3 class="font-semibold tracking-widest uppercase text-xs">${p.name}</h3>
         <p class="gold-text font-bold mb-4">₹${p.price}</p>
 
         <div class="mt-auto grid grid-cols-2 gap-2">
-            <button 
-              onclick="openProductPage(${p.id})"
-              class="py-3 border border-zinc-800 text-[9px] tracking-widest hover:bg-white hover:text-black transition uppercase">
-              View Product
-            </button>
+            <a href="#${p.slug}"
+               onclick="openProductPage(${p.id}, '${p.slug}')"
+               class="py-3 border border-zinc-800 text-[9px] tracking-widest hover:bg-white hover:text-black transition uppercase text-center">
+               View Product
+            </a>
 
-            <button 
+            <button
               onclick="buyNowFast(${p.id})"
               class="py-3 gold-bg text-black text-[9px] tracking-widest uppercase hover:brightness-110">
               Buy Now
             </button>
         </div>
     </div>`;
-
 });
+
+      
 
 
         function toggleCart() { document.getElementById('cartSidebar').classList.toggle('cart-open'); }
@@ -532,9 +538,16 @@ products.forEach(p => {
 let currentIndex = 0;
 let autoSlideInterval;
 
-function openProductPage(id) {
+function openProductPage(id, slug = null) {
     const p = products.find(x => x.id === id);
+    if (!p) return;
+
     curID = id;
+
+    // SET URL FOR META ADS
+    if (slug) {
+        history.pushState(null, "", "#" + slug);
+    }
 
     currentImages = p.imgs;
     currentIndex = 0;
@@ -543,16 +556,16 @@ function openProductPage(id) {
     document.getElementById('pPrice').innerText = '₹' + p.price;
     document.getElementById('pDesc').innerText = p.desc;
 
-  renderImage();
-renderThumbs();
-renderDots();
-enableImageControls();
-startAutoSlide();
-
+    renderImage();
+    renderThumbs();
+    renderDots();
+    enableImageControls();
+    startAutoSlide();
 
     document.getElementById('productPage').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 }
+
 function renderImage() {
     document.getElementById('mainImg').src = currentImages[currentIndex];
 }
@@ -786,6 +799,15 @@ const orderData = {
         btn.innerText = "Place Order";
     }
 }
+window.addEventListener("load", () => {
+    const slug = location.hash.replace("#", "");
+    if (!slug) return;
+
+    const product = products.find(p => p.slug === slug);
+    if (product) {
+        openProductPage(product.id, product.slug);
+    }
+});
 
     </script>
 </body>
