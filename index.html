@@ -67,103 +67,69 @@
     .section-divider { width:60px; height:1px; background:var(--gold); margin:16px auto 0; opacity:0.5; }
 
     /* PRODUCT CARDS */
-    .product-card {
-      background: linear-gradient(160deg, #111 0%, #0a0a0a 100%);
-      border: 1px solid var(--border);
-      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      border-radius: 4px;
-    }
-    .product-card:hover {
-      border-color: var(--gold);
-      transform: translateY(-8px);
-      box-shadow: 0 24px 70px rgba(212,175,55,0.22), 0 0 0 1px rgba(212,175,55,0.15);
-    }
+    .product-card { background:var(--surface); border:1px solid var(--border); transition:all 0.4s cubic-bezier(0.4,0,0.2,1); cursor:pointer; position:relative; overflow:hidden; }
+    .product-card:hover { border-color:var(--gold); transform:translateY(-6px); box-shadow:0 20px 60px rgba(212,175,55,0.12); }
     .product-card .img-wrap { position:relative; overflow:hidden; aspect-ratio:1; }
-    .product-card .img-main { width:100%; height:100%; object-fit:cover; transition:all 0.7s ease; }
-    .product-card .img-hover { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.7s ease; }
-    .product-card:hover .img-main { transform:scale(1.06); }
+    .product-card .img-main { width:100%; height:100%; object-fit:cover; transition:all 0.6s ease; }
+    .product-card .img-hover { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity 0.6s ease; }
+    .product-card:hover .img-main { transform:scale(1.04); }
     .product-card:hover .img-hover { opacity:1; }
-    /* Gold shimmer sweep */
-    .product-card::before {
-      content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
-      background:linear-gradient(90deg,transparent,rgba(212,175,55,0.09),transparent);
-      transition:left 0.7s ease; pointer-events:none; z-index:3;
-    }
-    .product-card:hover::before { left:150%; }
-    /* Gold top line on hover */
-    .product-card::after {
-      content:''; position:absolute; top:0; left:0; right:0; height:2px;
-      background:linear-gradient(90deg, var(--gold), var(--gold-light, #f0d060), var(--gold));
-      transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease;
-      z-index:4;
-    }
-    .product-card:hover::after { transform:scaleX(1); }
-
-    .badge {
-      position:absolute; top:14px; left:14px;
-      background:var(--gold); color:#000;
-      font-size:8px; font-weight:800; letter-spacing:2px; text-transform:uppercase;
-      padding:5px 12px; z-index:5; border-radius:2px;
-      box-shadow: 0 2px 12px rgba(212,175,55,0.4);
-    }
-
-    .card-body { padding:20px 18px 18px; }
-    .card-name {
-      font-size:10px; font-weight:700; letter-spacing:3px;
-      text-transform:uppercase; color:#bbb; margin-bottom:8px;
-    }
-    .card-price {
-      font-family:'Cormorant Garamond',serif; font-size:1.6rem;
-      color:var(--gold); font-weight:300; line-height:1;
-    }
-    .card-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+    .product-card::after { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(212,175,55,0.07),transparent); transition:left 0.6s ease; pointer-events:none; }
+    .product-card:hover::after { left:150%; }
+    .badge { position:absolute; top:12px; left:12px; background:var(--gold); color:#000; font-size:8px; font-weight:800; letter-spacing:2px; text-transform:uppercase; padding:4px 10px; z-index:2; }
+    .card-body { padding:20px; }
+    .card-name { font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#ccc; margin-bottom:6px; }
+    .card-price { font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--gold); font-weight:300; }
+    .card-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 
     /* ANIMATED BUTTON — View */
     .card-btn-view {
-      position:relative; display:flex; align-items:center; justify-content:center;
-      padding:14px 8px; border:1.5px solid rgba(212,175,55,0.5);
-      font-size:9px; letter-spacing:2.5px; text-transform:uppercase;
-      color:var(--gold); background:transparent;
-      cursor:pointer; overflow:hidden; border-radius:3px;
-      transition:all 0.6s cubic-bezier(0.23,1,0.32,1);
+      position:relative; display:flex; align-items:center; justify-content:center; gap:4px;
+      padding:12px 8px; border:2px solid transparent; font-size:9px; letter-spacing:2px;
+      text-transform:uppercase; color:var(--gold); background:inherit;
+      box-shadow:0 0 0 1.5px var(--gold); cursor:pointer; overflow:hidden;
+      transition:all 0.6s cubic-bezier(0.23,1,0.32,1); border-radius:4px;
     }
-    .card-btn-view svg { position:absolute; width:15px; fill:var(--gold); z-index:9; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
+    .card-btn-view svg { position:absolute; width:16px; fill:var(--gold); z-index:9; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
     .card-btn-view .arr-1 { right:10px; }
     .card-btn-view .arr-2 { left:-20%; }
-    .card-btn-view .cbtn-circle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:14px; height:14px; background:var(--gold); border-radius:50%; opacity:0; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
-    .card-btn-view .cbtn-text { position:relative; z-index:1; transform:translateX(-6px); transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
-    .card-btn-view:hover { border-color:var(--gold); color:#000; box-shadow:0 0 20px rgba(212,175,55,0.2); }
+    .card-btn-view .cbtn-circle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:16px; height:16px; background:var(--gold); border-radius:50%; opacity:0; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
+    .card-btn-view .cbtn-text { position:relative; z-index:1; transform:translateX(-8px); transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
+    .card-btn-view:hover { box-shadow:0 0 0 10px transparent; color:#000; border-radius:8px; }
     .card-btn-view:hover .arr-1 { right:-20%; }
     .card-btn-view:hover .arr-2 { left:10px; }
-    .card-btn-view:hover .cbtn-text { transform:translateX(6px); }
+    .card-btn-view:hover .cbtn-text { transform:translateX(8px); }
     .card-btn-view:hover svg { fill:#000; }
-    .card-btn-view:hover .cbtn-circle { width:200px; height:200px; opacity:1; }
-    .card-btn-view:active { scale:0.95; }
+    .card-btn-view:hover .cbtn-circle { width:180px; height:180px; opacity:1; }
+    .card-btn-view:active { scale:0.95; box-shadow:0 0 0 3px var(--gold); }
 
     /* ANIMATED BUTTON — Buy Now */
     .card-btn-buy {
-      position:relative; display:flex; align-items:center; justify-content:center;
-      padding:14px 8px; border:1.5px solid var(--gold);
-      font-size:9px; letter-spacing:2.5px; font-weight:700; text-transform:uppercase;
-      color:#000; background:var(--gold);
-      cursor:pointer; overflow:hidden; border-radius:3px;
-      transition:all 0.6s cubic-bezier(0.23,1,0.32,1);
-      box-shadow: 0 4px 20px rgba(212,175,55,0.25);
+      position:relative; display:flex; align-items:center; justify-content:center; gap:4px;
+      padding:12px 8px; border:2px solid transparent; font-size:9px; letter-spacing:2px;
+      font-weight:700; text-transform:uppercase; color:#000; background:var(--gold);
+      box-shadow:0 0 0 1.5px var(--gold); cursor:pointer; overflow:hidden;
+      transition:all 0.6s cubic-bezier(0.23,1,0.32,1); border-radius:4px;
     }
-    .card-btn-buy svg { position:absolute; width:15px; fill:#000; z-index:9; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
+    .card-btn-buy svg { position:absolute; width:16px; fill:#000; z-index:9; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
     .card-btn-buy .arr-1 { right:10px; }
     .card-btn-buy .arr-2 { left:-20%; }
-    .card-btn-buy .cbtn-circle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:14px; height:14px; background:rgba(255,255,255,0.3); border-radius:50%; opacity:0; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
-    .card-btn-buy .cbtn-text { position:relative; z-index:1; transform:translateX(-6px); transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
-    .card-btn-buy:hover { box-shadow:0 0 30px rgba(212,175,55,0.4); filter:brightness(1.08); }
+    .card-btn-buy .cbtn-circle { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:16px; height:16px; background:#fff; border-radius:50%; opacity:0; transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
+    .card-btn-buy .cbtn-text { position:relative; z-index:1; transform:translateX(-8px); transition:all 0.8s cubic-bezier(0.23,1,0.32,1); }
+    .card-btn-buy:hover { box-shadow:0 0 0 10px transparent; color:#000; border-radius:8px; filter:brightness(1.1); }
     .card-btn-buy:hover .arr-1 { right:-20%; }
     .card-btn-buy:hover .arr-2 { left:10px; }
-    .card-btn-buy:hover .cbtn-text { transform:translateX(6px); }
-    .card-btn-buy:hover .cbtn-circle { width:200px; height:200px; opacity:1; }
+    .card-btn-buy:hover .cbtn-text { transform:translateX(8px); }
+    .card-btn-buy:hover svg { fill:#000; }
+    .card-btn-buy:hover .cbtn-circle { width:180px; height:180px; opacity:1; }
     .card-btn-buy:active { scale:0.95; }
+
+    /* PRODUCT CARD GLOW on hover */
+    .product-card:hover {
+      border-color:var(--gold);
+      transform:translateY(-6px);
+      box-shadow:0 20px 60px rgba(212,175,55,0.18), 0 0 30px rgba(212,175,55,0.08);
+    }
 
     /* UPI ANIMATED PLACE ORDER BUTTON */
     .upi-animated-btn {
@@ -315,41 +281,42 @@
     <div class="section-divider"></div>
   </div>
 
+  <!-- SLIDER WRAPPER -->
   <div class="product-slider-outer" style="position:relative;">
 
     <!-- LEFT ARROW -->
     <button id="sliderPrev" onclick="slideProducts(-1)" style="
-      position:absolute; left:10px; top:42%; transform:translateY(-50%);
-      z-index:10; width:40px; height:40px; border-radius:50%;
-      background:rgba(10,10,10,0.85); border:1px solid var(--gold);
-      color:var(--gold); font-size:16px; cursor:pointer;
+      position:absolute; left:16px; top:50%; transform:translateY(-50%);
+      z-index:10; width:44px; height:44px; border-radius:50%;
+      background:rgba(212,175,55,0.12); border:1px solid var(--gold);
+      color:var(--gold); font-size:18px; cursor:pointer;
       display:flex; align-items:center; justify-content:center;
-      transition:all 0.3s; backdrop-filter:blur(8px);"
+      transition:all 0.3s; backdrop-filter:blur(6px);"
       onmouseover="this.style.background='var(--gold)';this.style.color='#000';"
-      onmouseout="this.style.background='rgba(10,10,10,0.85)';this.style.color='var(--gold)';">
+      onmouseout="this.style.background='rgba(212,175,55,0.12)';this.style.color='var(--gold)';">
       &#8592;
     </button>
 
     <!-- RIGHT ARROW -->
     <button id="sliderNext" onclick="slideProducts(1)" style="
-      position:absolute; right:10px; top:42%; transform:translateY(-50%);
-      z-index:10; width:40px; height:40px; border-radius:50%;
-      background:rgba(10,10,10,0.85); border:1px solid var(--gold);
-      color:var(--gold); font-size:16px; cursor:pointer;
+      position:absolute; right:16px; top:50%; transform:translateY(-50%);
+      z-index:10; width:44px; height:44px; border-radius:50%;
+      background:rgba(212,175,55,0.12); border:1px solid var(--gold);
+      color:var(--gold); font-size:18px; cursor:pointer;
       display:flex; align-items:center; justify-content:center;
-      transition:all 0.3s; backdrop-filter:blur(8px);"
+      transition:all 0.3s; backdrop-filter:blur(6px);"
       onmouseover="this.style.background='var(--gold)';this.style.color='#000';"
-      onmouseout="this.style.background='rgba(10,10,10,0.85)';this.style.color='var(--gold)';">
+      onmouseout="this.style.background='rgba(212,175,55,0.12)';this.style.color='var(--gold)';">
       &#8594;
     </button>
 
-    <!-- TRACK -->
-    <div id="sliderViewport" style="overflow:hidden; padding:8px 52px 28px;">
-      <div id="productSliderTrack" style="display:flex; gap:20px; transition:transform 0.55s cubic-bezier(0.4,0,0.2,1); will-change:transform;"></div>
+    <!-- SLIDER TRACK CONTAINER -->
+    <div style="overflow:hidden; padding:8px 60px 32px;">
+      <div id="productSliderTrack" style="display:flex; gap:24px; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change:transform;"></div>
     </div>
 
     <!-- DOTS -->
-    <div id="sliderDots" style="display:flex; justify-content:center; gap:8px; margin-top:8px; padding-bottom:8px;"></div>
+    <div id="sliderDots" style="display:flex; justify-content:center; gap:8px; margin-top:4px;"></div>
   </div>
 </section>
 
@@ -431,20 +398,8 @@
           </ul>
         </div>
         <div class="grid grid-cols-2 gap-3 mt-auto">
-          <button onclick="addCurrentToCart()" class="card-btn-view py-4 border border-zinc-800 text-xs tracking-widest uppercase hover:bg-white hover:text-black transition"
-            style="padding:16px 8px;font-size:10px;letter-spacing:2px;">
-            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
-            <span class="cbtn-text">Add to Cart</span>
-            <span class="cbtn-circle"></span>
-            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
-          </button>
-          <button onclick="buyNowFromProduct()" class="card-btn-buy py-4 text-xs tracking-widest uppercase"
-            style="padding:16px 8px;font-size:10px;letter-spacing:2px;">
-            <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
-            <span class="cbtn-text">Buy Now</span>
-            <span class="cbtn-circle"></span>
-            <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
-          </button>
+          <button onclick="addCurrentToCart()" class="card-btn-view py-4 border border-zinc-800 text-xs tracking-widest uppercase hover:bg-white hover:text-black transition">Add to Cart</button>
+          <button onclick="buyNowFromProduct()" class="card-btn-buy py-4 text-xs tracking-widest uppercase">Buy Now</button>
         </div>
       </div>
     </div>
@@ -668,22 +623,27 @@
     const dot = document.createElement('div');
     dot.id = 'dot-' + idx;
     dot.onclick = () => goToSlide(idx);
-    dot.style.cssText = `width:${idx===0?'28px':'8px'};height:8px;border-radius:999px;background:${idx===0?'var(--gold)':'#2a2a2a'};cursor:pointer;transition:all 0.35s;box-shadow:${idx===0?'0 0 8px rgba(212,175,55,0.5)':'none'};`;
+    dot.style.cssText = `width:${idx===0?'24px':'8px'};height:8px;border-radius:999px;background:${idx===0?'var(--gold)':'#333'};cursor:pointer;transition:all 0.3s;`;
     dotsContainer.appendChild(dot);
   });
 
+  // SLIDER LOGIC
+  let currentSlide = 0;
+  let sliderAutoInterval;
+  let isDragging = false, dragStartX = 0, dragCurrentX = 0;
+
   function getVisibleCount() {
     const w = window.innerWidth;
-    if (w >= 1100) return 4;
-    if (w >= 780) return 3;
-    if (w >= 520) return 2;
+    if (w >= 1200) return 4;
+    if (w >= 900) return 3;
+    if (w >= 600) return 2;
     return 1;
   }
 
   function getCardWidth() {
-    const gap = 20;
+    const gap = 24;
     const card = sliderTrack.querySelector('.product-card');
-    return card ? card.offsetWidth + gap : 320;
+    return card ? card.offsetWidth + gap : 324;
   }
 
   function maxSlide() {
@@ -698,15 +658,14 @@
     products.forEach((_, i) => {
       const dot = document.getElementById('dot-' + i);
       if (!dot) return;
-      dot.style.width = i === currentSlide ? '28px' : '8px';
-      dot.style.background = i === currentSlide ? 'var(--gold)' : '#2a2a2a';
-      dot.style.boxShadow = i === currentSlide ? '0 0 8px rgba(212,175,55,0.5)' : 'none';
+      dot.style.width = i === currentSlide ? '24px' : '8px';
+      dot.style.background = i === currentSlide ? 'var(--gold)' : '#333';
     });
   }
 
   function goToSlide(idx) {
     currentSlide = Math.max(0, Math.min(idx, maxSlide()));
-    sliderTrack.style.transition = 'transform 0.55s cubic-bezier(0.4,0,0.2,1)';
+    sliderTrack.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
     updateSliderTransform();
     updateDots();
     resetSliderAuto();
@@ -728,11 +687,10 @@
     startSliderAuto();
   }
 
-  // Touch swipe
+  // Touch / drag support
   sliderTrack.addEventListener('touchstart', e => {
     isDragging = true;
     dragStartX = e.touches[0].clientX;
-    dragCurrentX = dragStartX;
     sliderTrack.style.transition = 'none';
   }, { passive: true });
 
@@ -745,11 +703,11 @@
   sliderTrack.addEventListener('touchend', () => {
     isDragging = false;
     const diff = dragStartX - dragCurrentX;
-    if (Math.abs(diff) > 40) slideProducts(diff > 0 ? 1 : -1);
+    if (Math.abs(diff) > 50) slideProducts(diff > 0 ? 1 : -1);
     else goToSlide(currentSlide);
   });
 
-  // Mouse drag
+  // Mouse drag support
   sliderTrack.addEventListener('mousedown', e => {
     isDragging = true;
     dragStartX = e.clientX;
@@ -767,26 +725,29 @@
     isDragging = false;
     sliderTrack.style.cursor = 'grab';
     const diff = dragStartX - dragCurrentX;
-    if (Math.abs(diff) > 40) slideProducts(diff > 0 ? 1 : -1);
+    if (Math.abs(diff) > 50) slideProducts(diff > 0 ? 1 : -1);
     else goToSlide(currentSlide);
   });
 
+  // Recalculate on resize
+  window.addEventListener('resize', () => goToSlide(Math.min(currentSlide, maxSlide())));
+
+  // Set card widths dynamically based on viewport
   function setCardWidths() {
-    const viewport = document.getElementById('sliderViewport');
-    if (!viewport) return;
-    const gap = 20;
-    const sidePad = 104; // arrows + padding
+    const outer = document.querySelector('.product-slider-outer');
+    const paddingH = 120; // arrows space
+    const gap = 24;
     const visible = getVisibleCount();
-    const availW = viewport.offsetWidth - sidePad;
-    const cardW = Math.floor((availW - gap * (visible - 1)) / visible);
+    const availableWidth = (outer ? outer.offsetWidth : window.innerWidth) - paddingH;
+    const cardW = Math.floor((availableWidth - gap * (visible - 1)) / visible);
     document.querySelectorAll('#productSliderTrack .product-card').forEach(c => {
       c.style.width = cardW + 'px';
     });
-    goToSlide(Math.min(currentSlide, maxSlide()));
+    updateSliderTransform();
   }
 
-  window.addEventListener('resize', () => { setCardWidths(); });
-  setTimeout(() => { setCardWidths(); startSliderAuto(); }, 80);
+  window.addEventListener('resize', setCardWidths);
+  setTimeout(() => { setCardWidths(); startSliderAuto(); }, 100);
 
   // CART
   let cart=[], curID=null;
