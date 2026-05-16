@@ -196,6 +196,38 @@
     /* ANIMATIONS */
     .fade-in-up { opacity:0; transform:translateY(40px); transition:opacity 0.7s ease,transform 0.7s ease; }
     .fade-in-up.visible { opacity:1; transform:translateY(0); }
+    /* ECOM CHECKOUT */
+.checkout-shell { width:100%; max-width:1120px; margin:24px auto; background:transparent; }
+.checkout-head { display:flex; align-items:center; justify-content:space-between; padding:18px 0; }
+.checkout-grid { display:grid; grid-template-columns:minmax(0,1fr) 360px; gap:18px; align-items:start; }
+.checkout-panel { background:var(--surface); border:1px solid var(--border); }
+.checkout-step-title { display:flex; align-items:center; gap:12px; padding:18px 20px; border-bottom:1px solid var(--border); }
+.checkout-num { width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:var(--gold); color:#000; font-size:11px; font-weight:800; }
+.checkout-step-title h3 { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:#eee; font-weight:700; }
+.checkout-step-title p { font-size:10px; letter-spacing:1.5px; color:#666; text-transform:uppercase; margin-top:2px; }
+.checkout-body { padding:20px; }
+.checkout-card-item { display:flex; gap:14px; padding:14px; background:#090909; border:1px solid #1d1d1d; margin-bottom:10px; }
+.checkout-card-item img { width:74px; height:74px; object-fit:cover; border:1px solid #222; }
+.checkout-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.checkout-form-grid .full { grid-column:1 / -1; }
+.pay-option { display:flex; align-items:center; gap:14px; padding:16px; border:1px solid #292929; background:#090909; cursor:pointer; transition:all .25s; }
+.pay-option:hover, .pay-option.active { border-color:var(--gold); background:rgba(212,175,55,0.06); }
+.price-box { position:sticky; top:86px; background:var(--surface); border:1px solid var(--border); }
+.price-row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; font-size:12px; color:#888; }
+.price-row.total { border-top:1px solid var(--border); margin-top:8px; padding-top:16px; color:#fff; font-weight:800; }
+.checkout-safe { padding:14px 20px; border-top:1px solid var(--border); font-size:10px; color:#666; letter-spacing:1.4px; text-transform:uppercase; line-height:1.8; }
+.checkout-actions { display:grid; grid-template-columns:140px 1fr; gap:12px; margin-top:20px; }
+.checkout-back { border:1px solid #333; color:#777; padding:15px; font-size:10px; letter-spacing:2px; text-transform:uppercase; }
+.checkout-next { background:var(--gold); color:#000; padding:15px; font-size:10px; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
+@media(max-width:860px){
+  .checkout-shell { margin:0; }
+  .checkout-grid { grid-template-columns:1fr; }
+  .price-box { position:relative; top:auto; order:-1; }
+  .checkout-form-grid { grid-template-columns:1fr; }
+  .checkout-actions { grid-template-columns:1fr; }
+  #checkoutModal { padding:0 !important; }
+}
+
   </style>
 </head>
 <body>
@@ -426,99 +458,117 @@
 </div>
 
 <!-- CHECKOUT MODAL -->
-<div id="checkoutModal" class="fixed inset-0 bg-black/98 z-[200] items-start justify-center p-4 overflow-y-auto" style="display:none;">
-  <div class="w-full max-w-2xl my-8" style="background:var(--surface);border:1px solid var(--border);border-radius:2px;">
-
-    <!-- STEP INDICATOR -->
-    <div class="grid grid-cols-3 border-b" style="border-color:var(--border);">
-      <div id="step1-dot" class="py-4 text-center text-[9px] tracking-widest uppercase gold-text" style="border-bottom:2px solid var(--gold);">01 Order</div>
-      <div id="step2-dot" class="py-4 text-center text-[9px] tracking-widest uppercase text-zinc-700" style="border-bottom:2px solid transparent;">02 Shipping</div>
-      <div id="step3-dot" class="py-4 text-center text-[9px] tracking-widest uppercase text-zinc-700" style="border-bottom:2px solid transparent;">03 Payment</div>
+<div id="checkoutModal" class="fixed inset-0 bg-black/98 z-[200] p-4 overflow-y-auto" style="display:none;">
+  <div class="checkout-shell">
+    <div class="checkout-head">
+      <div>
+        <h2 class="luxury-font gold-text text-xl tracking-widest">CLIMAX CHECKOUT</h2>
+        <p class="text-[10px] text-zinc-600 uppercase tracking-widest mt-1">Secure order placement</p>
+      </div>
+      <button onclick="closeCheckout()" class="text-zinc-600 hover:text-white text-3xl leading-none">&times;</button>
     </div>
 
-    <div class="p-6 md:p-8">
-
-      <!-- THANK YOU -->
-      <div id="thankYouScreen" style="display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;">
-        <div style="font-size:64px;margin-bottom:20px;">🎉</div>
-        <h3 class="luxury-font text-2xl gold-text mb-3">Order Confirmed!</h3>
-        <p class="text-zinc-400 mb-4" style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;line-height:1.6;">Thank you for your order. Our team will contact you within 24 hours to confirm your delivery.</p>
-        <div id="orderSummaryBox" class="w-full text-left p-4 mb-6" style="background:#0a0a0a;border:1px solid var(--border);font-size:11px;color:#666;letter-spacing:1px;line-height:2;"></div>
-        <a href="https://wa.me/918850484512?text=Hi%2C%20I%20just%20placed%20an%20order%20on%20CLIMAX" target="_blank" class="btn-primary inline-block mb-4">Track via WhatsApp</a>
-        <button onclick="location.reload()" class="block w-full text-zinc-600 text-xs tracking-widest uppercase py-3 hover:text-white transition">Continue Shopping</button>
-      </div>
-
-      <!-- STEP 1: ORDER REVIEW -->
-      <div id="step1Content" style="display:block;">
-        <p class="text-xs uppercase tracking-widest text-zinc-500 mb-4">Review Your Items</p>
-        <div id="checkoutItemsList" class="mb-6" style="border-bottom:1px solid var(--border);padding-bottom:16px;"></div>
-        <div class="flex justify-between font-bold mb-8">
-          <span class="text-xs uppercase tracking-widest self-center">Grand Total</span>
-          <span id="checkoutTotalValue" class="gold-text" style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;"></span>
+    <div class="checkout-grid">
+      <div class="space-y-4">
+        <div class="checkout-panel" id="step1Content">
+          <div class="checkout-step-title">
+            <div class="checkout-num">1</div>
+            <div><h3>Order Summary</h3><p>Review selected bracelets</p></div>
+          </div>
+          <div class="checkout-body">
+            <div id="checkoutItemsList"></div>
+            <button onclick="nextStep(2)" class="checkout-next w-full mt-4">Continue to Delivery</button>
+          </div>
         </div>
-        <button onclick="nextStep(2)" class="w-full gold-bg text-black font-bold py-4 text-xs uppercase tracking-widest">Continue to Shipping →</button>
-      </div>
 
-      <!-- STEP 2: SHIPPING -->
-      <div id="step2Content" style="display:none;">
-        <p class="text-xs uppercase tracking-widest text-zinc-500 mb-6">Delivery Details</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input type="text" id="custName" placeholder="Full Name *" class="w-full p-3">
-          <input type="tel" id="custPhone" placeholder="Mobile Number *" class="w-full p-3">
-          <input type="text" id="custPincode" placeholder="Pincode *" class="w-full p-3">
-          <input type="text" id="custLocality" placeholder="Locality *" class="w-full p-3">
-          <textarea id="custAddress" placeholder="Address (Area and Street) *" class="w-full p-3 h-24 md:col-span-2" style="resize:none;"></textarea>
-          <input type="text" id="custCity" placeholder="City / District *" class="w-full p-3">
-          <select id="custState" class="w-full p-3">
-            <option value="">-- Select State --</option>
-            <option value="Maharashtra">Maharashtra</option>
-          </select>
-          <input type="text" id="custLandmark" placeholder="Landmark (Optional)" class="w-full p-3">
-          <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)" class="w-full p-3">
-        </div>
-        <div class="grid grid-cols-2 gap-3 mt-6">
-          <button onclick="nextStep(1)" class="py-4 border border-zinc-800 text-xs uppercase tracking-widest text-zinc-500 hover:text-white transition">← Back</button>
-          <button onclick="if(validateShipping()) nextStep(3)" class="gold-bg text-black font-bold py-4 text-xs uppercase tracking-widest">Next →</button>
-        </div>
-      </div>
-
-      <!-- STEP 3: PAYMENT — only UPI redirect + COD, nothing else -->
-      <div id="step3Content" style="display:none;">
-        <p class="text-xs uppercase tracking-widest text-zinc-500 mb-6">Payment Method</p>
-        <div class="space-y-3 mb-6">
-
-          <label class="flex items-center gap-4 p-4 cursor-pointer transition" style="border:1px solid #333;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='#333'">
-            <input type="radio" name="pay" value="UPI" checked onchange="updateCheckoutTotal()" class="accent-amber-400 w-4 h-4">
-            <div>
-              <p class="text-xs uppercase tracking-widest">UPI / GPay / PhonePe / Paytm</p>
-              <p class="text-[10px] text-zinc-600 mt-1">Instant • Secure • No extra charge</p>
+        <div class="checkout-panel" id="step2Content" style="display:none;">
+          <div class="checkout-step-title">
+            <div class="checkout-num">2</div>
+            <div><h3>Delivery Address</h3><p>Mumbai & Thane free shipping</p></div>
+          </div>
+          <div class="checkout-body">
+            <div class="checkout-form-grid">
+              <input type="text" id="custName" placeholder="Full Name *" class="w-full p-3">
+              <input type="tel" id="custPhone" placeholder="Mobile Number *" class="w-full p-3">
+              <input type="text" id="custPincode" placeholder="Pincode *" class="w-full p-3">
+              <input type="text" id="custLocality" placeholder="Locality *" class="w-full p-3">
+              <textarea id="custAddress" placeholder="Full Address *" class="full w-full p-3 h-24" style="resize:none;"></textarea>
+              <input type="text" id="custCity" placeholder="City / District *" class="w-full p-3">
+              <select id="custState" class="w-full p-3">
+                <option value="">-- Select State --</option>
+                <option value="Maharashtra">Maharashtra</option>
+              </select>
+              <input type="text" id="custLandmark" placeholder="Landmark (Optional)" class="w-full p-3">
+              <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)" class="w-full p-3">
             </div>
-          </label>
-
-          <label class="flex items-center gap-4 p-4 cursor-pointer transition" style="border:1px solid #333;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='#333'">
-            <input type="radio" name="pay" value="COD" onchange="updateCheckoutTotal()" class="accent-amber-400 w-4 h-4">
-            <div>
-              <p class="text-xs uppercase tracking-widest">Cash on Delivery <span class="gold-text">(+₹50)</span></p>
-              <p class="text-[10px] text-zinc-600 mt-1">Pay when you receive it</p>
+            <div class="checkout-actions">
+              <button onclick="nextStep(1)" class="checkout-back">Back</button>
+              <button onclick="if(validateShipping()) nextStep(3)" class="checkout-next">Deliver Here</button>
             </div>
-          </label>
+          </div>
+        </div>
 
+        <div class="checkout-panel" id="step3Content" style="display:none;">
+          <div class="checkout-step-title">
+            <div class="checkout-num">3</div>
+            <div><h3>Payment Method</h3><p>Choose how you want to pay</p></div>
+          </div>
+          <div class="checkout-body">
+            <div class="space-y-3">
+              <label class="pay-option active">
+                <input type="radio" name="pay" value="UPI" checked onchange="updateCheckoutTotal()">
+                <div>
+                  <p class="text-xs uppercase tracking-widest">UPI / GPay / PhonePe / Paytm</p>
+                  <p class="text-[10px] text-zinc-600 mt-1">Instant payment to CLIMAX</p>
+                </div>
+              </label>
+              <label class="pay-option">
+                <input type="radio" name="pay" value="COD" onchange="updateCheckoutTotal()">
+                <div>
+                  <p class="text-xs uppercase tracking-widest">Cash on Delivery <span class="gold-text">+₹50</span></p>
+                  <p class="text-[10px] text-zinc-600 mt-1">Pay when your order arrives</p>
+                </div>
+              </label>
+            </div>
+
+            <button onclick="submitOrder()" id="finalBtn" class="upi-animated-btn mt-6">
+              <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
+              <span class="cbtn-text">Place Order</span>
+              <span class="cbtn-circle"></span>
+              <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
+            </button>
+            <button onclick="nextStep(2)" class="w-full text-zinc-600 text-xs tracking-widest uppercase py-3 mt-2 hover:text-white transition">Back to Delivery</button>
+          </div>
         </div>
-        <div class="flex justify-between mb-6 pt-4" style="border-top:1px solid var(--border);">
-          <span class="text-xs uppercase tracking-widest self-center text-zinc-500">Total Payable</span>
-          <span id="checkoutTotalFinal" class="gold-text font-bold" style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;"></span>
+
+        <div class="checkout-panel" id="thankYouScreen" style="display:none;">
+          <div class="checkout-body text-center py-12">
+            <div style="font-size:56px;margin-bottom:18px;">✓</div>
+            <h3 class="luxury-font text-2xl gold-text mb-3">Order Confirmed</h3>
+            <p class="text-zinc-400 mb-5" style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;">Our team will contact you within 24 hours.</p>
+            <div id="orderSummaryBox" class="text-left p-4 mb-6" style="background:#090909;border:1px solid var(--border);font-size:11px;color:#777;letter-spacing:1px;line-height:2;"></div>
+            <a href="https://wa.me/918850484512?text=Hi%2C%20I%20just%20placed%20an%20order%20on%20CLIMAX" target="_blank" class="btn-primary inline-block">Track via WhatsApp</a>
+          </div>
         </div>
-        <button onclick="submitOrder()" id="finalBtn" class="upi-animated-btn">
-          <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
-          <span class="cbtn-text">Place Order</span>
-          <span class="cbtn-circle"></span>
-          <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"/></svg>
-        </button>
-        <button onclick="nextStep(2)" class="w-full text-zinc-600 text-xs tracking-widest uppercase py-3 mt-2 hover:text-white transition">← Back to Shipping</button>
       </div>
 
+      <aside class="price-box">
+        <div class="checkout-step-title">
+          <div>
+            <h3>Price Details</h3>
+            <p id="checkoutItemCount">0 items</p>
+          </div>
+        </div>
+        <div class="checkout-body">
+          <div class="price-row"><span>Subtotal</span><span id="checkoutBaseValue">₹0</span></div>
+          <div class="price-row"><span>Delivery</span><span class="gold-text">FREE</span></div>
+          <div class="price-row"><span>COD Fee</span><span id="checkoutCodValue">₹0</span></div>
+          <div class="price-row total"><span>Total Payable</span><span id="checkoutTotalFinal" class="gold-text">₹0</span></div>
+          <div id="checkoutTotalValue" class="hidden"></div>
+        </div>
+        <div class="checkout-safe">100% secure checkout<br>Free shipping across Mumbai & Thane</div>
+      </aside>
     </div>
-    <button onclick="closeCheckout()" class="w-full text-zinc-700 text-[10px] py-4 tracking-widest uppercase hover:text-zinc-400 transition border-t" style="border-color:var(--border);">Discard & Close</button>
   </div>
 </div>
 
@@ -809,124 +859,146 @@
   function resetAutoSlide(){ clearInterval(autoSlideInterval); startAutoSlide(); }
   function closeProductPage(){ clearInterval(autoSlideInterval); document.getElementById('productPage').classList.remove('open'); document.body.style.overflow='auto'; }
 
-  // CHECKOUT
-  function nextStep(s){
-    ['1','2','3'].forEach(n=>{
-      const el=document.getElementById('step'+n+'Content'); if(el) el.style.display='none';
-      const dot=document.getElementById('step'+n+'-dot');
-      dot.className='py-4 text-center text-[9px] tracking-widest uppercase text-zinc-700';
-      dot.style.borderBottom='2px solid transparent';
-    });
-    const el=document.getElementById('step'+s+'Content'); if(el) el.style.display='block';
-    const dot=document.getElementById('step'+s+'-dot');
-    dot.className='py-4 text-center text-[9px] tracking-widest uppercase gold-text';
-    dot.style.borderBottom='2px solid var(--gold)';
-    if(s===3) updateCheckoutTotal();
-  }
-  function openCheckout(){
-    if(!cart.length) return alert('Your cart is empty.');
-    document.getElementById('thankYouScreen').style.display='none';
-    document.getElementById('checkoutItemsList').innerHTML=cart.map(i=>`
-      <div class="flex justify-between py-3" style="border-bottom:1px solid #1a1a1a;">
-        <div class="flex items-center gap-3">
-          <img src="${i.imgs[0]}" class="w-10 h-10 object-cover rounded-sm">
-          <span class="text-[10px] uppercase tracking-widest">${i.name}</span>
+ // CHECKOUT
+function nextStep(s){
+  ['1','2','3'].forEach(n=>{
+    const el=document.getElementById('step'+n+'Content');
+    if(el) el.style.display='none';
+  });
+  document.getElementById('thankYouScreen').style.display='none';
+  const active=document.getElementById('step'+s+'Content');
+  if(active) active.style.display='block';
+  if(s===3) updateCheckoutTotal();
+}
+
+function openCheckout(){
+  if(!cart.length) return alert('Your cart is empty.');
+
+  document.getElementById('checkoutItemsList').innerHTML=cart.map(i=>`
+    <div class="checkout-card-item">
+      <img src="${i.imgs[0]}" loading="lazy" alt="${i.name}">
+      <div class="flex-1">
+        <p class="text-[11px] uppercase tracking-widest font-semibold text-zinc-200">${i.name}</p>
+        <p class="text-[10px] text-zinc-600 mt-1 uppercase tracking-widest">Climax Signature Series</p>
+        <div class="flex items-baseline gap-2 mt-3">
+          <span class="gold-text" style="font-family:'Cormorant Garamond',serif;font-size:1.35rem;">₹${i.price}</span>
+          <span style="font-size:12px;color:#555;text-decoration:line-through;font-family:'Cormorant Garamond',serif;">₹${i.originalPrice}</span>
         </div>
-        <span class="gold-text font-semibold text-sm">₹${i.price}</span>
-      </div>`).join('');
-    updateCheckoutTotal();
-    nextStep(1);
-    document.getElementById('checkoutModal').style.display='flex';
-  }
-  function updateCheckoutTotal(){
-    const base=cart.reduce((s,i)=>s+i.price,0);
-    const method=document.querySelector('input[name="pay"]:checked')?.value||'UPI';
-    const final=method==='COD'?base+COD_FEE:base;
-    const label=method==='COD'?`₹${final} (incl. ₹${COD_FEE} COD fee)`:`₹${final}`;
-    const el1=document.getElementById('checkoutTotalValue');
-    const el2=document.getElementById('checkoutTotalFinal');
-    if(el1) el1.innerText=label;
-    if(el2) el2.innerText=label;
-  }
-  function closeCheckout(){ document.getElementById('checkoutModal').style.display='none'; }
-  function validateShipping(){
-    const fields=['custName','custPhone','custPincode','custLocality','custAddress','custCity','custState'];
-    for(const id of fields){ if(!document.getElementById(id).value.trim()){ alert('⚠️ Please fill all required fields.'); return false; }}
-    if(!/^[6-9]\d{9}$/.test(document.getElementById('custPhone').value.trim())){ alert('⚠️ Enter a valid 10-digit Indian mobile number.'); return false; }
-    if(!/^\d{6}$/.test(document.getElementById('custPincode').value.trim())){ alert('⚠️ Enter a valid 6-digit pincode.'); return false; }
-    return true;
-  }
+      </div>
+    </div>
+  `).join('');
 
-  async function submitOrder(){
-    const btn=document.getElementById('finalBtn');
-    if(!validateShipping()) return;
-    const btnText = btn.querySelector('.cbtn-text');
-    btnText.innerText='Processing...'; btn.disabled=true;
+  document.getElementById('checkoutModal').style.display='block';
+  document.body.style.overflow='hidden';
+  updateCheckoutTotal();
+  nextStep(1);
+}
 
-    const base=cart.reduce((s,i)=>s+i.price,0);
-    const method=document.querySelector('input[name="pay"]:checked').value;
-    const finalTotal=method==='COD'?base+COD_FEE:base;
+function updateCheckoutTotal(){
+  const base=cart.reduce((s,i)=>s+i.price,0);
+  const method=document.querySelector('input[name="pay"]:checked')?.value||'UPI';
+  const cod=method==='COD'?COD_FEE:0;
+  const final=base+cod;
 
-    const orderData={
-      customer:{
-        name:document.getElementById('custName').value,
-        phone:document.getElementById('custPhone').value,
-        pincode:document.getElementById('custPincode').value,
-        locality:document.getElementById('custLocality').value,
-        address:document.getElementById('custAddress').value,
-        city:document.getElementById('custCity').value,
-        state:document.getElementById('custState').value,
-        landmark:document.getElementById('custLandmark').value,
-        altPhone:document.getElementById('custAltPhone').value
-      },
-      order:{
-        items:cart.map(i=>i.name).join(', '),
-        total:finalTotal,
-        method:method,
-        date:new Date().toLocaleString()
-      }
-    };
-
-    try {
-      await database.ref('orders').push().set(orderData);
-
-      if(method==='UPI'){
-        // Clean direct UPI app redirect — no QR, no WhatsApp, no popups
-        window.location.href=`upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR&tn=CLIMAX Order`;
-      } else {
-        showThankYou(orderData);
-      }
-
-    } catch(e){
-      alert('Error saving order. Please try again.');
-      btn.disabled=false;
-      btn.querySelector('.cbtn-text').innerText='Place Order';
-    }
-  }
-
-  function showThankYou(orderData){
-    ['1','2','3'].forEach(n=>{
-      const el=document.getElementById('step'+n+'Content'); if(el) el.style.display='none';
-      document.getElementById('step'+n+'-dot').style.borderBottom='2px solid transparent';
-    });
-    document.getElementById('orderSummaryBox').innerHTML=`ORDER: ${orderData.order.items}<br>TOTAL: ₹${orderData.order.total}<br>PAYMENT: ${orderData.order.method}<br>DELIVER TO: ${orderData.customer.name}, ${orderData.customer.locality}, ${orderData.customer.city}`;
-    document.getElementById('thankYouScreen').style.display='flex';
-    cart=[]; updateCartUI();
-  }
-
-  // SCROLL ANIMATIONS
-  const observer=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.1});
-  document.querySelectorAll('.fade-in-up').forEach(el=>observer.observe(el));
-
-  // HASH DEEPLINK
-  window.addEventListener('load',()=>{
-    const slug=location.hash.replace('#','');
-    if(!slug) return;
-    const p=products.find(x=>x.slug===slug);
-    if(p) openProductPage(p.id,p.slug);
+  document.querySelectorAll('.pay-option').forEach(label=>{
+    const input=label.querySelector('input[name="pay"]');
+    label.classList.toggle('active', input && input.checked);
   });
 
+  document.getElementById('checkoutItemCount').innerText=`${cart.length} item${cart.length>1?'s':''}`;
+  document.getElementById('checkoutBaseValue').innerText=`₹${base}`;
+  document.getElementById('checkoutCodValue').innerText=cod?`₹${cod}`:'₹0';
+  document.getElementById('checkoutTotalValue').innerText=`₹${final}`;
+  document.getElementById('checkoutTotalFinal').innerText=`₹${final}`;
+}
+
+function closeCheckout(){
+  document.getElementById('checkoutModal').style.display='none';
+  document.body.style.overflow='auto';
+}
+
+function validateShipping(){
+  const fields=['custName','custPhone','custPincode','custLocality','custAddress','custCity','custState'];
+  for(const id of fields){
+    if(!document.getElementById(id).value.trim()){
+      alert('Please fill all required delivery details.');
+      return false;
+    }
+  }
+  if(!/^[6-9]\d{9}$/.test(document.getElementById('custPhone').value.trim())){
+    alert('Enter a valid 10-digit Indian mobile number.');
+    return false;
+  }
+  if(!/^\d{6}$/.test(document.getElementById('custPincode').value.trim())){
+    alert('Enter a valid 6-digit pincode.');
+    return false;
+  }
+  return true;
+}
+
+async function submitOrder(){
+  const btn=document.getElementById('finalBtn');
+  if(!validateShipping()) return;
+
+  const btnText=btn.querySelector('.cbtn-text');
+  btnText.innerText='Processing...';
+  btn.disabled=true;
+
+  const base=cart.reduce((s,i)=>s+i.price,0);
+  const method=document.querySelector('input[name="pay"]:checked').value;
+  const finalTotal=method==='COD'?base+COD_FEE:base;
+
+  const orderData={
+    customer:{
+      name:document.getElementById('custName').value,
+      phone:document.getElementById('custPhone').value,
+      pincode:document.getElementById('custPincode').value,
+      locality:document.getElementById('custLocality').value,
+      address:document.getElementById('custAddress').value,
+      city:document.getElementById('custCity').value,
+      state:document.getElementById('custState').value,
+      landmark:document.getElementById('custLandmark').value,
+      altPhone:document.getElementById('custAltPhone').value
+    },
+    order:{
+      items:cart.map(i=>i.name).join(', '),
+      total:finalTotal,
+      method:method,
+      date:new Date().toLocaleString()
+    }
+  };
+
+  try{
+    await database.ref('orders').push().set(orderData);
+    if(method==='UPI'){
+      window.location.href=`upi://pay?pa=${MY_UPI_ID}&pn=CLIMAX&am=${finalTotal}&cu=INR&tn=CLIMAX Order`;
+    }else{
+      showThankYou(orderData);
+    }
+  }catch(e){
+    alert('Error saving order. Please try again.');
+    btn.disabled=false;
+    btnText.innerText='Place Order';
+  }
+}
+
+function showThankYou(orderData){
+  ['1','2','3'].forEach(n=>{
+    const el=document.getElementById('step'+n+'Content');
+    if(el) el.style.display='none';
+  });
+
+  document.getElementById('orderSummaryBox').innerHTML=
+    `ORDER: ${orderData.order.items}<br>`+
+    `TOTAL: ₹${orderData.order.total}<br>`+
+    `PAYMENT: ${orderData.order.method}<br>`+
+    `DELIVER TO: ${orderData.customer.name}, ${orderData.customer.locality}, ${orderData.customer.city}`;
+
+  document.getElementById('thankYouScreen').style.display='block';
+  cart=[];
   updateCartUI();
+}
+
 </script>
 </body>
 </html>
