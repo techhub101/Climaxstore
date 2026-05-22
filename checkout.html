@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | CLIMAX</title>
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#D4AF37">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+  <style>
+    :root { --gold:#D4AF37; --black:#060606; --surface:#0d0d0d; --border:#1e1e1e; --muted:#666; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; background:var(--black); color:#e8e8e8; font-family:'Raleway',sans-serif; }
+    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
+    .luxury-font { font-family:'Cinzel',serif; }
+    .gold-text { color:var(--gold); }
+    .gold-bg { background:var(--gold); }
+    nav { position:sticky; top:0; z-index:30; background:rgba(6,6,6,0.95); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
+    .checkout-wrap { max-width:1180px; margin:0 auto; padding:28px 18px 70px; }
+    .checkout-grid { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:18px; align-items:start; }
+    .panel { background:var(--surface); border:1px solid var(--border); }
+    .step-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; border-bottom:1px solid var(--border); }
+    .step-left { display:flex; align-items:center; gap:14px; min-width:0; }
+    .step-num { width:30px; height:30px; background:var(--gold); color:#000; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; flex:none; }
+    .step-title { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; font-weight:800; color:#f1f1f1; }
+    .step-sub { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#666; margin-top:3px; }
+    .step-change { font-size:10px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; }
+    .panel-body { padding:20px; }
+    .item-row { display:flex; gap:14px; padding:14px; background:#090909; border:1px solid #1d1d1d; margin-bottom:10px; }
+    .item-row img { width:78px; height:78px; object-fit:cover; border:1px solid #222; flex:none; }
+    .item-name { font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:800; color:#ddd; }
+    .item-meta { font-size:10px; letter-spacing:1.6px; text-transform:uppercase; color:#666; margin-top:5px; }
+    .price-main { font-family:'Cormorant Garamond',serif; font-size:1.45rem; color:var(--gold); }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .full { grid-column:1 / -1; }
+    input,textarea,select { width:100%; border-radius:0 !important; background:#090909 !important; border:1px solid #242424 !important; color:#fff !important; font-family:'Raleway',sans-serif; font-size:13px; padding:14px; transition:border-color .2s; }
+    textarea { min-height:96px; resize:none; }
+    input:focus,textarea:focus,select:focus { border-color:var(--gold) !important; outline:none; }
+    input::placeholder,textarea::placeholder { color:#4b4b4b; }
+    .pay-option { display:flex; align-items:center; gap:14px; padding:16px; border:1px solid #292929; background:#090909; cursor:pointer; transition:all .25s; }
+    .pay-option:hover, .pay-option.active { border-color:var(--gold); background:rgba(212,175,55,0.06); }
+    .pay-option input { width:16px; height:16px; accent-color:var(--gold); padding:0; }
+    .actions { display:grid; grid-template-columns:150px 1fr; gap:12px; margin-top:20px; }
+    .btn-back, .btn-next { min-height:50px; display:flex; align-items:center; justify-content:center; padding:14px; font-size:10px; letter-spacing:2.4px; text-transform:uppercase; transition:all .25s; }
+    .btn-back { border:1px solid #333; color:#777; }
+    .btn-back:hover { color:#fff; border-color:#555; }
+    .btn-next { background:var(--gold); color:#000; font-weight:900; }
+    .btn-next:hover { filter:brightness(1.12); }
+    .summary { position:sticky; top:88px; background:var(--surface); border:1px solid var(--border); }
+    .price-row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; font-size:12px; color:#888; }
+    .price-row.total { border-top:1px solid var(--border); margin-top:8px; padding-top:16px; color:#fff; font-weight:900; }
+    .safe-box { padding:14px 20px; border-top:1px solid var(--border); font-size:10px; color:#666; letter-spacing:1.4px; text-transform:uppercase; line-height:1.8; }
+    .upi-animated-btn { position:relative; display:flex; align-items:center; justify-content:center; width:100%; padding:20px 36px; border:2px solid transparent; font-size:11px; letter-spacing:3px; font-weight:800; text-transform:uppercase; color:#000; background:var(--gold); box-shadow:0 0 0 2px var(--gold), 0 0 20px rgba(212,175,55,0.3); cursor:pointer; overflow:hidden; border-radius:4px; transition:all 0.6s cubic-bezier(0.23,1,0.32,1); animation:upiGlow 2.5s ease-in-out infinite; }
+    @keyframes upiGlow { 0%,100% { box-shadow:0 0 0 2px var(--gold), 0 0 16px rgba(212,175,55,0.3); } 50% { box-shadow:0 0 0 2px var(--gold), 0 0 36px rgba(212,175,55,0.6); } }
+    .upi-animated-btn:hover { border-radius:12px; animation:none; filter:brightness(1.1); }
+    .upi-animated-btn:disabled { opacity:.6; cursor:not-allowed; animation:none; }
+    .empty-box { min-height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:var(--surface); border:1px solid var(--border); padding:30px; }
+    @media(max-width:900px) {
+      .checkout-grid { grid-template-columns:1fr; }
+      .summary { position:relative; top:auto; order:-1; }
+      .form-grid { grid-template-columns:1fr; }
+      .actions { grid-template-columns:1fr; }
+      .checkout-wrap { padding:16px 12px 50px; }
+      .step-head { align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="px-6 md:px-12 py-4 flex justify-between items-center">
+    <a href="index.html" class="text-[10px] tracking-widest uppercase text-zinc-600 hover:text-white transition">← Back to Shop</a>
+    <a href="index.html"><img src="https://u.cubeupload.com/qazwsxedcrf/climax.jpeg" alt="CLIMAX" class="h-10 md:h-11"></a>
+    <a href="https://wa.me/918850484512" target="_blank" class="text-[10px] tracking-widest uppercase gold-text hover:underline">Help</a>
+  </nav>
+
+  <main class="checkout-wrap">
+    <div class="mb-6">
+      <p class="text-[10px] gold-text tracking-[5px] uppercase mb-2">Secure Checkout</p>
+      <h1 class="luxury-font text-2xl md:text-4xl uppercase tracking-widest">Complete Your Order</h1>
+    </div>
+
+    <div id="emptyCart" class="empty-box" style="display:none;">
+      <h2 class="luxury-font text-2xl gold-text mb-3">Your Cart Is Empty</h2>
+      <p class="text-zinc-500 mb-6" style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;">Add a bracelet before starting checkout.</p>
+      <a href="index.html#collection" class="btn-next px-8">Shop Collection</a>
+    </div>
+
+    <div id="checkoutApp" class="checkout-grid">
+      <div class="space-y-4">
+        <section class="panel" id="step1Content">
+          <div class="step-head">
+            <div class="step-left"><div class="step-num">1</div><div><div class="step-title">Order Summary</div><div class="step-sub">Review selected bracelets</div></div></div>
+          </div>
+          <div class="panel-body">
+            <div id="checkoutItemsList"></div>
+            <button onclick="nextStep(2)" class="btn-next w-full mt-4">Continue to Delivery</button>
+          </div>
+        </section>
+
+        <section class="panel" id="step2Content" style="display:none;">
+          <div class="step-head">
+            <div class="step-left"><div class="step-num">2</div><div><div class="step-title">Delivery Address</div><div class="step-sub">Mumbai & Thane free shipping</div></div></div>
+            <button class="step-change" onclick="nextStep(1)">Edit Cart</button>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <input type="text" id="custName" placeholder="Full Name *">
+              <input type="tel" id="custPhone" placeholder="Mobile Number *">
+              <input type="text" id="custPincode" placeholder="Pincode *">
+              <input type="text" id="custLocality" placeholder="Locality *">
+              <textarea id="custAddress" class="full" placeholder="Address (Area and Street) *"></textarea>
+              <input type="text" id="custCity" placeholder="City / District *">
+              <select id="custState">
+                <option value="">-- Select State --</option>
+                <option value="Maharashtra">Maharashtra</option>
+              </select>
+              <input type="text" id="custLandmark" placeholder="Landmark (Optional)">
+              <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)">
+            </div>
+            <div class="actions"><button onclick="nextStep(1)" class="btn-back">Back</button><button onclick="if(validateShipping()) nextStep(3)" class="btn-next">Deliver Here</button></div>
+          </div>
+        </section>
+
+        <section class="panel" id="step3Content" style="display:none;">
+          <div class="step-head">
+            <div class="step-left"><div class="step-num">3</div><div><div class="step-title">Payment Method</div><div class="step-sub">Choose how you want to pay</div></div></div>
+            <button class="step-change" onclick="nextStep(2)">Edit Address</button>
+          </div>
+          <div class="panel-body">
+            <div class="space-y-3">
+              <label class="pay-option active"><input type="radio" name="pay" value="UPI" checked onchange="updateCheckoutTotal()"><div><p class="text-xs uppercase tracking-widest">UPI / GPay / PhonePe / Paytm</p><p class="text-[10px] text-zinc-600 mt-1">Instant payment to CLIMAX</p></div></label>
+              <label class="pay-option"><input type="radio" name="pay" value="COD" onchange="updateCheckoutTotal()"><div><p class="text-xs uppercase tracking-widest">Cash on Delivery <span class="gold-text">+₹50</span></p><p class="text-[10px] text-zinc-600 mt-1">Pay when your order arrives</p></div></label>
+            </div>
+            <button onclick="submitOrder()" id="finalBtn" class="upi-animated-btn mt-6"><span class="cbtn-text">Place Order</span></button>
+            <button onclick="nextStep(2)" class="w-full text-zinc-600 text-xs tracking-widest uppercase py-3 mt-2 hover:text-white transition">Back to Delivery</button>
+          </div>
+        </section>
+
+        <section class="panel" id="thankYouScreen" style="display:none;">
+          <div class="panel-body text-center py-12">
+            <div style="font-size:56px;margin-bottom:18px;color:var(--gold);">✓</div>
+            <h2 class="luxury-font text-2xl gold-text mb-3">Order Confirmed</h2>
+            <p id="thankYouMessage" class="text-zinc-400 mb-5" style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;">Our team will contact you within 24 hours.</p>
+            <div id="orderSummaryBox" class="text-left p-4 mb-6" style="background:#090909;border:1px solid var(--border);font-size:11px;color:#777;letter-spacing:1px;line-height:2;"></div>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <a id="openUpiBtn" href="#" class="btn-next inline-flex px-8" style="display:none;">Open UPI App</a>
+              <a id="trackWhatsappBtn" href="https://wa.me/918850484512?text=Hi%2C%20I%20just%20placed%20an%20order%20on%20CLIMAX" target="_blank" class="btn-next inline-flex px-8">Track via WhatsApp</a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="summary">
+        <div class="step-head"><div><div class="step-title">Price Details</div><div class="step-sub" id="checkoutItemCount">0 items</div></div></div>
+        <div class="panel-body">
+          <div class="price-row"><span>Subtotal</span><span id="checkoutBaseValue">₹0</span></div>
+          <div class="price-row"><span>Delivery</span><span class="gold-text">FREE</span></div>
+          <div class="price-row"><span>COD Fee</span><span id="checkoutCodValue">₹0</span></div>
+          <div class="price-row total"><span>Total Payable</span><span id="checkoutTotalFinal" class="gold-text">₹0</span></div>
+        </div>
+        <div class="safe-box">100% secure checkout<br>Free shipping across Mumbai & Thane<br>Cash on delivery available</div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const COD_FEE = 50;
+    const MY_UPI_ID = '8850484512@fam';
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4B88SlR4aXarruyfenpQG2_ttw1ZjuHQ",
+      authDomain: "climax-fbf10.firebaseapp.com",
+      projectId: "climax-fbf10",
+      storageBucket: "climax-fbf10.firebasestorage.app",
+      messagingSenderId: "273590231780",
+      appId: "1:273590231780:web:87ddd68084e4db648c42f1",
+      databaseURL: "https://climax-fbf10-default-rtdb.firebaseio.com"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    let cart = JSON.parse(localStorage.getItem('climaxCart') || '[]');
+
+    function initCheckout(){
+      if(!cart.length){
+        document.getElementById('checkoutApp').style.display = 'none';
+        document.getElementById('emptyCart').style.display = 'flex';
+        return;
+      }
+      document.getElementById('checkoutItemsList').innerHTML = cart.map(i => `
+        <div class="item-row">
+          <img src="${i.imgs[0]}" loading="lazy" alt="${i.name}">
+          <div class="flex-1">
+            <p class="item-name">${i.name}</p>
+            <p class="item-meta">Climax Signature Series</p>
+            <div class="flex items-baseline gap-2 mt-3">
+              <span class="price-main">₹${i.price}</span>
+              <span style="font-size:12px;color:#555;text-decoration:line-through;font-family:'Cormorant Garamond',serif;">₹${i.originalPrice}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      updateCheckoutTotal();
+      nextStep(1);
+    }
+
+    function nextStep(s){
+      ['1','2','3'].forEach(n => {
+        const el = document.getElementById('step' + n + 'Content');
+        if(el) el.style.display = 'none';
+      });
+      document.getElementById('thankYouScreen').style.display = 'none';
+      const active = document.getElementById('step' + s + 'Content');
+      if(active) active.style.display = 'block';
+      if(s === 3) updateCheckoutTotal();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    function updateCheckoutTotal(){
+      const base = cart.reduce((s,i) => s + i.price, 0);
+      const method = document.querySelector('input[name="pay"]:checked')?.value || 'UPI';
+      const cod = method === 'COD' ? COD_FEE : 0;
+      const final = base + cod;
+      document.querySelectorAll('.pay-option').forEach(label => {
+        const input = label.querySelector('input[name="pay"]');
+        label.classList.toggle('active', input && input.checked);
+      });
+      document.getElementById('checkoutItemCount').innerText = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
+      document.getElementById('checkoutBaseValue').innerText = `₹${base}`;
+      document.getElementById('checkoutCodValue').innerText = cod ? `₹${cod}` : '₹0';
+      document.getElementById('checkoutTotalFinal').innerText = `₹${final}`;
+    }
+
+    function validateShipping(){
+      const fields = ['custName','custPhone','custPincode','custLocality','custAddress','custCity','custState'];
+      for(const id of fields){
+        if(!document.getElementById(id).value.trim()){
+          alert('Please fill all required delivery details.');
+          return false;
+        }
+      }
+      if(!/^[6-9]\d{9}$/.test(document.getElementById('custPhone').value.trim())){
+        alert('Enter a valid 10-digit Indian mobile number.');
+        return false;
+      }
+      if(!/^\d{6}$/.test(document.getElementById('custPincode').value.trim())){
+        alert('Enter a valid 6-digit pincode.');
+        return false;
+      }
+      return true;
+    }
+
+    async function submitOrder(){
+      const btn = document.getElementById('finalBtn');
+      if(!validateShipping()) return;
+      const btnText = btn.querySelector('.cbtn-text');
+      btnText.innerText = 'Processing...';
+      btn.disabled = true;
+      const base = cart.reduce((s,i) => s + i.price, 0);
+      const method = document.querySelector('input[name="pay"]:checked').value;
+      const finalTotal = method === 'COD' ? base + COD_FEE : base;
+      const orderData = {
+        customer:{
+          name:document.getElementById('custName').value,
+          phone:document.getElementById('custPhone').value,
+          pincode:document.getElementById('custPincode').value,
+          locality:document.getElementById('custLocality').value,
+          address:document.getElementById('custAddress').value,
+          city:document.getElementById('custCity').value,
+          state:document.getElementById('custState').value,
+          landmark:document.getElementById('custLandmark').value,
+          altPhone:document.getElementById('custAltPhone').value
+        },
+        order:{
+          items:cart.map(i => i.name).join(', '),
+          total:finalTotal,
+          method,
+          date:new Date().toLocaleString()
+        }
+      };
+      try {
+        await database.ref('orders').push().set(orderData);
+        if(method === 'UPI'){
+          const upiLink = buildUpiLink(finalTotal);
+          localStorage.setItem('climaxPendingOrder', JSON.stringify(orderData));
+          showThankYou(orderData, upiLink);
+          setTimeout(() => { window.location.href = upiLink; }, 600);
+        } else {
+          showThankYou(orderData);
+        }
+      } catch(e) {
+        alert('Error saving order. Please try again.');
+        btn.disabled = false;
+        btnText.innerText = 'Place Order';
+      }
+    }
+
+    function buildUpiLink(amount){
+      const params = new URLSearchParams({
+        pa:MY_UPI_ID,
+        pn:'CLIMAX',
+        am:String(amount),
+        cu:'INR',
+        tn:'CLIMAX Order'
+      });
+      return 'upi://pay?' + params.toString();
+    }
+
+    function buildWhatsappLink(orderData){
+      const text =
+        `Hi CLIMAX, I placed an order.\n` +
+        `Items: ${orderData.order.items}\n` +
+        `Total: ₹${orderData.order.total}\n` +
+        `Payment: ${orderData.order.method}\n` +
+        `Name: ${orderData.customer.name}\n` +
+        `Phone: ${orderData.customer.phone}`;
+      return `https://wa.me/918850484512?text=${encodeURIComponent(text)}`;
+    }
+
+    function showThankYou(orderData, upiLink = ''){
+      ['1','2','3'].forEach(n => {
+        const el = document.getElementById('step' + n + 'Content');
+        if(el) el.style.display = 'none';
+      });
+      document.getElementById('thankYouMessage').innerText = upiLink
+        ? 'Your order is saved. If your payment app does not open automatically, tap Open UPI App below.'
+        : 'Our team will contact you within 24 hours.';
+      document.getElementById('orderSummaryBox').innerHTML =
+        `ORDER: ${orderData.order.items}<br>` +
+        `TOTAL: ₹${orderData.order.total}<br>` +
+        `PAYMENT: ${orderData.order.method}<br>` +
+        `DELIVER TO: ${orderData.customer.name}, ${orderData.customer.locality}, ${orderData.customer.city}`;
+      const upiBtn = document.getElementById('openUpiBtn');
+      upiBtn.style.display = upiLink ? 'inline-flex' : 'none';
+      if(upiLink) upiBtn.href = upiLink;
+      document.getElementById('trackWhatsappBtn').href = buildWhatsappLink(orderData);
+      document.getElementById('thankYouScreen').style.display = 'block';
+      localStorage.removeItem('climaxCart');
+      cart = [];
+      updateCheckoutTotal();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    initCheckout();
+  </script>
+</body>
+</html>
+
