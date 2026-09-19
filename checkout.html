@@ -3,171 +3,420 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checkout | CLIMAX</title>
+  <title>Secure Checkout | CLIMAX</title>
   <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#D4AF37">
+  <meta name="theme-color" content="#080808">
+  
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+
   <style>
-    :root { --gold:#D4AF37; --black:#060606; --surface:#0d0d0d; --border:#1e1e1e; --muted:#666; }
-    * { box-sizing:border-box; }
-    body { margin:0; min-height:100vh; background:var(--black); color:#e8e8e8; font-family:'Raleway',sans-serif; }
-    body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events:none; z-index:9999; opacity:0.4; }
-    .luxury-font { font-family:'Cinzel',serif; }
-    .gold-text { color:var(--gold); }
-    .gold-bg { background:var(--gold); }
-    nav { position:sticky; top:0; z-index:30; background:rgba(6,6,6,0.95); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); }
-    .checkout-wrap { max-width:1180px; margin:0 auto; padding:28px 18px 70px; }
-    .checkout-grid { display:grid; grid-template-columns:minmax(0,1fr) 380px; gap:18px; align-items:start; }
-    .panel { background:var(--surface); border:1px solid var(--border); }
-    .step-head { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; border-bottom:1px solid var(--border); }
-    .step-left { display:flex; align-items:center; gap:14px; min-width:0; }
-    .step-num { width:30px; height:30px; background:var(--gold); color:#000; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900; flex:none; }
-    .step-title { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; font-weight:800; color:#f1f1f1; }
-    .step-sub { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:#666; margin-top:3px; }
-    .step-change { font-size:10px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; }
-    .panel-body { padding:20px; }
-    .item-row { display:flex; gap:14px; padding:14px; background:#090909; border:1px solid #1d1d1d; margin-bottom:10px; }
-    .item-row img { width:78px; height:78px; object-fit:cover; border:1px solid #222; flex:none; }
-    .item-name { font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:800; color:#ddd; }
-    .item-meta { font-size:10px; letter-spacing:1.6px; text-transform:uppercase; color:#666; margin-top:5px; }
-    .price-main { font-family:'Cormorant Garamond',serif; font-size:1.45rem; color:var(--gold); }
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .full { grid-column:1 / -1; }
-    input,textarea,select { width:100%; border-radius:0 !important; background:#090909 !important; border:1px solid #242424 !important; color:#fff !important; font-family:'Raleway',sans-serif; font-size:13px; padding:14px; transition:border-color .2s; }
-    textarea { min-height:96px; resize:none; }
-    input:focus,textarea:focus,select:focus { border-color:var(--gold) !important; outline:none; }
-    input::placeholder,textarea::placeholder { color:#4b4b4b; }
-    .pay-option { display:flex; align-items:center; gap:14px; padding:16px; border:1px solid #292929; background:#090909; cursor:pointer; transition:all .25s; }
-    .pay-option:hover, .pay-option.active { border-color:var(--gold); background:rgba(212,175,55,0.06); }
-    .pay-option input { width:16px; height:16px; accent-color:var(--gold); padding:0; }
-    .actions { display:grid; grid-template-columns:150px 1fr; gap:12px; margin-top:20px; }
-    .btn-back, .btn-next { min-height:50px; display:flex; align-items:center; justify-content:center; padding:14px; font-size:10px; letter-spacing:2.4px; text-transform:uppercase; transition:all .25s; }
-    .btn-back { border:1px solid #333; color:#777; }
-    .btn-back:hover { color:#fff; border-color:#555; }
-    .btn-next { background:var(--gold); color:#000; font-weight:900; }
-    .btn-next:hover { filter:brightness(1.12); }
-    .summary { position:sticky; top:88px; background:var(--surface); border:1px solid var(--border); }
-    .price-row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; font-size:12px; color:#888; }
-    .price-row.total { border-top:1px solid var(--border); margin-top:8px; padding-top:16px; color:#fff; font-weight:900; }
-    .safe-box { padding:14px 20px; border-top:1px solid var(--border); font-size:10px; color:#666; letter-spacing:1.4px; text-transform:uppercase; line-height:1.8; }
-    .upi-animated-btn { position:relative; display:flex; align-items:center; justify-content:center; width:100%; padding:20px 36px; border:2px solid transparent; font-size:11px; letter-spacing:3px; font-weight:800; text-transform:uppercase; color:#000; background:var(--gold); box-shadow:0 0 0 2px var(--gold), 0 0 20px rgba(212,175,55,0.3); cursor:pointer; overflow:hidden; border-radius:4px; transition:all 0.6s cubic-bezier(0.23,1,0.32,1); animation:upiGlow 2.5s ease-in-out infinite; }
-    @keyframes upiGlow { 0%,100% { box-shadow:0 0 0 2px var(--gold), 0 0 16px rgba(212,175,55,0.3); } 50% { box-shadow:0 0 0 2px var(--gold), 0 0 36px rgba(212,175,55,0.6); } }
-    .upi-animated-btn:hover { border-radius:12px; animation:none; filter:brightness(1.1); }
-    .upi-animated-btn:disabled { opacity:.6; cursor:not-allowed; animation:none; }
-    .empty-box { min-height:420px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:var(--surface); border:1px solid var(--border); padding:30px; }
-    @media(max-width:900px) {
-      .checkout-grid { grid-template-columns:1fr; }
-      .summary { position:relative; top:auto; order:-1; }
-      .form-grid { grid-template-columns:1fr; }
-      .actions { grid-template-columns:1fr; }
-      .checkout-wrap { padding:16px 12px 50px; }
-      .step-head { align-items:flex-start; }
+    :root {
+      --gold: #D4AF37;
+      --gold-hover: #e5c158;
+      --bg: #060606;
+      --surface: #0e0e0e;
+      --surface-elevated: #141414;
+      --border: #1f1f1f;
+      --border-focus: #D4AF37;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--bg);
+      color: #f3f3f3;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .luxury-font { font-family: 'Cinzel', serif; }
+    .gold-text { color: var(--gold); }
+
+    /* Custom Form Fields */
+    .field-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #888;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .input-box {
+      width: 100%;
+      background: #090909;
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 13px;
+      padding: 13px 14px;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-box:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 1px var(--border-focus);
+    }
+    .input-box::placeholder { color: #3e3e3e; }
+
+    /* Step Stepper Indicator */
+    .step-track-line {
+      height: 2px;
+      background: #1a1a1a;
+      flex: 1;
+      margin: 0 12px;
+      position: relative;
+    }
+    .step-track-line.active {
+      background: var(--gold);
+    }
+    .step-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      background: #141414;
+      border: 1px solid #282828;
+      color: #777;
+      transition: all 0.3s ease;
+    }
+    .step-dot.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #000;
+    }
+    .step-dot.completed {
+      background: #1f1f1f;
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    /* Buttons */
+    .btn-gold {
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 15px 24px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-gold:hover {
+      background: var(--gold-hover);
+      transform: translateY(-1px);
+    }
+    .btn-gold:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-ghost {
+      border: 1px solid #282828;
+      background: transparent;
+      color: #888;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover {
+      color: #fff;
+      border-color: #555;
+    }
+
+    /* Payment Card Options */
+    .payment-option-card {
+      background: #0b0b0b;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .payment-option-card:hover {
+      border-color: #383838;
+    }
+    .payment-option-card.selected {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.04);
     }
   </style>
 </head>
 <body>
-  <nav class="px-6 md:px-12 py-4 flex justify-between items-center">
-    <a href="index.html" class="text-[10px] tracking-widest uppercase text-zinc-600 hover:text-white transition">← Back to Shop</a>
-    <a href="index.html"><img src="https://u.cubeupload.com/qazwsxedcrf/climax.jpeg" alt="CLIMAX" class="h-10 md:h-11"></a>
-    <a href="https://wa.me/918850484512" target="_blank" class="text-[10px] tracking-widest uppercase gold-text hover:underline">Help</a>
-  </nav>
 
-  <main class="checkout-wrap">
-    <div class="mb-6">
-      <p class="text-[10px] gold-text tracking-[5px] uppercase mb-2">Secure Checkout</p>
-      <h1 class="luxury-font text-2xl md:text-4xl uppercase tracking-widest">Complete Your Order</h1>
+  <!-- Top Slim Security Nav -->
+  <header class="border-b border-zinc-900 bg-[#080808]/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white transition">
+        <span>←</span> <span class="hidden sm:inline">Back to Catalog</span>
+      </a>
+      <a href="index.html" class="luxury-font text-lg font-black tracking-widest text-white">
+        CLIMAX
+      </a>
+      <div class="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
+        <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        <span>100% Encrypted</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stepper Breadcrumb (D2C Style) -->
+  <div class="border-b border-zinc-900 bg-[#090909] py-4">
+    <div class="max-w-md mx-auto px-6 flex items-center justify-between text-[10px] uppercase font-bold tracking-wider">
+      <div class="flex items-center gap-2" id="stepIndicator1">
+        <div class="step-dot active" id="dot1">1</div>
+        <span class="text-zinc-200" id="label1">Bag</span>
+      </div>
+      <div class="step-track-line" id="line1"></div>
+      <div class="flex items-center gap-2" id="stepIndicator2">
+        <div class="step-dot" id="dot2">2</div>
+        <span class="text-zinc-500" id="label2">Address</span>
+      </div>
+      <div class="step-track-line" id="line2"></div>
+      <div class="flex items-center gap-2" id="stepIndicator3">
+        <div class="step-dot" id="dot3">3</div>
+        <span class="text-zinc-500" id="label3">Payment</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12">
+    
+    <!-- Empty Cart Fallback -->
+    <div id="emptyCart" class="hidden text-center py-24 bg-[#0a0a0a] border border-zinc-900 rounded-md p-6">
+      <div class="w-16 h-16 rounded-full bg-zinc-900 flex items-center justify-center mx-auto mb-4 text-zinc-500">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+      </div>
+      <h2 class="luxury-font text-2xl font-bold tracking-wider uppercase mb-2">Your Bag is Empty</h2>
+      <p class="text-zinc-500 text-xs uppercase tracking-widest mb-8">Add selected items from the collection to begin checkout.</p>
+      <a href="index.html#collection" class="btn-gold">Explore Collections</a>
     </div>
 
-    <div id="emptyCart" class="empty-box" style="display:none;">
-      <h2 class="luxury-font text-2xl gold-text mb-3">Your Cart Is Empty</h2>
-      <p class="text-zinc-500 mb-6" style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;">Add a bracelet before starting checkout.</p>
-      <a href="index.html#collection" class="btn-next px-8">Shop Collection</a>
-    </div>
+    <!-- Active Checkout Grid -->
+    <div id="checkoutApp" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Steps Container (7 Cols) -->
+      <div class="lg:col-span-7 space-y-6">
 
-    <div id="checkoutApp" class="checkout-grid">
-      <div class="space-y-4">
-        <section class="panel" id="step1Content">
-          <div class="step-head">
-            <div class="step-left"><div class="step-num">1</div><div><div class="step-title">Order Summary</div><div class="step-sub">Review selected bracelets</div></div></div>
-          </div>
-          <div class="panel-body">
-            <div id="checkoutItemsList"></div>
-            <button onclick="nextStep(2)" class="btn-next w-full mt-4">Continue to Delivery</button>
-          </div>
-        </section>
-
-        <section class="panel" id="step2Content" style="display:none;">
-          <div class="step-head">
-            <div class="step-left"><div class="step-num">2</div><div><div class="step-title">Delivery Address</div><div class="step-sub">Mumbai & Thane free shipping</div></div></div>
-            <button class="step-change" onclick="nextStep(1)">Edit Cart</button>
-          </div>
-          <div class="panel-body">
-            <div class="form-grid">
-              <input type="text" id="custName" placeholder="Full Name *">
-              <input type="tel" id="custPhone" placeholder="Mobile Number *">
-              <input type="text" id="custPincode" placeholder="Pincode *">
-              <input type="text" id="custLocality" placeholder="Locality *">
-              <textarea id="custAddress" class="full" placeholder="Address (Area and Street) *"></textarea>
-              <input type="text" id="custCity" placeholder="City / District *">
-              <select id="custState">
-                <option value="">-- Select State --</option>
-                <option value="Maharashtra">Maharashtra</option>
-              </select>
-              <input type="text" id="custLandmark" placeholder="Landmark (Optional)">
-              <input type="tel" id="custAltPhone" placeholder="Alt Phone (Optional)">
+        <!-- Step 1: Items in Cart -->
+        <section id="step1Content" class="bg-[#0b0b0b] border border-zinc-900 rounded-md overflow-hidden">
+          <div class="p-5 border-b border-zinc-900 flex justify-between items-center">
+            <div>
+              <h2 class="text-xs font-extrabold tracking-widest uppercase text-white">Order Review</h2>
+              <p class="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5" id="cartHeaderSubtitle">Verify selected items</p>
             </div>
-            <div class="actions"><button onclick="nextStep(1)" class="btn-back">Back</button><button onclick="if(validateShipping()) nextStep(3)" class="btn-next">Deliver Here</button></div>
+            <a href="index.html" class="text-[10px] font-bold text-amber-400 uppercase tracking-wider hover:underline">+ Add More</a>
+          </div>
+          
+          <div class="p-5">
+            <div id="checkoutItemsList" class="divide-y divide-zinc-900"></div>
+            <button onclick="nextStep(2)" class="btn-gold w-full mt-6 py-4">Proceed to Delivery Address →</button>
           </div>
         </section>
 
-        <section class="panel" id="step3Content" style="display:none;">
-          <div class="step-head">
-            <div class="step-left"><div class="step-num">3</div><div><div class="step-title">Payment Method</div><div class="step-sub">Choose how you want to pay</div></div></div>
-            <button class="step-change" onclick="nextStep(2)">Edit Address</button>
-          </div>
-          <div class="panel-body">
-            <div class="space-y-3">
-              <label class="pay-option active"><input type="radio" name="pay" value="UPI" checked onchange="updateCheckoutTotal()"><div><p class="text-xs uppercase tracking-widest">UPI / GPay / PhonePe / Paytm</p><p class="text-[10px] text-zinc-600 mt-1">Instant payment to CLIMAX</p></div></label>
-              <label class="pay-option"><input type="radio" name="pay" value="COD" onchange="updateCheckoutTotal()"><div><p class="text-xs uppercase tracking-widest">Cash on Delivery <span class="gold-text">+₹50</span></p><p class="text-[10px] text-zinc-600 mt-1">Pay when your order arrives</p></div></label>
+        <!-- Step 2: Shipping & Address -->
+        <section id="step2Content" class="hidden bg-[#0b0b0b] border border-zinc-900 rounded-md overflow-hidden">
+          <div class="p-5 border-b border-zinc-900 flex justify-between items-center">
+            <div>
+              <h2 class="text-xs font-extrabold tracking-widest uppercase text-white">Shipping & Contact Details</h2>
+              <p class="text-[10px] text-amber-400 uppercase tracking-wider mt-0.5">Complimentary shipping across Mumbai & Thane</p>
             </div>
-            <button onclick="submitOrder()" id="finalBtn" class="upi-animated-btn mt-6"><span class="cbtn-text">Place Order</span></button>
-            <button onclick="nextStep(2)" class="w-full text-zinc-600 text-xs tracking-widest uppercase py-3 mt-2 hover:text-white transition">Back to Delivery</button>
+            <button onclick="nextStep(1)" class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider hover:text-white">Review Bag</button>
+          </div>
+
+          <div class="p-5 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="field-label">Full Name *</label>
+                <input type="text" id="custName" placeholder="e.g. Yash Patil" class="input-box">
+              </div>
+              <div>
+                <label class="field-label">Phone Number *</label>
+                <input type="tel" id="custPhone" placeholder="10-digit mobile number" class="input-box">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="field-label">Pincode *</label>
+                <input type="text" id="custPincode" placeholder="e.g. 400080" class="input-box">
+              </div>
+              <div>
+                <label class="field-label">Locality / Area *</label>
+                <input type="text" id="custLocality" placeholder="e.g. Mulund West" class="input-box">
+              </div>
+            </div>
+
+            <div>
+              <label class="field-label">Complete Street Address *</label>
+              <textarea id="custAddress" rows="2" placeholder="Flat / Building no., Street name, Landmark" class="input-box" style="resize:none;"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="field-label">City / District *</label>
+                <input type="text" id="custCity" placeholder="Mumbai" class="input-box">
+              </div>
+              <div>
+                <label class="field-label">State *</label>
+                <select id="custState" class="input-box">
+                  <option value="Maharashtra" selected>Maharashtra</option>
+                  <option value="Other">Other Region</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex gap-3 pt-3">
+              <button onclick="nextStep(1)" class="btn-ghost flex-1">Back</button>
+              <button onclick="if(validateShipping()) nextStep(3)" class="btn-gold flex-[2]">Save & Proceed to Payment</button>
+            </div>
           </div>
         </section>
 
-        <section class="panel" id="thankYouScreen" style="display:none;">
-          <div class="panel-body text-center py-12">
-            <div style="font-size:56px;margin-bottom:18px;color:var(--gold);">✓</div>
-            <h2 class="luxury-font text-2xl gold-text mb-3">Order Confirmed</h2>
-            <p id="thankYouMessage" class="text-zinc-400 mb-5" style="font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;">Our team will contact you within 24 hours.</p>
-            <div id="orderSummaryBox" class="text-left p-4 mb-6" style="background:#090909;border:1px solid var(--border);font-size:11px;color:#777;letter-spacing:1px;line-height:2;"></div>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-              <a id="openUpiBtn" href="#" class="btn-next inline-flex px-8" style="display:none;">Open UPI App</a>
-              <a id="trackWhatsappBtn" href="https://wa.me/918850484512?text=Hi%2C%20I%20just%20placed%20an%20order%20on%20CLIMAX" target="_blank" class="btn-next inline-flex px-8">Track via WhatsApp</a>
+        <!-- Step 3: Payment Selection -->
+        <section id="step3Content" class="hidden bg-[#0b0b0b] border border-zinc-900 rounded-md overflow-hidden">
+          <div class="p-5 border-b border-zinc-900 flex justify-between items-center">
+            <div>
+              <h2 class="text-xs font-extrabold tracking-widest uppercase text-white">Payment Method</h2>
+              <p class="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Select your preferred payment gateway</p>
             </div>
+            <button onclick="nextStep(2)" class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider hover:text-white">Change Address</button>
+          </div>
+
+          <div class="p-5 space-y-3">
+            <!-- Option 1: Instant UPI -->
+            <label class="payment-option-card selected" id="cardUpi" onclick="selectPaymentMethod('UPI')">
+              <input type="radio" name="payMethod" value="UPI" checked class="accent-amber-400 w-4 h-4 cursor-pointer">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-white uppercase tracking-wider">Instant UPI / QR</span>
+                  <span class="text-[9px] bg-amber-400/10 text-amber-400 font-extrabold px-2 py-0.5 rounded border border-amber-400/20">FASTEST</span>
+                </div>
+                <p class="text-[10px] text-zinc-500 mt-1">Google Pay, PhonePe, Paytm, or BHIM instant gateway.</p>
+              </div>
+            </label>
+
+            <!-- Option 2: Cash On Delivery -->
+            <label class="payment-option-card" id="cardCod" onclick="selectPaymentMethod('COD')">
+              <input type="radio" name="payMethod" value="COD" class="accent-amber-400 w-4 h-4 cursor-pointer">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-white uppercase tracking-wider">Cash on Delivery (COD)</span>
+                  <span class="text-[10px] font-bold text-amber-400">+₹50 Fee</span>
+                </div>
+                <p class="text-[10px] text-zinc-500 mt-1">Pay with cash or UPI directly when parcel reaches your doorstep.</p>
+              </div>
+            </label>
+
+            <button onclick="submitOrder()" id="finalBtn" class="btn-gold w-full mt-6 py-4">
+              <span id="btnTextLabel">Authorize Order</span>
+            </button>
           </div>
         </section>
+
+        <!-- Order Confirmed Success Screen -->
+        <section id="thankYouScreen" class="hidden bg-[#0b0b0b] border border-zinc-900 rounded-md p-8 text-center">
+          <div class="w-14 h-14 rounded-full bg-amber-400 text-black flex items-center justify-center font-black text-2xl mx-auto mb-4">
+            ✓
+          </div>
+          <h2 class="luxury-font text-2xl font-bold tracking-widest uppercase mb-2">Order Confirmed</h2>
+          <p id="thankYouMessage" class="text-zinc-400 text-xs leading-relaxed max-w-md mx-auto mb-6">
+            Your booking details have been registered. Our dispatch team will process shipment within 24 hours.
+          </p>
+
+          <div id="orderSummaryBox" class="bg-[#101010] border border-zinc-900 rounded p-4 text-left text-xs space-y-2 text-zinc-400 mb-8"></div>
+
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a id="openUpiBtn" href="#" class="btn-gold hidden">Open Payment App</a>
+            <a id="trackWhatsappBtn" href="#" target="_blank" class="btn-ghost !text-zinc-200">Track Order on WhatsApp</a>
+          </div>
+        </section>
+
       </div>
 
-      <aside class="summary">
-        <div class="step-head"><div><div class="step-title">Price Details</div><div class="step-sub" id="checkoutItemCount">0 items</div></div></div>
-        <div class="panel-body">
-          <div class="price-row"><span>Subtotal</span><span id="checkoutBaseValue">₹0</span></div>
-          <div class="price-row"><span>Delivery</span><span class="gold-text">FREE</span></div>
-          <div class="price-row"><span>COD Fee</span><span id="checkoutCodValue">₹0</span></div>
-          <div class="price-row total"><span>Total Payable</span><span id="checkoutTotalFinal" class="gold-text">₹0</span></div>
+      <!-- Right Summary Panel (5 Cols, Sticky) -->
+      <aside class="lg:col-span-5 sticky top-24 space-y-4">
+        <div class="bg-[#0b0b0b] border border-zinc-900 rounded-md p-6">
+          <h3 class="text-xs font-extrabold uppercase tracking-widest text-zinc-300 border-b border-zinc-900 pb-4 mb-4">
+            Price Breakdown
+          </h3>
+
+          <div class="space-y-3 text-xs">
+            <div class="flex justify-between text-zinc-400">
+              <span>Bag Total (<span id="checkoutItemCount">0 items</span>)</span>
+              <span id="checkoutBaseValue" class="text-zinc-200 font-semibold">₹0</span>
+            </div>
+            <div class="flex justify-between text-zinc-400">
+              <span>Standard Shipping</span>
+              <span class="text-emerald-400 font-bold uppercase tracking-wider text-[11px]">Free</span>
+            </div>
+            <div class="flex justify-between text-zinc-400">
+              <span>COD Handling Charge</span>
+              <span id="checkoutCodValue" class="text-zinc-200 font-semibold">₹0</span>
+            </div>
+
+            <div class="border-t border-zinc-900 pt-4 flex justify-between items-baseline text-sm">
+              <span class="font-extrabold uppercase tracking-wider text-white">Amount Payable</span>
+              <span id="checkoutTotalFinal" class="text-lg font-black text-amber-400">₹0</span>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-5 border-t border-zinc-900 space-y-2 text-[10px] uppercase font-bold tracking-wider text-zinc-500">
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400">✦</span>
+              <span>Complimentary Doorstep Delivery in Mumbai & Thane</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400">✦</span>
+              <span>Signature Box Included</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-amber-400">✦</span>
+              <span>7-Day Replacement Guarantee</span>
+            </div>
+          </div>
         </div>
-        <div class="safe-box">100% secure checkout<br>Free shipping across Mumbai & Thane<br>Cash on delivery available</div>
+
+        <div class="bg-[#080808] border border-zinc-900 p-4 rounded text-center">
+          <p class="text-[10px] uppercase tracking-widest text-zinc-500">Need Immediate Help?</p>
+          <a href="https://wa.me/918850484512" target="_blank" class="text-xs font-bold text-amber-400 hover:underline tracking-wider uppercase mt-1 inline-block">Chat on WhatsApp: +91 88504 84512</a>
+        </div>
       </aside>
+
     </div>
   </main>
 
   <script>
     const COD_FEE = 50;
     const MY_UPI_ID = '8850484512@fam';
+
+    // Firebase Setup
     const firebaseConfig = {
       apiKey: "AIzaSyD4B88SlR4aXarruyfenpQG2_ttw1ZjuHQ",
       authDomain: "climax-fbf10.firebaseapp.com",
@@ -179,108 +428,177 @@
     };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
+
     let cart = JSON.parse(localStorage.getItem('climaxCart') || '[]');
 
-    function initCheckout(){
-      if(!cart.length){
-        document.getElementById('checkoutApp').style.display = 'none';
-        document.getElementById('emptyCart').style.display = 'flex';
+    function initCheckout() {
+      if (!cart.length) {
+        document.getElementById('checkoutApp').classList.add('hidden');
+        document.getElementById('emptyCart').classList.remove('hidden');
         return;
       }
-      document.getElementById('checkoutItemsList').innerHTML = cart.map(i => `
-        <div class="item-row">
-          <img src="${i.imgs[0]}" loading="lazy" alt="${i.name}">
-          <div class="flex-1">
-            <p class="item-name">${i.name}</p>
-            <p class="item-meta">Climax Signature Series</p>
-            <div class="flex items-baseline gap-2 mt-3">
-              <span class="price-main">₹${i.price}</span>
-              <span style="font-size:12px;color:#555;text-decoration:line-through;font-family:'Cormorant Garamond',serif;">₹${i.originalPrice}</span>
+
+      document.getElementById('checkoutItemsList').innerHTML = cart.map((i, idx) => `
+        <div class="flex items-center gap-4 py-3.5">
+          <img src="${i.imgs[0]}" class="w-16 h-16 object-cover rounded border border-zinc-800 flex-shrink-0" alt="${i.name}">
+          <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-bold text-zinc-200 uppercase tracking-wide truncate">${i.name}</h4>
+            <p class="text-[10px] text-zinc-500 uppercase tracking-wider mt-0.5">Quantity: 1</p>
+            <div class="flex items-baseline gap-2 mt-1">
+              <span class="text-xs font-bold text-white">₹${i.price}</span>
+              ${i.originalPrice ? `<span class="text-[10px] text-zinc-600 line-through">₹${i.originalPrice}</span>` : ''}
             </div>
           </div>
+          <button onclick="removeItem(${idx})" class="text-zinc-600 hover:text-zinc-300 text-xs uppercase tracking-wider font-semibold px-2 py-1">Remove</button>
         </div>
       `).join('');
+
       updateCheckoutTotal();
       nextStep(1);
     }
 
-    function nextStep(s){
-      ['1','2','3'].forEach(n => {
-        const el = document.getElementById('step' + n + 'Content');
-        if(el) el.style.display = 'none';
-      });
-      document.getElementById('thankYouScreen').style.display = 'none';
-      const active = document.getElementById('step' + s + 'Content');
-      if(active) active.style.display = 'block';
-      if(s === 3) updateCheckoutTotal();
-      window.scrollTo({top:0, behavior:'smooth'});
+    function removeItem(idx) {
+      cart.splice(idx, 1);
+      localStorage.setItem('climaxCart', JSON.stringify(cart));
+      initCheckout();
     }
 
-    function updateCheckoutTotal(){
-      const base = cart.reduce((s,i) => s + i.price, 0);
-      const method = document.querySelector('input[name="pay"]:checked')?.value || 'UPI';
+    function nextStep(step) {
+      ['1', '2', '3'].forEach(n => {
+        const pane = document.getElementById('step' + n + 'Content');
+        if (pane) pane.classList.add('hidden');
+      });
+      document.getElementById('thankYouScreen').classList.add('hidden');
+
+      const target = document.getElementById('step' + step + 'Content');
+      if (target) target.classList.remove('hidden');
+
+      // Update Stepper Visuals
+      for (let i = 1; i <= 3; i++) {
+        const dot = document.getElementById('dot' + i);
+        const label = document.getElementById('label' + i);
+        const line = document.getElementById('line' + (i - 1));
+
+        dot.classList.remove('active', 'completed');
+        label.classList.remove('text-zinc-200');
+        label.classList.add('text-zinc-500');
+
+        if (i < step) {
+          dot.classList.add('completed');
+          dot.innerHTML = '✓';
+        } else if (i === step) {
+          dot.classList.add('active');
+          dot.innerText = i;
+          label.classList.add('text-zinc-200');
+          label.classList.remove('text-zinc-500');
+        } else {
+          dot.innerText = i;
+        }
+
+        if (line) {
+          line.classList.toggle('active', i <= step);
+        }
+      }
+
+      if (step === 3) updateCheckoutTotal();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectPaymentMethod(method) {
+      const radio = document.querySelector(`input[value="${method}"]`);
+      if (radio) radio.checked = true;
+
+      document.getElementById('cardUpi').classList.toggle('selected', method === 'UPI');
+      document.getElementById('cardCod').classList.toggle('selected', method === 'COD');
+
+      updateCheckoutTotal();
+    }
+
+    function updateCheckoutTotal() {
+      const base = cart.reduce((s, i) => s + i.price, 0);
+      const method = document.querySelector('input[name="payMethod"]:checked')?.value || 'UPI';
       const cod = method === 'COD' ? COD_FEE : 0;
       const final = base + cod;
-      document.querySelectorAll('.pay-option').forEach(label => {
-        const input = label.querySelector('input[name="pay"]');
-        label.classList.toggle('active', input && input.checked);
-      });
+
       document.getElementById('checkoutItemCount').innerText = `${cart.length} item${cart.length > 1 ? 's' : ''}`;
       document.getElementById('checkoutBaseValue').innerText = `₹${base}`;
       document.getElementById('checkoutCodValue').innerText = cod ? `₹${cod}` : '₹0';
       document.getElementById('checkoutTotalFinal').innerText = `₹${final}`;
+
+      const btnText = document.getElementById('btnTextLabel');
+      if (btnText) {
+        btnText.innerText = method === 'COD' ? `Place Order (COD - ₹${final})` : `Pay via UPI (₹${final})`;
+      }
     }
 
-    function validateShipping(){
-      const fields = ['custName','custPhone','custPincode','custLocality','custAddress','custCity','custState'];
-      for(const id of fields){
-        if(!document.getElementById(id).value.trim()){
-          alert('Please fill all required delivery details.');
+    function validateShipping() {
+      const fields = [
+        { id: 'custName', name: 'Full Name' },
+        { id: 'custPhone', name: 'Phone Number' },
+        { id: 'custPincode', name: 'Pincode' },
+        { id: 'custLocality', name: 'Locality' },
+        { id: 'custAddress', name: 'Street Address' },
+        { id: 'custCity', name: 'City' }
+      ];
+
+      for (const field of fields) {
+        if (!document.getElementById(field.id).value.trim()) {
+          alert(`Please provide your ${field.name}.`);
+          document.getElementById(field.id).focus();
           return false;
         }
       }
-      if(!/^[6-9]\d{9}$/.test(document.getElementById('custPhone').value.trim())){
-        alert('Enter a valid 10-digit Indian mobile number.');
+
+      if (!/^[6-9]\d{9}$/.test(document.getElementById('custPhone').value.trim())) {
+        alert('Please enter a valid 10-digit Indian phone number.');
+        document.getElementById('custPhone').focus();
         return false;
       }
-      if(!/^\d{6}$/.test(document.getElementById('custPincode').value.trim())){
-        alert('Enter a valid 6-digit pincode.');
+
+      if (!/^\d{6}$/.test(document.getElementById('custPincode').value.trim())) {
+        alert('Please enter a valid 6-digit postal pincode.');
+        document.getElementById('custPincode').focus();
         return false;
       }
+
       return true;
     }
 
-    async function submitOrder(){
+    async function submitOrder() {
       const btn = document.getElementById('finalBtn');
-      if(!validateShipping()) return;
-      const btnText = btn.querySelector('.cbtn-text');
-      btnText.innerText = 'Processing...';
+      const btnText = document.getElementById('btnTextLabel');
+      
+      if (!validateShipping()) return;
+
+      btnText.innerText = 'Transmitting Order...';
       btn.disabled = true;
-      const base = cart.reduce((s,i) => s + i.price, 0);
-      const method = document.querySelector('input[name="pay"]:checked').value;
+
+      const base = cart.reduce((s, i) => s + i.price, 0);
+      const method = document.querySelector('input[name="payMethod"]:checked').value;
       const finalTotal = method === 'COD' ? base + COD_FEE : base;
+
       const orderData = {
-        customer:{
-          name:document.getElementById('custName').value,
-          phone:document.getElementById('custPhone').value,
-          pincode:document.getElementById('custPincode').value,
-          locality:document.getElementById('custLocality').value,
-          address:document.getElementById('custAddress').value,
-          city:document.getElementById('custCity').value,
-          state:document.getElementById('custState').value,
-          landmark:document.getElementById('custLandmark').value,
-          altPhone:document.getElementById('custAltPhone').value
+        customer: {
+          name: document.getElementById('custName').value.trim(),
+          phone: document.getElementById('custPhone').value.trim(),
+          pincode: document.getElementById('custPincode').value.trim(),
+          locality: document.getElementById('custLocality').value.trim(),
+          address: document.getElementById('custAddress').value.trim(),
+          city: document.getElementById('custCity').value.trim(),
+          state: document.getElementById('custState').value
         },
-        order:{
-          items:cart.map(i => i.name).join(', '),
-          total:finalTotal,
+        order: {
+          items: cart.map(i => i.name).join(', '),
+          total: finalTotal,
           method,
-          date:new Date().toLocaleString()
+          date: new Date().toLocaleString()
         }
       };
+
       try {
         await database.ref('orders').push().set(orderData);
-        if(method === 'UPI'){
+
+        if (method === 'UPI') {
           const upiLink = buildUpiLink(finalTotal);
           localStorage.setItem('climaxPendingOrder', JSON.stringify(orderData));
           showThankYou(orderData, upiLink);
@@ -288,61 +606,70 @@
         } else {
           showThankYou(orderData);
         }
-      } catch(e) {
-        alert('Error saving order. Please try again.');
+      } catch (e) {
+        alert('Error connecting to gateway. Please retry.');
         btn.disabled = false;
-        btnText.innerText = 'Place Order';
+        btnText.innerText = 'Authorize Order';
       }
     }
 
-    function buildUpiLink(amount){
+    function buildUpiLink(amount) {
       const params = new URLSearchParams({
-        pa:MY_UPI_ID,
-        pn:'CLIMAX',
-        am:String(amount),
-        cu:'INR',
-        tn:'CLIMAX Order'
+        pa: MY_UPI_ID,
+        pn: 'CLIMAX Official',
+        am: String(amount),
+        cu: 'INR',
+        tn: 'CLIMAX Direct Order'
       });
       return 'upi://pay?' + params.toString();
     }
 
-    function buildWhatsappLink(orderData){
+    function buildWhatsappLink(orderData) {
       const text =
-        `Hi CLIMAX, I placed an order.\n` +
-        `Items: ${orderData.order.items}\n` +
-        `Total: ₹${orderData.order.total}\n` +
-        `Payment: ${orderData.order.method}\n` +
-        `Name: ${orderData.customer.name}\n` +
-        `Phone: ${orderData.customer.phone}`;
+        `Hi CLIMAX, I just placed an order!\n\n` +
+        `📦 *Item(s):* ${orderData.order.items}\n` +
+        `💰 *Total Amount:* ₹${orderData.order.total}\n` +
+        `💳 *Payment Method:* ${orderData.order.method}\n` +
+        `📍 *Delivery To:* ${orderData.customer.name}, ${orderData.customer.locality}, ${orderData.customer.city} (${orderData.customer.pincode})\n` +
+        `📞 *Contact:* ${orderData.customer.phone}`;
       return `https://wa.me/918850484512?text=${encodeURIComponent(text)}`;
     }
 
-    function showThankYou(orderData, upiLink = ''){
-      ['1','2','3'].forEach(n => {
-        const el = document.getElementById('step' + n + 'Content');
-        if(el) el.style.display = 'none';
+    function showThankYou(orderData, upiLink = '') {
+      ['1', '2', '3'].forEach(n => {
+        document.getElementById('step' + n + 'Content').classList.add('hidden');
       });
+
       document.getElementById('thankYouMessage').innerText = upiLink
-        ? 'Your order is saved. If your payment app does not open automatically, tap Open UPI App below.'
-        : 'Our team will contact you within 24 hours.';
-      document.getElementById('orderSummaryBox').innerHTML =
-        `ORDER: ${orderData.order.items}<br>` +
-        `TOTAL: ₹${orderData.order.total}<br>` +
-        `PAYMENT: ${orderData.order.method}<br>` +
-        `DELIVER TO: ${orderData.customer.name}, ${orderData.customer.locality}, ${orderData.customer.city}`;
+        ? 'Your order is recorded! If your UPI app (GPay / PhonePe) did not open automatically, tap the Open Payment button below.'
+        : 'Your Cash on Delivery booking is verified. Our dispatch team will contact you prior to delivery.';
+
+      document.getElementById('orderSummaryBox').innerHTML = `
+        <div><strong class="text-zinc-200">Products:</strong> ${orderData.order.items}</div>
+        <div><strong class="text-zinc-200">Total Payable:</strong> ₹${orderData.order.total}</div>
+        <div><strong class="text-zinc-200">Method:</strong> ${orderData.order.method}</div>
+        <div><strong class="text-zinc-200">Destination:</strong> ${orderData.customer.name}, ${orderData.customer.address}, ${orderData.customer.city} - ${orderData.customer.pincode}</div>
+      `;
+
       const upiBtn = document.getElementById('openUpiBtn');
-      upiBtn.style.display = upiLink ? 'inline-flex' : 'none';
-      if(upiLink) upiBtn.href = upiLink;
+      if (upiLink) {
+        upiBtn.classList.remove('hidden');
+        upiBtn.href = upiLink;
+      } else {
+        upiBtn.classList.add('hidden');
+      }
+
       document.getElementById('trackWhatsappBtn').href = buildWhatsappLink(orderData);
-      document.getElementById('thankYouScreen').style.display = 'block';
+      document.getElementById('thankYouScreen').classList.remove('hidden');
+
+      // Clear Cart Session
       localStorage.removeItem('climaxCart');
       cart = [];
       updateCheckoutTotal();
-      window.scrollTo({top:0, behavior:'smooth'});
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    initCheckout();
+    window.addEventListener('DOMContentLoaded', initCheckout);
   </script>
 </body>
 </html>
-
